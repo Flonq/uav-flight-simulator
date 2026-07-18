@@ -76,23 +76,22 @@ Simülasyonun planlanan temel akışı:
 
 | Alan | Teknoloji |
 |---|---|
-| Oyun motoru | Unity |
+| Oyun motoru | Unity 6.3 LTS — 6000.3.20f1 |
 | Programlama dili | C# |
+| Render Pipeline | Universal Render Pipeline |
 | Sürüm kontrolü | Git |
 | Kod deposu | GitHub |
 | Geliştirme ortamı | Visual Studio veya JetBrains Rider |
 | Girdi sistemi | Unity Input System |
 | Fizik sistemi | Unity Rigidbody tabanlı fizik |
-| Kullanıcı arayüzü | Unity UI Toolkit veya UGUI |
+| Kullanıcı arayüzü | uGUI ve TextMeshPro |
 | Hedef platform | Windows |
 
 ### Henüz kesinleştirilmemiş bilgiler
 
-- Kullanılacak Unity sürümünün tam numarası
-- Render Pipeline seçimi
 - Kullanılacak İHA modelinin kesin adı
-- UI Toolkit veya UGUI tercihi
 - Joystick desteğinin ilk sürüme dahil edilip edilmeyeceği
+- Cinemachine paketine ihtiyaç duyulup duyulmayacağı
 
 Bu kararlar verildiğinde `TECHNICAL_DECISIONS.md` dosyasına eklenecektir.
 

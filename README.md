@@ -26,12 +26,12 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 
 ## Proje Durumu
 
-**Mevcut aşama:** Planlama ve proje kurulumu
+**Mevcut aşama:** Test ortamı ve havaalanı prototipi
 
 | Sistem | Durum |
 |---|---|
 | Proje dokümantasyonu | Tamamlandı |
-| Unity proje kurulumu | Planlandı |
+| Unity proje kurulumu | Tamamlandı |
 | İHA uçuş fiziği | Planlandı |
 | Kamera sistemi | Planlandı |
 | Telemetri sistemi | Planlandı |
@@ -106,18 +106,17 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 
 | Teknoloji | Kullanım amacı |
 |---|---|
-| Unity | Simülasyon ve oyun motoru |
+| Unity 6.3 LTS — 6000.3.20f1 | Simülasyon ve oyun motoru |
 | C# | Uçuş, görev ve arayüz sistemleri |
-| Unity Input System | Klavye, fare ve kontrolcü girdileri |
+| Universal Render Pipeline | Windows için dengeli görsel kalite ve performans |
+| Unity Input System | Klavye, fare ve gelecekteki kontrolcü girdileri |
 | Unity Physics | Rigidbody tabanlı uçuş ve çarpışma |
+| uGUI ve TextMeshPro | Telemetri ve yer kontrol istasyonu arayüzü |
 | Git | Sürüm kontrolü |
 | GitHub | Kaynak kod ve portföy sunumu |
 
 ### Kesinleştirilecek teknolojiler
 
-- Unity sürümünün tam numarası
-- Universal veya Built-in Render Pipeline
-- UI Toolkit veya UGUI
 - Cinemachine kullanımı
 - Joystick desteği
 

@@ -287,53 +287,63 @@ Proje küçük kalırsa gereğinden fazla ScriptableObject kullanımı karmaşı
 
 ## TD-009 — Render Pipeline Seçimi
 
-**Durum:** Önerildi
+**Durum:** Kabul edildi  
+**Tarih:** 18 Temmuz 2026
 
-### Önerilen karar
+### Karar
 
-Universal Render Pipeline kullanılması.
+Proje Universal Render Pipeline kullanılarak geliştirilecektir.
 
 ### Gerekçe
 
-- Windows için yeterli görsel kalite
-- Built-in Render Pipeline'a göre modern iş akışı
-- HDRP'ye göre daha düşük sistem gereksinimi
-- Performans ve kalite arasında dengeli yapı
-- Sis, post-processing ve çevre efektleri için yeterli özellik
+- Windows için yeterli görsel kalite sağlaması
+- Built-in Render Pipeline'a göre daha modern bir iş akışı sunması
+- HDRP'ye göre daha düşük sistem gereksinimine sahip olması
+- Performans ve görsel kalite arasında dengeli olması
+- Sis, post-processing, Render Texture ve çevre efektleri için yeterli özellik sunması
+- Hedeflenen 1080p ve 60 FPS performansıyla uyumlu olması
 
 ### Alternatifler
 
 - Built-in Render Pipeline
 - High Definition Render Pipeline
 
-### Kesinleştirme kriteri
+### Sonuçlar
 
-İHA modeli ve çevre assetleri incelendikten sonra materyal uyumluluğu kontrol edilecektir.
+- Proje `Universal 3D` şablonuyla oluşturulmuştur.
+- URP ayar assetleri sürüm kontrolüne dahil edilecektir.
+- Eklenecek materyal ve assetlerin URP uyumluluğu kontrol edilecektir.
+- Render Pipeline değişikliği yalnızca önemli bir teknik gerekçe oluşursa değerlendirilecektir.
 
 ---
 
 ## TD-010 — Kullanıcı Arayüzü Teknolojisi
 
-**Durum:** Önerildi
+**Durum:** Kabul edildi  
+**Tarih:** 18 Temmuz 2026
 
-### Seçenekler
+### Karar
+
+MVP kullanıcı arayüzü uGUI ve TextMeshPro kullanılarak geliştirilecektir.
+
+### Gerekçe
+
+- Runtime telemetri arayüzlerinin hızlı hazırlanabilmesi
+- GameObject ve MonoBehaviour tabanlı sistemlerle kolay entegrasyon
+- EO kamera görüntüsü için RawImage ve Render Texture kullanımının uygun olması
+- Inspector üzerinden hızlı prototipleme yapılabilmesi
+- Tek geliştiricili MVP kapsamında daha düşük başlangıç karmaşıklığı oluşturması
+
+### Alternatifler
 
 - UI Toolkit
-- UGUI
+- Özel çizim sistemi
 
-### Önerilen yaklaşım
+### Sonuçlar
 
-İlk prototipte hızlı geliştirme için UGUI; karmaşık yer kontrol paneli gerekiyorsa UI Toolkit değerlendirilmesi.
-
-### Karar kriterleri
-
-- Telemetri ekranının karmaşıklığı
-- Harita ve kamera paneli ihtiyacı
-- Kullanılacak hazır UI assetleri
-- Geliştirme hızı
-- Responsive tasarım ihtiyacı
-
-Kesin karar verildiğinde bu bölüm güncellenecektir.
+- Telemetri, görev paneli, uyarılar ve kamera arayüzleri uGUI ile hazırlanacaktır.
+- Metin bileşenlerinde TextMeshPro kullanılacaktır.
+- UI Toolkit, MVP tamamlandıktan sonra yalnızca açık bir ihtiyaç oluşursa yeniden değerlendirilecektir.
 
 ---
 
@@ -478,17 +488,69 @@ Yeni bir sistem eklenmeden önce mevcut sistemin çalışır hâli commit edilme
 
 ---
 
+## TD-017 — Unity Sürümü
+
+**Durum:** Kabul edildi  
+**Tarih:** 18 Temmuz 2026
+
+### Karar
+
+Proje Unity 6.3 LTS sürümünün `6000.3.20f1` Editor sürümüyle geliştirilecektir.
+
+### Gerekçe
+
+- Uzun süreli desteklenen bir Unity sürümü olması
+- Yeni başlayan projede eski sürüm bağımlılığı bulunmaması
+- URP ve Unity Input System ile güncel ve uyumlu bir geliştirme ortamı sunması
+- Portföy projesi için güncel Unity iş akışlarını göstermesi
+- Proje geliştirme süresince kararlı bir sürüm tabanı sağlaması
+
+### Alternatifler
+
+- Unity 2022.3 LTS
+- Unity 6'nın daha yeni desteklenen güncellemeleri
+
+### Sonuçlar
+
+- Unity sürümü `ProjectSettings/ProjectVersion.txt` üzerinden Git ile takip edilecektir.
+- Proje geliştirme sırasında Editor sürümü sebepsiz yere yükseltilmeyecektir.
+- Sürüm yükseltme gerekirse ayrı bir Git branch üzerinde yedek ve test yapılarak uygulanacaktır.
+
+---
+
+## TD-018 — Cinemachine Paketinin Ertelenmesi
+
+**Durum:** Kabul edildi  
+**Tarih:** 18 Temmuz 2026
+
+### Karar
+
+Cinemachine paketi ilk proje kurulumu sırasında eklenmeyecektir.
+
+### Gerekçe
+
+- İlk prototipte kullanılmayan bir bağımlılık oluşturmamak
+- Kamera sistemini uçuş sisteminden bağımsız özel bileşenlerle tasarlamak
+- Projenin temel kamera ihtiyaçlarını önce küçük bir prototiple doğrulamak
+- Gereksiz paket ve proje karmaşıklığından kaçınmak
+
+### Sonuçlar
+
+Cinemachine ihtiyacı Faz 8 kamera sistemi geliştirilirken tekrar değerlendirilecektir.
+
+---
+
 ## Karar Bekleyen Konular
 
-- [ ] Unity sürümünün tam numarası
-- [ ] URP veya Built-in Render Pipeline seçimi
-- [ ] UI Toolkit veya UGUI seçimi
+- [x] Unity sürümünün tam numarası — Unity 6.3 LTS, 6000.3.20f1
+- [x] Render Pipeline seçimi — Universal Render Pipeline
+- [x] UI teknolojisi — uGUI ve TextMeshPro
 - [ ] Kullanılacak İHA modelinin kesinleştirilmesi
 - [ ] İlk sürümde joystick desteği
 - [ ] Yakıt sistemi veya batarya sistemi
 - [ ] Harita çözümü
 - [ ] Test framework kapsamı
-- [ ] Cinemachine kullanımı
+- [ ] Cinemachine ihtiyacının Faz 8 sırasında yeniden değerlendirilmesi
 - [ ] Terrain veya modüler çevre kullanımı
 
 ---

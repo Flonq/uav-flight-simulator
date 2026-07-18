@@ -21,9 +21,9 @@ Bu dosya projenin geliştirme planını ve ilerleme durumunu takip etmek için k
 - [x] `TECHNICAL_DECISIONS.md` oluşturuldu
 - [x] `TASKS.md` oluşturuldu
 - [x] `README.md` oluşturuldu
-- [ ] Unity sürümünü kesinleştir
-- [ ] Render Pipeline seçimini kesinleştir
-- [ ] UI teknolojisini kesinleştir
+- [x] Unity sürümünü kesinleştir
+- [x] Render Pipeline seçimini kesinleştir
+- [x] UI teknolojisini kesinleştir
 - [ ] İHA modelini kesinleştir
 - [ ] Proje takvimini oluştur
 
@@ -35,23 +35,24 @@ Projenin teknik temeli ve ilk sürüm kapsamı açıkça tanımlanmış olmalıd
 
 # FAZ 1 — Unity Proje Kurulumu
 
-- [ ] Yeni Unity projesini oluştur
-- [ ] Proje adını belirle
-- [ ] Windows hedef platformunu ayarla
-- [ ] Renk uzayını kontrol et
-- [ ] Input System paketini kur
-- [ ] TextMeshPro temel kaynaklarını ekle
-- [ ] Gerekliyse Cinemachine paketini kur
-- [ ] `_Project` ana klasörünü oluştur
-- [ ] Önerilen alt klasör yapısını oluştur
-- [ ] İlk test sahnesini oluştur
-- [ ] Sahneyi `FlightTest` adıyla kaydet
-- [ ] Proje ayarlarının ilk yedeğini al
-- [ ] Git deposunu başlat
-- [ ] Unity için `.gitignore` ekle
-- [ ] İlk commit'i oluştur
-- [ ] GitHub reposunu oluştur
-- [ ] Yerel repoyu GitHub'a push et
+- [x] Yeni Unity projesini oluştur
+- [x] Proje adını belirle
+- [x] Windows hedef platformunu ayarla
+- [x] Renk uzayını kontrol et
+- [x] Input System paketini kur
+- [x] TextMeshPro temel kaynaklarını ekle
+- [x] Gerekliyse Cinemachine paketini kur
+  - İlk prototip için gerekli görülmedi; Faz 8 sırasında tekrar değerlendirilecek.
+- [x] `_Project` ana klasörünü oluştur
+- [x] Önerilen alt klasör yapısını oluştur
+- [x] İlk test sahnesini oluştur
+- [x] Sahneyi `FlightTest` adıyla kaydet
+- [x] Proje ayarlarının ilk yedeğini al
+- [x] Git deposunu başlat
+- [x] Unity için `.gitignore` ekle
+- [x] İlk commit'i oluştur
+- [x] GitHub reposunu oluştur
+- [x] Yerel repoyu GitHub'a push et
 
 ### Çıkış kriteri
 
@@ -456,6 +457,6 @@ Yeni bir hata bulunduğunda aşağıdaki biçimde eklenmelidir:
 
 Bu bölüm her çalışma oturumunun sonunda güncellenmelidir.
 
-1. Unity sürümünü kesinleştir
-2. Yeni Unity projesini oluştur
-3. Git ve klasör yapısını hazırla
+1. Basit test zemini oluştur
+2. Geçici pist oluştur
+3. Çevre ölçeğini metre birimine göre doğrula
