@@ -1,0 +1,58 @@
+# Unity tarafından otomatik üretilen klasörler
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+/[Cc]rashes/
+
+# Yerel ve dağıtılabilir build çıktıları
+/[Bb]uild/
+/[Bb]uilds/
+
+# Unity Asset Store araçları
+/[Aa]ssets/AssetStoreTools*
+
+# Visual Studio
+.vs/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.sln.docstates
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+*.DotSettings.user
+
+# Diğer editör ve araç dosyaları
+.consulo/
+.gradle/
+ExportedObj/
+
+# Unity tarafından üretilen debug meta dosyaları
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Tanılama dosyaları
+sysinfo.txt
+crashlytics-build.properties
+
+# İşletim sistemi dosyaları
+.DS_Store
+Thumbs.db
+Desktop.ini
