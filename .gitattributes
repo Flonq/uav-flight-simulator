@@ -1,6 +1,5 @@
 # Metin dosyalarını platformlar arasında tutarlı hâle getir
 * text=auto
-
 # Kaynak kod ve dokümantasyon
 *.cs text eol=lf
 *.shader text eol=lf
@@ -13,7 +12,6 @@
 *.yml text eol=lf
 *.md text eol=lf
 *.txt text eol=lf
-
 # Unity metin tabanlı asset dosyaları
 *.asmdef text eol=lf
 *.asmref text eol=lf
@@ -25,7 +23,6 @@
 *.mat text eol=lf
 *.controller text eol=lf
 *.anim text eol=lf
-
 # İkili dosyalar
 *.png -text
 *.jpg -text
@@ -40,3 +37,5 @@
 *.ogg -text
 *.mp4 -text
 *.dll -text
+Assets/ThirdParty/Meshy/**/*.fbx filter=lfs diff=lfs merge=lfs -text
+Assets/ThirdParty/Meshy/**/*.png filter=lfs diff=lfs merge=lfs -text
