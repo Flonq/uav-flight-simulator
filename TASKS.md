@@ -68,10 +68,10 @@ Proje hatasız açılmalı, boş test sahnesi çalışmalı ve GitHub üzerinde 
 - [x] Pist collider davranışını Play Mode'da doğrula
 - [x] İHA spawn noktası oluştur
 - [x] Hangar ve üs çevresini ekle
-- [ ] Yer kontrol istasyonu alanını belirle
-- [ ] Directional Light temel ayarlarını doğrula
-- [ ] Skybox kullanımını değerlendir
-- [ ] Sis kullanımını değerlendir
+- [x] Yer kontrol istasyonu alanını belirle
+- [x] Directional Light temel ayarlarını doğrula
+- [x] Skybox kullanımını değerlendir
+- [x] Sis kullanımını değerlendir
 - [x] Test kamerasını doğrula
 - [x] Çevre ölçeğini İHA ile karşılaştırarak doğrula
 - [x] Havaalanı sahnesinde performans testi yap
@@ -89,7 +89,7 @@ Proje hatasız açılmalı, boş test sahnesi çalışmalı ve GitHub üzerinde 
 # FAZ 3 — İHA Modeli ve Fizik Kökü
 
 - [x] İHA modelini projeye aktar
-- [ ] Modelin lisansını belgeleyerek kontrol et
+- [x] Modelin lisansını belgeleyerek kontrol et
 - [x] Model ölçeğini metre birimine göre ayarla
 - [x] Pivot noktasını kontrol et
 - [x] Model yönünü Unity eksenlerine göre düzelt
@@ -97,7 +97,8 @@ Proje hatasız açılmalı, boş test sahnesi çalışmalı ve GitHub üzerinde 
 - [x] Görsel modeli fizik kökünün altına yerleştir
 - [x] Rigidbody ekle
 - [x] Kütle değerini belirle
-- [ ] Center of Mass ayarını kontrol et
+- [x] Center of Mass ayarını kontrol et
+  - Rigidbody Automatic Center Of Mass kullanılıyor; özel CoM ayarı uçuş fiziği geliştirilirken gerekirse yeniden değerlendirilecek.
 - [x] Ana collider yapısını oluştur
 - [x] Kanat colliderlarını değerlendir
 - [x] Tekerlek veya iniş takımı colliderlarını oluştur
