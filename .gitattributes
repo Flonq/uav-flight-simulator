@@ -39,3 +39,6 @@
 *.dll -text
 Assets/ThirdParty/Meshy/**/*.fbx filter=lfs diff=lfs merge=lfs -text
 Assets/ThirdParty/Meshy/**/*.png filter=lfs diff=lfs merge=lfs -text
+Assets/ThirdParty/Tiny[[:space:]]Teacup[[:space:]]Studio/Military[[:space:]]Base[[:space:]]Pack/**/*.fbx filter=lfs diff=lfs merge=lfs -text
+Assets/ThirdParty/Tiny[[:space:]]Teacup[[:space:]]Studio/Military[[:space:]]Base[[:space:]]Pack/**/*.png filter=lfs diff=lfs merge=lfs -text
+Assets/ThirdParty/Tiny[[:space:]]Teacup[[:space:]]Studio/Military[[:space:]]Base[[:space:]]Pack/**/*.exr filter=lfs diff=lfs merge=lfs -text
