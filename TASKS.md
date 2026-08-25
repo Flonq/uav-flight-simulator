@@ -24,7 +24,7 @@ Bu dosya projenin geliştirme planını ve ilerleme durumunu takip etmek için k
 - [x] Unity sürümünü kesinleştir
 - [x] Render Pipeline seçimini kesinleştir
 - [x] UI teknolojisini kesinleştir
-- [ ] İHA modelini kesinleştir
+- [x] İHA modelini kesinleştir
 - [ ] Proje takvimini oluştur
 
 ### Çıkış kriteri
@@ -62,19 +62,23 @@ Proje hatasız açılmalı, boş test sahnesi çalışmalı ve GitHub üzerinde 
 
 # FAZ 2 — Test Ortamı ve Havaalanı
 
-- [ ] Basit zemin oluştur
-- [ ] Pist modeli veya geçici pist oluştur
-- [ ] Pist collider ayarlarını yap
-- [ ] Başlangıç noktası oluştur
-- [ ] İHA spawn noktası oluştur
-- [ ] Basit hangar alanı ekle
-- [ ] Yer kontrol istasyonu alanı ekle
-- [ ] Directional Light ayarla
-- [ ] Skybox ayarla
-- [ ] Sis ayarlarını değerlendir
-- [ ] Test kamerası oluştur
-- [ ] Çevre ölçeğini metre birimine göre kontrol et
-- [ ] Havaalanı sahnesinde 60 FPS testi yap
+- [x] Test zemini ve havaalanı çevresini hazırla
+  - Military Base Pack test ortamının temel çevresi olarak kullanılıyor.
+- [x] Pist / test yüzeyini hazırla
+- [x] Pist collider davranışını Play Mode'da doğrula
+- [x] İHA spawn noktası oluştur
+- [x] Hangar ve üs çevresini ekle
+- [ ] Yer kontrol istasyonu alanını belirle
+- [ ] Directional Light temel ayarlarını doğrula
+- [ ] Skybox kullanımını değerlendir
+- [ ] Sis kullanımını değerlendir
+- [x] Test kamerasını doğrula
+- [x] Çevre ölçeğini İHA ile karşılaştırarak doğrula
+- [x] Havaalanı sahnesinde performans testi yap
+- [x] Military Base Pack lisansını kontrol et
+- [x] Military Base Pack URP materyal uyumluluğunu düzelt
+- [x] Gereksiz Spot Light gölgelerini kapat
+- [x] Play Mode testinde Console'u hatasız ve uyarısız doğrula
 
 ### Çıkış kriteri
 
@@ -84,21 +88,22 @@ Proje hatasız açılmalı, boş test sahnesi çalışmalı ve GitHub üzerinde 
 
 # FAZ 3 — İHA Modeli ve Fizik Kökü
 
-- [ ] İHA modelini projeye aktar
+- [x] İHA modelini projeye aktar
 - [ ] Modelin lisansını belgeleyerek kontrol et
-- [ ] Model ölçeğini metre birimine göre ayarla
-- [ ] Pivot noktasını kontrol et
-- [ ] Model yönünü Unity eksenlerine göre düzelt
-- [ ] Fizik kök nesnesi oluştur
-- [ ] Görsel modeli fizik kökünün altına yerleştir
-- [ ] Rigidbody ekle
-- [ ] Kütle değerini belirle
+- [x] Model ölçeğini metre birimine göre ayarla
+- [x] Pivot noktasını kontrol et
+- [x] Model yönünü Unity eksenlerine göre düzelt
+- [x] Fizik kök nesnesi oluştur
+- [x] Görsel modeli fizik kökünün altına yerleştir
+- [x] Rigidbody ekle
+- [x] Kütle değerini belirle
 - [ ] Center of Mass ayarını kontrol et
-- [ ] Ana collider yapısını oluştur
-- [ ] Kanat colliderlarını değerlendir
-- [ ] Tekerlek veya iniş takımı colliderlarını oluştur
-- [ ] Prefab oluştur
-- [ ] Prefabı test sahnesine ekle
+- [x] Ana collider yapısını oluştur
+- [x] Kanat colliderlarını değerlendir
+- [x] Tekerlek veya iniş takımı colliderlarını oluştur
+- [x] Prefab oluştur
+- [x] Prefabı test sahnesine ekle
+- [x] Yerçekimi ve pist temas testini gerçekleştir
 
 ### Çıkış kriteri
 
@@ -457,6 +462,6 @@ Yeni bir hata bulunduğunda aşağıdaki biçimde eklenmelidir:
 
 Bu bölüm her çalışma oturumunun sonunda güncellenmelidir.
 
-1. Basit test zemini oluştur
-2. Geçici pist oluştur
-3. Çevre ölçeğini metre birimine göre doğrula
+1. Test ortamındaki Directional Light, Skybox, sis ve yer kontrol istasyonu alanı kararlarını tamamla
+2. İHA modelinin lisansını belgeleyerek kontrol et ve Center of Mass ayarını doğrula
+3. Faz 2 ve Faz 3 dokümantasyonunu tamamlayıp test ortamı branch'ini kapat
