@@ -10,11 +10,11 @@
 
 ## 2. Projenin Amacı
 
-Bu proje, Unity kullanılarak geliştirilecek masaüstü tabanlı bir insansız hava aracı uçuş simülatörüdür.
+Bu proje, Unity kullanılarak geliştirilen masaüstü tabanlı bir insansız hava aracı uçuş simülatörüdür.
 
 Projenin temel amacı; yazılım mimarisi, oyun motoru kullanımı, fizik tabanlı sistem geliştirme, kullanıcı arayüzü tasarımı, görev akışı oluşturma ve teknik dokümantasyon becerilerimi tek bir portföy çalışmasında göstermektir.
 
-Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak üzere geliştirilecektir.
+Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak üzere geliştirilmektedir.
 
 Bu çalışma resmî bir Baykar ürünü değildir ve Baykar tarafından desteklendiği veya onaylandığı iddiasını taşımaz.
 
@@ -72,7 +72,7 @@ Simülasyonun planlanan temel akışı:
 
 ---
 
-## 6. Kullanılacak Teknolojiler
+## 6. Kullanılan Teknolojiler
 
 | Alan | Teknoloji |
 |---|---|
@@ -81,19 +81,23 @@ Simülasyonun planlanan temel akışı:
 | Render Pipeline | Universal Render Pipeline |
 | Sürüm kontrolü | Git |
 | Kod deposu | GitHub |
-| Geliştirme ortamı | Visual Studio veya JetBrains Rider |
 | Girdi sistemi | Unity Input System |
 | Fizik sistemi | Unity Rigidbody tabanlı fizik |
 | Kullanıcı arayüzü | uGUI ve TextMeshPro |
 | Hedef platform | Windows |
 
-### Henüz kesinleştirilmemiş bilgiler
+### Mevcut teknik kararlar
 
-- Kullanılacak İHA modelinin kesin adı
-- Joystick desteğinin ilk sürüme dahil edilip edilmeyeceği
-- Cinemachine paketine ihtiyaç duyulup duyulmayacağı
+- Proje `Universal 3D` şablonu ile oluşturulmuştur.
+- Renk uzayı `Linear` olarak kullanılmaktadır.
+- Kullanıcı girdileri Unity Input System üzerinden yönetilecektir.
+- İHA hareketi `Rigidbody` tabanlı yarı gerçekçi bir fizik modeli ile geliştirilecektir.
+- Görsel model ile fizik kök nesnesi birbirinden ayrılmıştır.
+- Kullanıcı arayüzü için uGUI ve TextMeshPro kullanılacaktır.
+- Cinemachine ilk prototip için gerekli görülmemiştir; kamera sistemi geliştirilirken tekrar değerlendirilecektir.
+- Joystick desteği MVP sonrasında veya ihtiyaç oluşması durumunda değerlendirilecektir.
 
-Bu kararlar verildiğinde `TECHNICAL_DECISIONS.md` dosyasına eklenecektir.
+Ayrıntılı teknik kararlar `TECHNICAL_DECISIONS.md` dosyasında tutulmaktadır.
 
 ---
 
@@ -116,7 +120,7 @@ Bu kararlar verildiğinde `TECHNICAL_DECISIONS.md` dosyasına eklenecektir.
 
 - Takip kamerası
 - Serbest gözlem kamerası
-- Kokpit veya gövde kamerası
+- Gövde kamerası
 - Elektro-optik hedefleme kamerası
 - Kamera modları arasında geçiş
 - Zoom ve hedef takibi
@@ -139,7 +143,6 @@ Bu kararlar verildiğinde `TECHNICAL_DECISIONS.md` dosyasına eklenecektir.
 - Yön
 - Pitch, roll ve yaw değerleri
 - Motor gücü
-- Yakıt veya enerji seviyesi
 - Görev süresi
 - Waypoint mesafesi
 
@@ -200,22 +203,15 @@ Bu proje bir portföy ve yazılım demonstrasyon çalışmasıdır; sertifikalı
 
 ---
 
-## 10. Önerilen Proje Klasör Yapısı
+## 10. Proje Klasör Yapısı
 
 ```text
 Assets/
 ├── _Project/
 │   ├── Art/
-│   │   ├── Aircraft/
-│   │   ├── Environment/
-│   │   ├── Materials/
-│   │   └── UI/
 │   ├── Audio/
 │   ├── Prefabs/
-│   │   ├── Aircraft/
-│   │   ├── Environment/
-│   │   ├── Mission/
-│   │   └── UI/
+│   │   └── Aircraft/
 │   ├── Scenes/
 │   ├── Scripts/
 │   │   ├── Aircraft/
@@ -227,17 +223,20 @@ Assets/
 │   │   └── UI/
 │   ├── Settings/
 │   └── Tests/
-├── Plugins/
 └── ThirdParty/
 ```
+
+Proje tarafından geliştirilen içerikler mümkün olduğunca `Assets/_Project` altında tutulmaktadır.
+
+Harici modeller ve asset paketleri `Assets/ThirdParty` altında izole edilmektedir.
 
 ---
 
 ## 11. Geliştirme Yaklaşımı
 
-Proje küçük ve test edilebilir aşamalar hâlinde geliştirilecektir.
+Proje küçük ve test edilebilir aşamalar hâlinde geliştirilmektedir.
 
-Her özellik için uygulanacak temel süreç:
+Her özellik için uygulanan temel süreç:
 
 1. Gereksinimi tanımla
 2. Mevcut sistemi incele
@@ -249,7 +248,26 @@ Her özellik için uygulanacak temel süreç:
 8. Git commit oluştur
 9. Dokümantasyonu güncelle
 
-Kod ve Unity ayarları geliştirici tarafından manuel olarak uygulanacaktır.
+### Mimari yaklaşım
+
+Tek bir büyük kontrol sınıfı yerine sorumlulukları ayrılmış bileşenler kullanılacaktır.
+
+Planlanan temel bileşenler:
+
+```text
+AircraftInputReader
+AircraftPhysics
+AircraftEngine
+AircraftControlSurfaces
+AircraftGroundController
+AircraftTelemetry
+CameraModeController
+MissionManager
+Waypoint
+GroundControlUI
+```
+
+Kullanıcı girdisi, fizik sistemi, kamera, telemetri, görev sistemi ve kullanıcı arayüzü birbirinden mümkün olduğunca bağımsız tutulacaktır.
 
 ---
 
@@ -272,26 +290,43 @@ Proje aşağıdaki koşullar sağlandığında başarılı kabul edilecektir:
 
 ## 13. Mevcut Durum
 
-**Durum:** Planlama ve dokümantasyon aşaması
+**Mevcut aşama:** Faz 3 tamamlandı — Faz 4 Girdi Sistemi geliştirmesine geçiliyor.
 
-Şu anda:
+### Tamamlanan temel çalışmalar
 
-- Projenin genel amacı belirlendi
-- Ana sistemler taslak olarak tanımlandı
-- İlk sürüm kapsamı oluşturuldu
-- Dokümantasyon yapısı hazırlandı
+- Unity 6.3 LTS projesi oluşturuldu ve temel proje ayarları tamamlandı.
+- Universal Render Pipeline yapılandırıldı.
+- Unity Input System ve TextMeshPro proje altyapısına dahil edildi.
+- Modüler `_Project` klasör yapısı oluşturuldu.
+- `FlightTest` ana test sahnesi hazırlandı.
+- Military Base Pack kullanılarak havaalanı ve üs test ortamı oluşturuldu.
+- Harici environment materyalleri URP ile uyumlu hâle getirildi.
+- Sahnedeki gereksiz gerçek zamanlı gölge maliyetleri azaltıldı.
+- İHA spawn noktası ve yer kontrol istasyonu için mantıksal alan belirlendi.
+- İHA görsel modeli projeye aktarıldı.
+- İHA görsel yönü ve ölçeği Unity sahnesine uygun hâle getirildi.
+- Ayrı bir fizik kök nesnesi oluşturuldu.
+- Rigidbody ve temel gövde, kanat ve iniş takımı collider yapısı oluşturuldu.
+- Rigidbody için otomatik Center of Mass kullanımı doğrulandı.
+- Yerçekimi ve pist temas davranışı Play Mode'da test edildi.
+- Test sahnesinde Console hatasız ve uyarısız çalışacak duruma getirildi.
+- Faz 2 ve Faz 3 geliştirmeleri `main` branch'ine birleştirildi.
 
-Bir sonraki adım:
+### Sıradaki geliştirme
 
-- Unity sürümünü kesinleştirmek
-- Yeni Unity projesini oluşturmak
-- Git deposunu hazırlamak
-- Temel klasör yapısını oluşturmak
-- İlk test sahnesini hazırlamak
+Bir sonraki aşama **Faz 4 — Girdi Sistemi** olacaktır.
+
+Bu aşamada:
+
+- `Aircraft.inputactions` oluşturulacak
+- Pitch, roll, yaw, throttle ve brake girdileri tanımlanacak
+- Kamera ve UI girdilerinin temeli hazırlanacak
+- `AircraftInputReader` geliştirilecek
+- Girdi sistemi fizik kodundan bağımsız şekilde test edilecektir
 
 ---
 
-## 14. İletişim ve Proje Sahibi
+## 14. Proje Sahibi
 
 **Geliştirici:** Mert Kaan  
 **Rol:** Yazılım Mühendisi / Unity Geliştiricisi  

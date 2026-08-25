@@ -540,18 +540,93 @@ Cinemachine ihtiyacı Faz 8 kamera sistemi geliştirilirken tekrar değerlendiri
 
 ---
 
+## TD-019 — Test Ortamında Military Base Pack Kullanılması
+
+**Durum:** Kabul edildi  
+**Tarih:** 25 Ağustos 2026
+
+### Karar
+
+İHA geliştirme ve fizik testleri için Military Base Pack tabanlı havaalanı ve üs ortamı kullanılacaktır.
+
+### Gerekçe
+
+- Sıfırdan çevre modellemek yerine geliştirme süresini ana teknik sistemlere ayırmak
+- Pist, hangar ve üs yapılarıyla yeterli görsel ölçek referansı sağlamak
+- Rigidbody ve yer teması testleri için kullanılabilir bir test ortamına hızlı şekilde ulaşmak
+- Portföy sunumunda boş prototip sahnesi yerine anlaşılır bir operasyon ortamı göstermek
+
+### Sonuçlar
+
+- Paket `Assets/ThirdParty` altında izole tutulacaktır.
+- Paketin temel mekaniklere herhangi bir kod bağımlılığı olmayacaktır.
+- Built-in materyaller URP ile uyumlu hâle getirilmiştir.
+- Gereksiz Spot Light gölgeleri performans amacıyla kapatılmıştır.
+- Üçüncü taraf asset lisansları repo public hâle getirilmeden önce yeniden değerlendirilecektir.
+
+---
+
+## TD-020 — Görsel Model ile Fizik Kökünün Ayrılması
+
+**Durum:** Kabul edildi  
+**Tarih:** 25 Ağustos 2026
+
+### Karar
+
+İHA'nın görsel modeli doğrudan fizik nesnesi olarak kullanılmayacak; ayrı bir `AircraftRoot` fizik kökü altında tutulacaktır.
+
+### Gerekçe
+
+- Modelin pivot ve eksen farklılıklarını fizik sisteminden bağımsız düzeltebilmek
+- Görsel model ölçeğini ve rotasyonunu Rigidbody davranışını bozmadan ayarlayabilmek
+- Collider yapısını görsel mesh geometrisinden bağımsız tasarlamak
+- İleride görsel model değiştirilse bile uçuş fiziği mimarisini korumak
+
+### Sonuçlar
+
+- Rigidbody fizik kök nesnesi üzerinde bulunacaktır.
+- Görsel model fizik kökünün child nesnesi olacaktır.
+- Gövde, kanat ve iniş takımı colliderları ayrı primitive colliderlarla temsil edilecektir.
+- Uçuş kuvvetleri ileride fizik köküne uygulanacaktır.
+
+---
+
+## TD-021 — Automatic Center Of Mass Kullanılması
+
+**Durum:** Kabul edildi  
+**Tarih:** 25 Ağustos 2026
+
+### Karar
+
+İlk uçuş prototipinde Rigidbody için Unity'nin `Automatic Center Of Mass` hesaplaması kullanılacaktır.
+
+### Gerekçe
+
+- Mevcut collider yapısının genel olarak simetrik olması
+- Pist temas ve yerçekimi testlerinde anormal yana yatma veya dönüş gözlenmemesi
+- Uçuş fiziği geliştirilmeden önce gereksiz manuel Center of Mass ayarı yapmamak
+- Özel Center of Mass değerinin gerçek uçuş davranışı gözlemlendikten sonra daha anlamlı şekilde ayarlanabilmesi
+
+### Sonuçlar
+
+- Şimdilik manuel Center of Mass offset değeri kullanılmayacaktır.
+- Uçuş fiziği ve stall davranışı geliştirilirken Center of Mass yeniden değerlendirilecektir.
+- Gerekirse daha sonraki fazlarda özel bir Center of Mass konumu tanımlanabilecektir.
+
+---
+
 ## Karar Bekleyen Konular
 
 - [x] Unity sürümünün tam numarası — Unity 6.3 LTS, 6000.3.20f1
 - [x] Render Pipeline seçimi — Universal Render Pipeline
 - [x] UI teknolojisi — uGUI ve TextMeshPro
-- [ ] Kullanılacak İHA modelinin kesinleştirilmesi
+- [x] Kullanılacak İHA modelinin kesinleştirilmesi — Meshy ile özel lisans kapsamında üretilen sabit kanatlı İHA modeli
 - [ ] İlk sürümde joystick desteği
 - [ ] Yakıt sistemi veya batarya sistemi
 - [ ] Harita çözümü
 - [ ] Test framework kapsamı
 - [ ] Cinemachine ihtiyacının Faz 8 sırasında yeniden değerlendirilmesi
-- [ ] Terrain veya modüler çevre kullanımı
+- [x] Terrain veya modüler çevre kullanımı — Military Base Pack tabanlı test ortamı
 
 ---
 
@@ -560,3 +635,5 @@ Cinemachine ihtiyacı Faz 8 kamera sistemi geliştirilirken tekrar değerlendiri
 | Tarih | Karar | Değişiklik |
 |---|---|---|
 | Proje başlangıcı | TD-001 – TD-016 | İlk teknik karar taslağı oluşturuldu |
+| 18 Temmuz 2026 | TD-017 – TD-018 | Unity sürümü kesinleştirildi ve Cinemachine kullanımı kamera fazına ertelendi |
+| 25 Ağustos 2026 | TD-019 – TD-021 | Test ortamı, fizik kökü ve Center of Mass kararları belgelendi |

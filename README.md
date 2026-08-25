@@ -1,6 +1,6 @@
 # UAV Flight Simulator
 
-Unity ve C# kullanılarak geliştirilen, sabit kanatlı bir insansız hava aracının kalkış, görev uçuşu, hedef gözlemi ve iniş süreçlerini simüle eden masaüstü portföy projesidir.
+Unity ve C# kullanılarak geliştirilen, sabit kanatlı bir insansız hava aracının kalkış, görev uçuşu, hedef gözlemi ve iniş süreçlerini simüle etmeyi amaçlayan masaüstü portföy projesidir.
 
 > Bu proje bireysel bir yazılım ve simülasyon çalışmasıdır. Resmî bir Baykar ürünü değildir ve Baykar tarafından desteklendiği veya onaylandığı iddiasını taşımaz.
 
@@ -10,7 +10,7 @@ Unity ve C# kullanılarak geliştirilen, sabit kanatlı bir insansız hava arac�
 
 UAV Flight Simulator, bir yer kontrol istasyonu arayüzü üzerinden İHA uçuşunun yönetilmesini amaçlamaktadır.
 
-Kullanıcı:
+Planlanan görev akışında kullanıcı:
 
 - İHA sistemlerini hazırlayabilecek
 - Pistten kalkış yapabilecek
@@ -26,62 +26,39 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 
 ## Proje Durumu
 
-**Mevcut aşama:** Test ortamı ve havaalanı prototipi
+**Mevcut aşama:** Faz 3 tamamlandı — Faz 4 Girdi Sistemi geliştirmesine geçiliyor.
 
 | Sistem | Durum |
 |---|---|
-| Proje dokümantasyonu | Tamamlandı |
+| Proje dokümantasyonu ve temel teknik kararlar | Tamamlandı |
 | Unity proje kurulumu | Tamamlandı |
-| İHA uçuş fiziği | Planlandı |
+| Test havaalanı ve üs ortamı | Tamamlandı |
+| İHA model entegrasyonu ve fizik kökü | Tamamlandı |
+| Girdi sistemi | Sıradaki aşama |
+| Motor ve throttle sistemi | Planlandı |
+| Temel uçuş fiziği | Planlandı |
 | Kamera sistemi | Planlandı |
 | Telemetri sistemi | Planlandı |
 | Görev sistemi | Planlandı |
 | Yer kontrol istasyonu UI | Planlandı |
 | Windows build | Planlandı |
 
----
+### Tamamlanan prototip altyapısı
 
-## Planlanan Özellikler
-
-### Uçuş sistemi
-
-- Rigidbody tabanlı uçuş fiziği
-- Motor gücü ve throttle kontrolü
-- Pitch, roll ve yaw kontrolü
-- Lift ve drag kuvvetleri
-- Basitleştirilmiş stall davranışı
-- Pist üzerinde hareket
-- Kalkış ve iniş
-
-### Kamera sistemi
-
-- Takip kamerası
-- Gövde kamerası
-- Serbest kamera
-- Elektro-optik hedefleme kamerası
-- Zoom ve hedef takibi
-
-### Görev sistemi
-
-- Görev brifingi
-- Waypoint rotası
-- Hedef bölgesi
-- Görev başarı ve başarısızlık koşulları
-- Üsse dönüş
-- Görev sonuç ekranı
-
-### Telemetri ve arayüz
-
-- Hız
-- İrtifa
-- Dikey hız
-- Heading
-- Pitch, roll ve yaw
-- Throttle
-- Waypoint mesafesi
-- Kamera modu
-- Görev durumu
-- Sistem uyarıları
+- Unity 6.3 LTS projesi ve URP yapılandırması
+- Unity Input System ve TextMeshPro altyapısı
+- Modüler `_Project` klasör yapısı
+- `FlightTest` ana test sahnesi
+- Military Base Pack tabanlı test havaalanı ve üs çevresi
+- URP uyumlu environment materyalleri
+- İHA spawn noktası
+- Yer kontrol istasyonu için mantıksal alan
+- Sabit kanatlı İHA görsel modeli
+- Görsel modelden ayrılmış `Rigidbody` fizik kökü
+- Gövde, kanat ve iniş takımı için temel collider yapısı
+- Automatic Center Of Mass kullanımı
+- Pist teması ve yerçekimi Play Mode testi
+- Hatasız ve uyarısız test sahnesi Console kontrolü
 
 ---
 
@@ -95,10 +72,11 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 4. Temel fizik tabanlı uçuş
 5. Kalkış ve iniş
 6. Takip kamerası
-7. Elektro-optik kamera
+7. Basit elektro-optik kamera
 8. Temel telemetri paneli
 9. En az üç waypoint içeren bir görev
-10. Windows çalıştırılabilir build
+10. Görev başarı ekranı
+11. Windows çalıştırılabilir build
 
 ---
 
@@ -115,14 +93,22 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 | Git | Sürüm kontrolü |
 | GitHub | Kaynak kod ve portföy sunumu |
 
-### Kesinleştirilecek teknolojiler
+### Teknik yaklaşım
 
-- Cinemachine kullanımı
-- Joystick desteği
+- Hedef platform Windows masaüstüdür.
+- Renk uzayı `Linear` olarak kullanılmaktadır.
+- Uçuş sistemi `Rigidbody` tabanlı yarı gerçekçi bir fizik modeli olarak geliştirilecektir.
+- Girdi okuma ile fizik uygulaması birbirinden ayrılacaktır.
+- Görsel model ile fizik kök nesnesi birbirinden ayrılmıştır.
+- Fizik hesaplamaları `FixedUpdate` içinde yürütülecektir.
+- Ana mekanikler hazır bir uçuş sistemi paketine devredilmeyecektir.
+- Cinemachine ilk prototip için gerekli görülmemiştir ve kamera fazında yeniden değerlendirilecektir.
+
+Daha ayrıntılı kararlar için [`TECHNICAL_DECISIONS.md`](TECHNICAL_DECISIONS.md) dosyasına bakılabilir.
 
 ---
 
-## Teknik Yaklaşım
+## Mimari Yaklaşım
 
 Proje, tek bir büyük kontrol sınıfı yerine sorumlulukları ayrılmış modüler bileşenlerden oluşacaktır.
 
@@ -141,35 +127,26 @@ Waypoint
 GroundControlUI
 ```
 
-### Temel prensipler
+Temel prensipler:
 
-- Girdi okuma ve fizik uygulaması ayrılacaktır.
-- Fizik işlemleri `FixedUpdate` içinde çalıştırılacaktır.
-- Ayarlar mümkün olduğunca Inspector üzerinden düzenlenebilir olacaktır.
+- Kullanıcı girdisi fizik sisteminden bağımsız okunacaktır.
+- Inspector ayarları mümkün olduğunca `[SerializeField] private` alanlar üzerinden yönetilecektir.
+- Sistemler küçük ve test edilebilir bileşenlere ayrılacaktır.
 - Büyük özellikler ayrı Git branchlerinde geliştirilecektir.
-- Ana mekanikler hazır bir uçuş sistemi paketine teslim edilmeyecektir.
-- Kod okunabilirlik ve genişletilebilirlik gözetilerek yazılacaktır.
-
-Daha ayrıntılı kararlar için [`TECHNICAL_DECISIONS.md`](TECHNICAL_DECISIONS.md) dosyasına bakılabilir.
+- Console hata ve uyarıları geliştirme sürecinde göz ardı edilmeyecektir.
+- Kod yapısı teknik görüşmede açıklanabilir olacak şekilde tasarlanacaktır.
 
 ---
 
-## Planlanan Klasör Yapısı
+## Proje Klasör Yapısı
 
 ```text
 Assets/
 ├── _Project/
 │   ├── Art/
-│   │   ├── Aircraft/
-│   │   ├── Environment/
-│   │   ├── Materials/
-│   │   └── UI/
 │   ├── Audio/
 │   ├── Prefabs/
-│   │   ├── Aircraft/
-│   │   ├── Environment/
-│   │   ├── Mission/
-│   │   └── UI/
+│   │   └── Aircraft/
 │   ├── Scenes/
 │   ├── Scripts/
 │   │   ├── Aircraft/
@@ -181,17 +158,16 @@ Assets/
 │   │   └── UI/
 │   ├── Settings/
 │   └── Tests/
-├── Plugins/
 └── ThirdParty/
 ```
 
+Proje tarafından geliştirilen içerikler mümkün olduğunca `Assets/_Project` altında tutulmaktadır. Harici model ve asset paketleri `Assets/ThirdParty` altında izole edilmektedir.
+
 ---
 
-## Kontroller
+## Planlanan Kontroller
 
-Kontrol şeması geliştirme aşamasında kesinleştirilecektir.
-
-Planlanan varsayılan kontroller:
+Kontrol şeması Faz 4 sırasında Unity Input System üzerinden kesinleştirilecektir.
 
 | İşlem | Tuş |
 |---|---|
@@ -205,88 +181,46 @@ Planlanan varsayılan kontroller:
 | EO kamera zoom | Mouse Wheel |
 | Pause | Escape |
 
-Bu tuşlar proje geliştirilirken değişebilir.
+Bu kontroller henüz nihai değildir ve girdi sistemi testleri sırasında değişebilir.
 
 ---
 
 ## Kurulum
 
-Proje kaynak kodu henüz yayınlanabilir bir geliştirme aşamasına ulaşmamıştır.
+Geliştirme için proje **Unity 6.3 LTS — 6000.3.20f1** ile açılmalıdır.
 
-İleride temel geliştirme kurulumu aşağıdaki şekilde olacaktır:
-
-1. Uyumlu Unity Hub sürümünü yükleyin.
-2. Repoyu klonlayın.
-3. Projeyi belirtilen Unity sürümüyle açın.
-4. Unity'nin paketleri içe aktarmasını bekleyin.
-5. Ana sahneyi açın.
-6. Play düğmesine basın.
+1. Repoyu klonlayın.
+2. Unity Hub üzerinden projeyi `6000.3.20f1` Editor sürümüyle açın.
+3. Unity'nin paketleri ve assetleri içe aktarmasını bekleyin.
+4. `Assets/_Project/Scenes/FlightTest.unity` sahnesini açın.
+5. Console'da kritik hata bulunmadığını kontrol edin.
+6. Play Mode ile mevcut test ortamını çalıştırın.
 
 ```bash
 git clone <repository-url>
 ```
 
-Kesin Unity sürümü belirlendiğinde bu bölüm güncellenecektir.
-
----
-
-## Build Çalıştırma
-
-Windows build yayımlandığında:
-
-1. Sürüm arşivini indirin.
-2. ZIP dosyasını bir klasöre çıkarın.
-3. Uygulamanın `.exe` dosyasını çalıştırın.
-4. Kontroller ekranını inceleyin.
-5. Simülasyonu başlatın.
-
----
-
-## Dokümantasyon
-
-| Dosya | Açıklama |
-|---|---|
-| [`PROJECT_OVERVIEW.md`](PROJECT_OVERVIEW.md) | Projenin amacı, kapsamı ve başarı kriterleri |
-| [`TECHNICAL_DECISIONS.md`](TECHNICAL_DECISIONS.md) | Alınan teknik kararlar ve gerekçeleri |
-| [`TASKS.md`](TASKS.md) | Geliştirme aşamaları ve görev takibi |
-| [`README.md`](README.md) | GitHub ve portföy tanıtımı |
-
----
-
-## Ekran Görüntüleri
-
-Projenin görsel geliştirmesi başladığında bu bölüme eklenecektir.
-
-```text
-docs/images/
-├── main-menu.png
-├── takeoff.png
-├── flight.png
-├── eo-camera.png
-└── landing.png
-```
-
-Örnek kullanım:
-
-```markdown
-![Takeoff](docs/images/takeoff.png)
-```
+> Repo public olarak yayımlanmadan önce üçüncü taraf assetlerin yeniden dağıtım koşulları ayrıca kontrol edilecektir.
 
 ---
 
 ## Geliştirme Yol Haritası
 
-- [x] Proje fikrinin belirlenmesi
+- [x] Proje fikrinin ve MVP kapsamının belirlenmesi
 - [x] Başlangıç dokümantasyonunun hazırlanması
-- [ ] Unity projesinin oluşturulması
-- [ ] Test havaalanının hazırlanması
-- [ ] İHA modelinin eklenmesi
+- [x] Unity projesinin oluşturulması
+- [x] Temel klasör ve Git yapısının hazırlanması
+- [x] Test havaalanının hazırlanması
+- [x] İHA modelinin projeye eklenmesi
+- [x] Rigidbody fizik kökü ve temel collider yapısının hazırlanması
 - [ ] Girdi sisteminin geliştirilmesi
+- [ ] Motor ve throttle sisteminin geliştirilmesi
 - [ ] Temel uçuş fiziğinin geliştirilmesi
-- [ ] Kalkış ve iniş sisteminin geliştirilmesi
+- [ ] Yer hareketi, kalkış ve iniş sistemlerinin geliştirilmesi
 - [ ] Kamera sisteminin geliştirilmesi
 - [ ] Telemetri arayüzünün geliştirilmesi
 - [ ] Waypoint ve görev sisteminin geliştirilmesi
+- [ ] EO kamera ve hedefleme sisteminin geliştirilmesi
 - [ ] Ses ve görsel iyileştirmeler
 - [ ] Optimizasyon
 - [ ] Windows build
@@ -298,16 +232,71 @@ Ayrıntılı görev listesi için [`TASKS.md`](TASKS.md) dosyasına bakılabilir
 
 ## Bilinen Eksikler
 
-Proje henüz geliştirme başlangıcındadır. Bu nedenle şu sistemler mevcut değildir:
+Proje henüz uçuş mekaniği geliştirme aşamasına geçmemiştir. Bu nedenle şu sistemler henüz mevcut değildir:
 
-- Çalışan uçuş fiziği
-- Tamamlanmış İHA modeli entegrasyonu
-- Yer kontrol istasyonu arayüzü
+- Çalışan kullanıcı uçuş girdisi
+- Motor ve throttle sistemi
+- Lift, drag ve kontrol torklarını uygulayan uçuş fiziği
+- Kalkış ve iniş sistemi
+- Kamera modları
+- Telemetri arayüzü
+- Yer kontrol istasyonu kullanıcı arayüzü
 - Waypoint görevi
 - EO kamera hedefleme sistemi
 - Windows build
 
-Bu bölüm geliştirme süresince düzenli olarak güncellenecektir.
+---
+
+## Üçüncü Taraf İçerikler
+
+Projede üçüncü taraf içerikler `Assets/ThirdParty` altında tutulmaktadır.
+
+### Military Base Pack
+
+Test havaalanı ve üs çevresi için **Military Base Pack** kullanılmaktadır.
+
+- Paket, test ortamının çevre modeli olarak kullanılmaktadır.
+- Materyalleri URP ile uyumlu hâle getirilmiştir.
+- Paket lisansı proje geliştirme sırasında kontrol edilmiştir.
+- Ham assetlerin yeniden dağıtım koşulları nedeniyle repo public hâle getirilmeden önce lisans durumu yeniden değerlendirilecektir.
+
+### İHA modeli
+
+İHA görsel modeli Meshy kullanılarak proje için üretilmiştir.
+
+- Model, ücretli Meshy planı kapsamında özel lisans ile oluşturulmuştur.
+- Modelin görsel yönü, ölçeği ve fizik hiyerarşisi Unity için ayrıca düzenlenmiştir.
+- Uçuş fiziği hazır model davranışına bağlı değildir; proje içinde ayrı olarak geliştirilecektir.
+
+Diğer üçüncü taraf model, ses, doku ve paketler kendi lisanslarına tabidir.
+
+---
+
+## Dokümantasyon
+
+| Dosya | Açıklama |
+|---|---|
+| [`PROJECT_OVERVIEW.md`](PROJECT_OVERVIEW.md) | Projenin amacı, kapsamı, başarı kriterleri ve güncel durumu |
+| [`TECHNICAL_DECISIONS.md`](TECHNICAL_DECISIONS.md) | Alınan teknik kararlar ve gerekçeleri |
+| [`TASKS.md`](TASKS.md) | Geliştirme aşamaları ve görev takibi |
+| [`README.md`](README.md) | GitHub ve portföy tanıtımı |
+
+---
+
+## Ekran Görüntüleri
+
+Portföy sunumuna uygun ekran görüntüleri proje görsel olarak olgunlaştıkça eklenecektir.
+
+Planlanan yapı:
+
+```text
+docs/images/
+├── test-environment.png
+├── takeoff.png
+├── flight.png
+├── eo-camera.png
+└── landing.png
+```
 
 ---
 
@@ -330,11 +319,11 @@ MVP tamamlandıktan sonra değerlendirilebilecek özellikler:
 
 ---
 
-## Lisans ve Üçüncü Taraf İçerikler
+## Lisans
 
-Kaynak kod lisansı proje yayımlanmadan önce belirlenecektir.
+Kaynak kod lisansı proje public olarak yayımlanmadan önce belirlenecektir.
 
-Üçüncü taraf model, ses, doku ve paketler kendi lisanslarına tabidir. Ücretli veya yeniden dağıtımı yasak olan asset dosyaları açık kaynak depoya eklenmeyecektir.
+Üçüncü taraf içerikler kendi lisanslarına tabidir ve proje reposunun dağıtım biçimi bu lisans koşulları dikkate alınarak belirlenecektir.
 
 ---
 
@@ -343,4 +332,4 @@ Kaynak kod lisansı proje yayımlanmadan önce belirlenecektir.
 **Mert Kaan**  
 Yazılım Mühendisi / Unity Geliştiricisi
 
-Bu proje, yazılım geliştirme, Unity, C#, fizik tabanlı sistemler ve teknik dokümantasyon yetkinliklerini göstermek amacıyla geliştirilmektedir.
+Bu proje; Unity, C#, fizik tabanlı sistemler, modüler yazılım mimarisi, teknik dokümantasyon ve sürüm kontrolü yetkinliklerini göstermek amacıyla geliştirilmektedir.
