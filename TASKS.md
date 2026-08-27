@@ -114,22 +114,25 @@ Proje hatasız açılmalı, boş test sahnesi çalışmalı ve GitHub üzerinde 
 
 # FAZ 4 — Girdi Sistemi
 
-- [ ] `Aircraft.inputactions` dosyasını oluştur
-- [ ] Pitch action oluştur
-- [ ] Roll action oluştur
-- [ ] Yaw action oluştur
-- [ ] Throttle action oluştur
-- [ ] Brake action oluştur
-- [ ] Kamera değiştirme action oluştur
-- [ ] EO kamera zoom action oluştur
-- [ ] Pause action oluştur
-- [ ] C# sınıf üretimini etkinleştir
-- [ ] `AircraftInputReader` scriptini oluştur
-- [ ] Girdi değerlerini debug panelinde göster
-- [ ] Klavye kontrolünü test et
-- [ ] Fare kontrolü gerekip gerekmediğini değerlendir
-- [ ] Gamepad desteğini test et
-- [ ] Joystick desteğini sonraki sürüm için değerlendir
+- [x] `Aircraft.inputactions` dosyasını oluştur
+- [x] Pitch action oluştur
+- [x] Roll action oluştur
+- [x] Yaw action oluştur
+- [x] Throttle action oluştur
+- [x] Brake action oluştur
+- [x] Kamera değiştirme action oluştur
+- [x] EO kamera zoom action oluştur
+- [x] Pause action oluştur
+- [x] C# sınıf üretimini etkinleştir
+- [x] `AircraftInputReader` scriptini oluştur
+- [x] Girdi değerlerini debug panelinde göster
+- [x] Klavye kontrolünü test et
+- [x] Fare kontrolü gerekip gerekmediğini değerlendir
+  - Fare doğrudan uçuş kontrolünde kullanılmayacak; EO kamera, zoom ve UI etkileşimleri için ayrılacak.
+- [x] Gamepad desteğini test et
+  - DualSense gamepad ile pitch, roll, yaw, throttle, brake, kamera değiştirme, EO zoom ve pause girdileri doğrulandı.
+- [x] Joystick desteğini sonraki sürüm için değerlendir
+  - Unity Input System mimarisi joystick desteğine genişletilebilir bırakıldı; fiziksel joystick/HOTAS desteği MVP sonrasına ertelendi.
 
 ### Çıkış kriteri
 
