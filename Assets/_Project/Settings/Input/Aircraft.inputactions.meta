@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: a7d4d3995c4a7ce4ba1621c21b0f4dd8
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 8404be70184654265930450def6a9037, type: 3}
+  generateWrapperCode: 1
+  wrapperCodePath: Assets/_Project/Scripts/Input/Generated/AircraftInputActions.cs
+  wrapperClassName: AircraftInputActions
+  wrapperCodeNamespace: MertKaan.UAVSimulator.InputSystem
