@@ -466,6 +466,6 @@ Yeni bir hata bulunduğunda aşağıdaki biçimde eklenmelidir:
 
 Bu bölüm her çalışma oturumunun sonunda güncellenmelidir.
 
-1. Test ortamındaki Directional Light, Skybox, sis ve yer kontrol istasyonu alanı kararlarını tamamla
-2. İHA modelinin lisansını belgeleyerek kontrol et ve Center of Mass ayarını doğrula
-3. Faz 2 ve Faz 3 dokümantasyonunu tamamlayıp test ortamı branch'ini kapat
+1. Faz 5 için `AircraftEngine` mimarisini ve sorumluluklarını belirle
+2. Throttle girdisini `AircraftEngine` sistemine bağla
+3. Rigidbody üzerine ileri yönlü thrust kuvveti uygulayıp pist hızlanma testini gerçekleştir
