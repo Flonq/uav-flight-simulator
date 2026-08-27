@@ -615,13 +615,63 @@ Cinemachine ihtiyacı Faz 8 kamera sistemi geliştirilirken tekrar değerlendiri
 
 ---
 
+## TD-022 — Cihazdan Bağımsız Girdi Katmanı ve Gamepad Binding Stratejisi
+
+**Durum:** Kabul edildi  
+**Tarih:** 27 Ağustos 2026
+
+### Karar
+
+Kullanıcı girdileri Unity Input System üzerinden cihazdan bağımsız action'lar olarak okunacaktır.
+
+Klavye, fare ve gamepad aynı `Aircraft.inputactions` asseti üzerinden yönetilecek; fizik sistemi doğrudan herhangi bir fiziksel cihazı okumayacaktır.
+
+Gamepad bindinglerinde cihaz özelinde DualSense pathleri yerine genel `Gamepad` control pathleri kullanılacaktır.
+
+### Uygulanan Action Map'ler
+
+```text
+Aircraft
+├── Pitch
+├── Roll
+├── Yaw
+├── Throttle
+└── Brake
+
+Camera
+├── SwitchCamera
+└── EOZoom
+
+UI
+└── Pause
+```
+
+### Gerekçe
+
+- Girdi sistemi ile uçuş fiziğini birbirinden bağımsız tutmak
+- Aynı uçuş komutlarını farklı giriş cihazlarından okuyabilmek
+- DualSense testlerine rağmen PlayStation'a özel bir bağımlılık oluşturmamak
+- Daha sonra Xbox gamepad veya farklı uyumlu kontrolcülerin eklenmesini kolaylaştırmak
+- Joystick ve HOTAS desteğinin ileride mevcut action yapısı genişletilerek eklenebilmesini sağlamak
+
+### Sonuçlar
+
+- `AircraftInputReader` fizik kuvveti uygulamaz; yalnızca kullanıcı komutlarını yayınlar.
+- Klavye ve DualSense gamepad girdileri Play Mode'da doğrulanmıştır.
+- Fare doğrudan pitch, roll veya yaw kontrolünde kullanılmayacaktır.
+- Fare EO kamera, zoom ve UI etkileşimleri için ayrılmıştır.
+- Özel joystick/HOTAS desteği MVP sonrasına ertelenmiştir.
+- Input System tarafından üretilen `AircraftInputActions.cs` dosyası manuel olarak düzenlenmeyecektir.
+
+---
+
 ## Karar Bekleyen Konular
 
 - [x] Unity sürümünün tam numarası — Unity 6.3 LTS, 6000.3.20f1
 - [x] Render Pipeline seçimi — Universal Render Pipeline
 - [x] UI teknolojisi — uGUI ve TextMeshPro
 - [x] Kullanılacak İHA modelinin kesinleştirilmesi — Meshy ile özel lisans kapsamında üretilen sabit kanatlı İHA modeli
-- [ ] İlk sürümde joystick desteği
+- [x] İlk sürümde joystick desteği — MVP kapsamında özel joystick/HOTAS bindingleri eklenmeyecek; sonraki sürüme ertelendi
 - [ ] Yakıt sistemi veya batarya sistemi
 - [ ] Harita çözümü
 - [ ] Test framework kapsamı
@@ -637,3 +687,4 @@ Cinemachine ihtiyacı Faz 8 kamera sistemi geliştirilirken tekrar değerlendiri
 | Proje başlangıcı | TD-001 – TD-016 | İlk teknik karar taslağı oluşturuldu |
 | 18 Temmuz 2026 | TD-017 – TD-018 | Unity sürümü kesinleştirildi ve Cinemachine kullanımı kamera fazına ertelendi |
 | 25 Ağustos 2026 | TD-019 – TD-021 | Test ortamı, fizik kökü ve Center of Mass kararları belgelendi |
+| 27 Ağustos 2026 | TD-022 | Cihazdan bağımsız Input System ve generic Gamepad binding stratejisi belgelendi |

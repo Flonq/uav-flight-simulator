@@ -65,8 +65,8 @@ Simülasyonun planlanan temel akışı:
 ## 5. Hedef Platform
 
 - **Birincil platform:** Windows masaüstü
-- **Kontrol yöntemi:** Klavye ve fare
-- **İleri aşama seçeneği:** Gamepad veya joystick desteği
+- **Kontrol yöntemi:** Klavye, fare ve gamepad
+- **İleri aşama seçeneği:** Joystick veya HOTAS desteği
 - **Ekran modu:** 16:9 çözünürlükler
 - **Hedef performans:** Orta seviye bir bilgisayarda kararlı 60 FPS
 
@@ -171,7 +171,7 @@ Ayrıntılı teknik kararlar `TECHNICAL_DECISIONS.md` dosyasında tutulmaktadır
 
 - Tek bir sabit kanatlı İHA
 - Tek bir havaalanı veya test sahası
-- Klavye ve fare ile kontrol
+- Klavye, fare ve gamepad ile kontrol
 - Temel fizik tabanlı uçuş
 - Kalkış ve iniş
 - Takip kamerası
@@ -290,7 +290,7 @@ Proje aşağıdaki koşullar sağlandığında başarılı kabul edilecektir:
 
 ## 13. Mevcut Durum
 
-**Mevcut aşama:** Faz 3 tamamlandı — Faz 4 Girdi Sistemi geliştirmesine geçiliyor.
+**Mevcut aşama:** Faz 4 tamamlandı — Faz 5 Motor ve Throttle Sistemi geliştirmesine geçiliyor.
 
 ### Tamamlanan temel çalışmalar
 
@@ -311,18 +311,25 @@ Proje aşağıdaki koşullar sağlandığında başarılı kabul edilecektir:
 - Yerçekimi ve pist temas davranışı Play Mode'da test edildi.
 - Test sahnesinde Console hatasız ve uyarısız çalışacak duruma getirildi.
 - Faz 2 ve Faz 3 geliştirmeleri `main` branch'ine birleştirildi.
+- `Aircraft`, `Camera` ve `UI` Action Map'lerini içeren Input System yapısı oluşturuldu.
+- `AircraftInputReader` ile kullanıcı girdisi fizik sisteminden ayrıldı.
+- Klavye ve DualSense gamepad kontrolleri Play Mode'da doğrulandı.
+- EO zoom için fare ve gamepad girdileri hazırlandı.
+- Girdi değerlerini doğrulamak için geliştirme amaçlı debug paneli oluşturuldu.
+- Özel joystick/HOTAS desteğinin MVP sonrasına ertelenmesine karar verildi.
 
 ### Sıradaki geliştirme
 
-Bir sonraki aşama **Faz 4 — Girdi Sistemi** olacaktır.
+Bir sonraki aşama **Faz 5 — Motor ve Throttle Sistemi** olacaktır.
 
 Bu aşamada:
 
-- `Aircraft.inputactions` oluşturulacak
-- Pitch, roll, yaw, throttle ve brake girdileri tanımlanacak
-- Kamera ve UI girdilerinin temeli hazırlanacak
-- `AircraftInputReader` geliştirilecek
-- Girdi sistemi fizik kodundan bağımsız şekilde test edilecektir
+- `AircraftEngine` bileşeni oluşturulacak
+- Throttle girdisi motor sistemine bağlanacak
+- Motor thrust değeri hesaplanacak
+- Rigidbody üzerine ileri yönlü kuvvet uygulanacak
+- Motor ve throttle değerleri Inspector üzerinden ayarlanabilir tutulacak
+- Sistem uçuş aerodinamiğinden bağımsız olarak test edilecektir
 
 ---
 

@@ -26,7 +26,7 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 
 ## Proje Durumu
 
-**Mevcut aşama:** Faz 3 tamamlandı — Faz 4 Girdi Sistemi geliştirmesine geçiliyor.
+**Mevcut aşama:** Faz 4 tamamlandı — Faz 5 Motor ve Throttle Sistemi geliştirmesine geçiliyor.
 
 | Sistem | Durum |
 |---|---|
@@ -34,8 +34,8 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 | Unity proje kurulumu | Tamamlandı |
 | Test havaalanı ve üs ortamı | Tamamlandı |
 | İHA model entegrasyonu ve fizik kökü | Tamamlandı |
-| Girdi sistemi | Sıradaki aşama |
-| Motor ve throttle sistemi | Planlandı |
+| Girdi sistemi | Tamamlandı |
+| Motor ve throttle sistemi | Sıradaki aşama |
 | Temel uçuş fiziği | Planlandı |
 | Kamera sistemi | Planlandı |
 | Telemetri sistemi | Planlandı |
@@ -58,6 +58,10 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 - Gövde, kanat ve iniş takımı için temel collider yapısı
 - Automatic Center Of Mass kullanımı
 - Pist teması ve yerçekimi Play Mode testi
+- Unity Input System tabanlı `Aircraft`, `Camera` ve `UI` Action Map'leri
+- Fizik sisteminden bağımsız `AircraftInputReader`
+- Klavye ve DualSense gamepad kontrol desteği
+- Girdi değerlerini gösteren geliştirme amaçlı debug paneli
 - Hatasız ve uyarısız test sahnesi Console kontrolü
 
 ---
@@ -68,7 +72,7 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 
 1. Tek bir sabit kanatlı İHA
 2. Tek bir havaalanı veya test sahası
-3. Klavye ve fare kontrolü
+3. Klavye, fare ve gamepad kontrolü
 4. Temel fizik tabanlı uçuş
 5. Kalkış ve iniş
 6. Takip kamerası
@@ -87,7 +91,7 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 | Unity 6.3 LTS — 6000.3.20f1 | Simülasyon ve oyun motoru |
 | C# | Uçuş, görev ve arayüz sistemleri |
 | Universal Render Pipeline | Windows için dengeli görsel kalite ve performans |
-| Unity Input System | Klavye, fare ve gelecekteki kontrolcü girdileri |
+| Unity Input System | Klavye, fare ve gamepad girdileri |
 | Unity Physics | Rigidbody tabanlı uçuş ve çarpışma |
 | uGUI ve TextMeshPro | Telemetri ve yer kontrol istasyonu arayüzü |
 | Git | Sürüm kontrolü |
@@ -165,23 +169,23 @@ Proje tarafından geliştirilen içerikler mümkün olduğunca `Assets/_Project`
 
 ---
 
-## Planlanan Kontroller
+## Kontroller
 
-Kontrol şeması Faz 4 sırasında Unity Input System üzerinden kesinleştirilecektir.
+Kontrol şeması Unity Input System üzerinden tanımlanmıştır. Fizik sistemi doğrudan klavye veya gamepad okumaz; girdiler `AircraftInputReader` üzerinden sağlanır.
 
-| İşlem | Tuş |
-|---|---|
-| Pitch | W / S |
-| Roll | A / D |
-| Yaw | Q / E |
-| Throttle artır | Left Shift |
-| Throttle azalt | Left Control |
-| Fren | Space |
-| Kamera değiştir | C |
-| EO kamera zoom | Mouse Wheel |
-| Pause | Escape |
+| İşlem | Klavye / Fare | Gamepad |
+|---|---|---|
+| Pitch | W / S | Left Stick Y |
+| Roll | A / D | Left Stick X |
+| Yaw | Q / E | L1 / R1 |
+| Throttle artır | Left Shift | R2 |
+| Throttle azalt | Left Control | L2 |
+| Fren | Space | Button South / Cross |
+| Kamera değiştir | C | Button North / Triangle |
+| EO kamera zoom | Mouse Wheel | D-Pad Up / Down |
+| Pause | Escape | Start / Options |
 
-Bu kontroller henüz nihai değildir ve girdi sistemi testleri sırasında değişebilir.
+DualSense kontrolcü Play Mode'da genel `Gamepad` bindingleri üzerinden doğrulanmıştır. Özel joystick/HOTAS desteği MVP sonrasına ertelenmiştir.
 
 ---
 
@@ -213,7 +217,7 @@ git clone <repository-url>
 - [x] Test havaalanının hazırlanması
 - [x] İHA modelinin projeye eklenmesi
 - [x] Rigidbody fizik kökü ve temel collider yapısının hazırlanması
-- [ ] Girdi sisteminin geliştirilmesi
+- [x] Girdi sisteminin geliştirilmesi
 - [ ] Motor ve throttle sisteminin geliştirilmesi
 - [ ] Temel uçuş fiziğinin geliştirilmesi
 - [ ] Yer hareketi, kalkış ve iniş sistemlerinin geliştirilmesi
@@ -234,7 +238,6 @@ Ayrıntılı görev listesi için [`TASKS.md`](TASKS.md) dosyasına bakılabilir
 
 Proje henüz uçuş mekaniği geliştirme aşamasına geçmemiştir. Bu nedenle şu sistemler henüz mevcut değildir:
 
-- Çalışan kullanıcı uçuş girdisi
 - Motor ve throttle sistemi
 - Lift, drag ve kontrol torklarını uygulayan uçuş fiziği
 - Kalkış ve iniş sistemi
