@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/uav-readme-hero.svg" alt="UAV Flight Simulator" width="100%" />
+  <img src="./.github/media/uav-readme-hero.svg" alt="UAV Flight Simulator" width="100%" />
 </p>
 
 <p align="center">
@@ -219,19 +219,34 @@ Project-authored assets and systems are kept under `Assets/_Project` wherever po
 
 ## 08 / DEVELOPMENT SETUP
 
-Use **Unity 6.3 LTS — 6000.3.20f1**.
+Use **Unity 6.3 LTS — `6000.3.20f1`**.
 
 ```bash
 git clone https://github.com/Flonq/uav-flight-simulator.git
 ```
 
+### Third-party environment requirement
+
+The **Military Base Pack** used by the `FlightTest` environment is intentionally **not distributed with this repository** because its license does not permit redistribution of the raw asset files.
+
+To reproduce the full development scene, obtain the asset pack separately from its original source and place it at:
+
+```text
+Assets/ThirdParty/Tiny Teacup Studio/Military Base Pack/
+```
+
+The exact folder path is important because the Unity scene references the original asset GUIDs.
+
 Then:
 
 1. Open the repository from Unity Hub using `6000.3.20f1`.
-2. Allow Unity to import packages and project assets.
-3. Open `Assets/_Project/Scenes/FlightTest.unity`.
-4. Confirm there are no critical Console errors.
-5. Enter Play Mode to run the current test environment.
+2. Add the Military Base Pack to the path shown above.
+3. Allow Unity to import packages and project assets.
+4. Open `Assets/_Project/Scenes/FlightTest.unity`.
+5. Confirm there are no critical Console errors.
+6. Enter Play Mode to run the current test environment.
+
+> A fresh clone without the Military Base Pack can still be used to inspect the project-authored code and architecture, but the full airfield environment will contain missing asset references until the pack is restored locally.
 
 ---
 
@@ -248,11 +263,24 @@ Then:
 
 ## 10 / THIRD-PARTY CONTENT
 
-Third-party content is isolated under `Assets/ThirdParty` and remains subject to its original license terms.
+Third-party content is kept separate from project-authored systems under `Assets/ThirdParty`.
 
-The test environment uses a **Military Base Pack** whose materials were adapted for URP. The UAV visual model was generated for this project through Meshy and then adjusted for Unity scale, orientation and physics hierarchy. Flight behavior is implemented independently from the visual model.
+### Military Base Pack
 
-Licensing and redistribution requirements for the content currently included in the repository have been reviewed before public release.
+The test airfield and base environment use the **Military Base Pack** by Tiny Teacup Studio.
+
+- The pack is used only as environment content.
+- Its materials were adapted locally for URP.
+- Raw asset files are not distributed through this public repository.
+- Developers reproducing the full environment must obtain the pack separately and restore it to the expected local folder.
+
+### UAV visual model
+
+The UAV visual model was created specifically for this project and is project-owned content.
+
+The model was adjusted for Unity scale, orientation and physics hierarchy, while all flight behavior is implemented independently from the visual asset.
+
+Third-party content remains subject to its original license terms.
 
 ---
 

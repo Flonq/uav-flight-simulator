@@ -61,3 +61,7 @@ Desktop.ini
 /.erp
 /Assets/ERP/
 /Assets/ERP.meta
+
+# Third-party environment assets - local only
+/Assets/ThirdParty/Tiny Teacup Studio/Military Base Pack/
+/Assets/ThirdParty/Tiny Teacup Studio/Military Base Pack.meta
