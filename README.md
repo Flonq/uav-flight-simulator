@@ -1,148 +1,196 @@
-# UAV Flight Simulator
+<p align="center">
+  <img src="./assets/uav-readme-hero.svg" alt="UAV Flight Simulator" width="100%" />
+</p>
 
-Unity ve C# kullanılarak geliştirilen, sabit kanatlı bir insansız hava aracının kalkış, görev uçuşu, hedef gözlemi ve iniş süreçlerini simüle etmeyi amaçlayan masaüstü portföy projesidir.
+<p align="center">
+  <strong>A modular fixed-wing UAV flight-simulation portfolio project built in Unity 6.3 LTS and C#.</strong><br/>
+  Physics-driven control, telemetry, camera systems and mission logic are developed as separate, explainable components.
+</p>
 
-> Bu proje bireysel bir yazılım ve simülasyon çalışmasıdır. Resmî bir Baykar ürünü değildir ve Baykar tarafından desteklendiği veya onaylandığı iddiasını taşımaz.
-
----
-
-## Proje Hakkında
-
-UAV Flight Simulator, bir yer kontrol istasyonu arayüzü üzerinden İHA uçuşunun yönetilmesini amaçlamaktadır.
-
-Planlanan görev akışında kullanıcı:
-
-- İHA sistemlerini hazırlayabilecek
-- Pistten kalkış yapabilecek
-- Belirlenen waypoint rotasını takip edebilecek
-- Elektro-optik kamera ile hedef bölgesini gözlemleyebilecek
-- Görev hedefini tamamlayabilecek
-- Üs bölgesine dönerek iniş yapabilecek
-- Uçuş boyunca telemetri verilerini izleyebilecek
-
-Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak üzere geliştirilmektedir.
+<p align="center">
+  <code>Unity 6.3 LTS</code> · <code>C#</code> · <code>URP</code> · <code>Unity Input System</code> · <code>Rigidbody Physics</code> · <code>Windows</code>
+</p>
 
 ---
 
-## Proje Durumu
+## 01 / PROJECT STATUS
 
-**Mevcut aşama:** Faz 4 tamamlandı — Faz 5 Motor ve Throttle Sistemi geliştirmesine geçiliyor.
+**Current phase:** `Phase 05 — Engine & Throttle System`
 
-| Sistem | Durum |
-|---|---|
-| Proje dokümantasyonu ve temel teknik kararlar | Tamamlandı |
-| Unity proje kurulumu | Tamamlandı |
-| Test havaalanı ve üs ortamı | Tamamlandı |
-| İHA model entegrasyonu ve fizik kökü | Tamamlandı |
-| Girdi sistemi | Tamamlandı |
-| Motor ve throttle sistemi | Sıradaki aşama |
-| Temel uçuş fiziği | Planlandı |
-| Kamera sistemi | Planlandı |
-| Telemetri sistemi | Planlandı |
-| Görev sistemi | Planlandı |
-| Yer kontrol istasyonu UI | Planlandı |
-| Windows build | Planlandı |
+| System | Status |
+| --- | --- |
+| Project architecture & technical documentation | ✅ Complete |
+| Unity project setup | ✅ Complete |
+| Test airfield & base environment | ✅ Complete |
+| Aircraft model & physics root integration | ✅ Complete |
+| Input system | ✅ Complete |
+| Engine & throttle | 🔄 Next / in development |
+| Core flight physics | ⏳ Planned |
+| Ground handling & takeoff | ⏳ Planned |
+| Camera systems | ⏳ Planned |
+| Telemetry | ⏳ Planned |
+| Mission & waypoint systems | ⏳ Planned |
+| Ground-control UI | ⏳ Planned |
+| Windows build | ⏳ Planned |
 
-### Tamamlanan prototip altyapısı
+### Completed foundation
 
-- Unity 6.3 LTS projesi ve URP yapılandırması
-- Unity Input System ve TextMeshPro altyapısı
-- Modüler `_Project` klasör yapısı
-- `FlightTest` ana test sahnesi
-- Military Base Pack tabanlı test havaalanı ve üs çevresi
-- URP uyumlu environment materyalleri
-- İHA spawn noktası
-- Yer kontrol istasyonu için mantıksal alan
-- Sabit kanatlı İHA görsel modeli
-- Görsel modelden ayrılmış `Rigidbody` fizik kökü
-- Gövde, kanat ve iniş takımı için temel collider yapısı
-- Automatic Center Of Mass kullanımı
-- Pist teması ve yerçekimi Play Mode testi
-- Unity Input System tabanlı `Aircraft`, `Camera` ve `UI` Action Map'leri
-- Fizik sisteminden bağımsız `AircraftInputReader`
-- Klavye ve DualSense gamepad kontrol desteği
-- Girdi değerlerini gösteren geliştirme amaçlı debug paneli
-- Hatasız ve uyarısız test sahnesi Console kontrolü
+- Unity 6.3 LTS project with Universal Render Pipeline
+- Modular `Assets/_Project` structure
+- Dedicated `FlightTest` scene
+- Airfield/base test environment
+- Fixed-wing UAV visual model with a separate `Rigidbody` physics root
+- Body, wing and landing-gear collider setup
+- Gravity and runway-contact validation in Play Mode
+- Unity Input System with separate `Aircraft`, `Camera` and `UI` action maps
+- `AircraftInputReader` decoupled from flight physics
+- Keyboard and DualSense gamepad input validation
+- Development debug panel for live input values
+- Clean Play Mode test scene without critical Console errors
 
 ---
 
-## MVP Kapsamı
+## 02 / PROJECT GOAL
 
-İlk tamamlanabilir sürüm aşağıdakileri içerecektir:
+The goal is to build a complete single-player desktop mission loop around a fixed-wing UAV:
 
-1. Tek bir sabit kanatlı İHA
-2. Tek bir havaalanı veya test sahası
-3. Klavye, fare ve gamepad kontrolü
-4. Temel fizik tabanlı uçuş
-5. Kalkış ve iniş
-6. Takip kamerası
-7. Basit elektro-optik kamera
-8. Temel telemetri paneli
-9. En az üç waypoint içeren bir görev
-10. Görev başarı ekranı
-11. Windows çalıştırılabilir build
+`pre-flight → takeoff → waypoint navigation → EO observation → mission objective → return → landing`
 
----
+The project is intentionally developed **system by system instead of relying on a prepackaged flight framework**. The emphasis is not on military-grade aerodynamic fidelity; it is on creating a technically clear, maintainable and demonstrable simulation architecture.
 
-## Kullanılan Teknolojiler
+### MVP target
 
-| Teknoloji | Kullanım amacı |
-|---|---|
-| Unity 6.3 LTS — 6000.3.20f1 | Simülasyon ve oyun motoru |
-| C# | Uçuş, görev ve arayüz sistemleri |
-| Universal Render Pipeline | Windows için dengeli görsel kalite ve performans |
-| Unity Input System | Klavye, fare ve gamepad girdileri |
-| Unity Physics | Rigidbody tabanlı uçuş ve çarpışma |
-| uGUI ve TextMeshPro | Telemetri ve yer kontrol istasyonu arayüzü |
-| Git | Sürüm kontrolü |
-| GitHub | Kaynak kod ve portföy sunumu |
+The first complete version is planned to include:
 
-### Teknik yaklaşım
-
-- Hedef platform Windows masaüstüdür.
-- Renk uzayı `Linear` olarak kullanılmaktadır.
-- Uçuş sistemi `Rigidbody` tabanlı yarı gerçekçi bir fizik modeli olarak geliştirilecektir.
-- Girdi okuma ile fizik uygulaması birbirinden ayrılacaktır.
-- Görsel model ile fizik kök nesnesi birbirinden ayrılmıştır.
-- Fizik hesaplamaları `FixedUpdate` içinde yürütülecektir.
-- Ana mekanikler hazır bir uçuş sistemi paketine devredilmeyecektir.
-- Cinemachine ilk prototip için gerekli görülmemiştir ve kamera fazında yeniden değerlendirilecektir.
-
-Daha ayrıntılı kararlar için [`TECHNICAL_DECISIONS.md`](TECHNICAL_DECISIONS.md) dosyasına bakılabilir.
+- One fixed-wing UAV
+- One airfield / test environment
+- Keyboard, mouse and gamepad input
+- Physics-based takeoff, flight and landing
+- Follow camera and EO observation camera
+- Basic telemetry interface
+- A mission containing at least three waypoints
+- Mission-complete flow
+- Windows executable build
 
 ---
 
-## Mimari Yaklaşım
+## 03 / ARCHITECTURE
 
-Proje, tek bir büyük kontrol sınıfı yerine sorumlulukları ayrılmış modüler bileşenlerden oluşacaktır.
-
-Planlanan temel bileşenler:
+The simulator avoids a single monolithic aircraft controller. Responsibilities are separated into small components that can be tested and evolved independently.
 
 ```text
 AircraftInputReader
-AircraftPhysics
-AircraftEngine
-AircraftControlSurfaces
-AircraftGroundController
-AircraftTelemetry
-CameraModeController
-MissionManager
-Waypoint
-GroundControlUI
+        │
+        ├──► AircraftEngine
+        ├──► AircraftPhysics
+        ├──► AircraftControlSurfaces
+        └──► AircraftGroundController
+                    │
+                    ├──► AircraftTelemetry
+                    ├──► CameraModeController
+                    ├──► MissionManager
+                    └──► GroundControlUI
 ```
 
-Temel prensipler:
+Planned core components:
 
-- Kullanıcı girdisi fizik sisteminden bağımsız okunacaktır.
-- Inspector ayarları mümkün olduğunca `[SerializeField] private` alanlar üzerinden yönetilecektir.
-- Sistemler küçük ve test edilebilir bileşenlere ayrılacaktır.
-- Büyük özellikler ayrı Git branchlerinde geliştirilecektir.
-- Console hata ve uyarıları geliştirme sürecinde göz ardı edilmeyecektir.
-- Kod yapısı teknik görüşmede açıklanabilir olacak şekilde tasarlanacaktır.
+| Component | Responsibility |
+| --- | --- |
+| `AircraftInputReader` | Reads and exposes user input independently from physics |
+| `AircraftEngine` | Throttle state, thrust generation and engine parameters |
+| `AircraftPhysics` | Airspeed, lift, drag and rotational control forces |
+| `AircraftControlSurfaces` | Pitch, roll and yaw control behavior |
+| `AircraftGroundController` | Runway steering, braking and ground state |
+| `AircraftTelemetry` | Speed, altitude, attitude, heading and mission data |
+| `CameraModeController` | Follow, body, free and EO camera modes |
+| `MissionManager` | Mission state, objectives and completion conditions |
+| `Waypoint` | Ordered mission navigation points |
+| `GroundControlUI` | Telemetry and mission presentation |
+
+### Engineering principles
+
+- Input reading is separated from physics application.
+- The visual model and physics root are independent objects.
+- Physics work runs through the fixed-timestep simulation path.
+- Inspector configuration uses serialized private fields where practical.
+- Larger features are developed in isolated Git branches.
+- Technical decisions are documented with their reasoning.
+- Systems are designed to be explainable in a technical review.
+
+For the reasoning behind individual choices, see [`TECHNICAL_DECISIONS.md`](TECHNICAL_DECISIONS.md).
 
 ---
 
-## Proje Klasör Yapısı
+## 04 / CONTROLS
+
+Input is defined through Unity Input System. The physics layer does not read keyboard or gamepad state directly; it consumes values exposed by `AircraftInputReader`.
+
+| Action | Keyboard / Mouse | Gamepad |
+| --- | --- | --- |
+| Pitch | `W / S` | Left Stick Y |
+| Roll | `A / D` | Left Stick X |
+| Yaw | `Q / E` | `L1 / R1` |
+| Increase throttle | `Left Shift` | `R2` |
+| Decrease throttle | `Left Control` | `L2` |
+| Brake | `Space` | Cross / South Button |
+| Change camera | `C` | Triangle / North Button |
+| EO camera zoom | Mouse Wheel | D-Pad Up / Down |
+| Pause | `Escape` | Options / Start |
+
+DualSense controls have been validated in Play Mode through generic `Gamepad` bindings. Dedicated joystick / HOTAS support is intentionally postponed until after the MVP.
+
+---
+
+## 05 / TECH STACK
+
+| Area | Technology |
+| --- | --- |
+| Engine | Unity 6.3 LTS — `6000.3.20f1` |
+| Language | C# |
+| Rendering | Universal Render Pipeline |
+| Input | Unity Input System |
+| Physics | Rigidbody-based Unity Physics |
+| UI | uGUI + TextMeshPro |
+| Version control | Git + GitHub |
+| Target platform | Windows desktop |
+
+### Technical direction
+
+- Linear color space
+- Semi-realistic, Rigidbody-based flight model
+- Custom flight mechanics rather than a ready-made aircraft controller
+- 16:9 desktop presentation
+- Stable 60 FPS target on a mid-range PC
+- Cinemachine deferred unless it provides clear value during the camera phase
+
+---
+
+## 06 / ROADMAP
+
+- [x] Define project scope and MVP
+- [x] Create technical documentation
+- [x] Set up Unity project and repository structure
+- [x] Build the test airfield / base environment
+- [x] Integrate UAV model and physics root
+- [x] Build the input layer
+- [ ] Implement engine and throttle system
+- [ ] Implement core flight physics
+- [ ] Implement ground handling, takeoff and landing
+- [ ] Build camera modes
+- [ ] Build telemetry layer
+- [ ] Build ground-control interface
+- [ ] Add waypoint and mission flow
+- [ ] Add EO observation / targeting interaction
+- [ ] Audio and visual polish
+- [ ] Optimization and multi-frame-rate validation
+- [ ] Produce Windows build
+- [ ] Record portfolio demonstration video
+
+The detailed phase-by-phase tracker is maintained in [`TASKS.md`](TASKS.md).
+
+---
+
+## 07 / PROJECT STRUCTURE
 
 ```text
 Assets/
@@ -165,174 +213,58 @@ Assets/
 └── ThirdParty/
 ```
 
-Proje tarafından geliştirilen içerikler mümkün olduğunca `Assets/_Project` altında tutulmaktadır. Harici model ve asset paketleri `Assets/ThirdParty` altında izole edilmektedir.
+Project-authored assets and systems are kept under `Assets/_Project` wherever possible. External packages and assets are isolated under `Assets/ThirdParty` so project code and third-party content remain easy to distinguish.
 
 ---
 
-## Kontroller
+## 08 / DEVELOPMENT SETUP
 
-Kontrol şeması Unity Input System üzerinden tanımlanmıştır. Fizik sistemi doğrudan klavye veya gamepad okumaz; girdiler `AircraftInputReader` üzerinden sağlanır.
-
-| İşlem | Klavye / Fare | Gamepad |
-|---|---|---|
-| Pitch | W / S | Left Stick Y |
-| Roll | A / D | Left Stick X |
-| Yaw | Q / E | L1 / R1 |
-| Throttle artır | Left Shift | R2 |
-| Throttle azalt | Left Control | L2 |
-| Fren | Space | Button South / Cross |
-| Kamera değiştir | C | Button North / Triangle |
-| EO kamera zoom | Mouse Wheel | D-Pad Up / Down |
-| Pause | Escape | Start / Options |
-
-DualSense kontrolcü Play Mode'da genel `Gamepad` bindingleri üzerinden doğrulanmıştır. Özel joystick/HOTAS desteği MVP sonrasına ertelenmiştir.
-
----
-
-## Kurulum
-
-Geliştirme için proje **Unity 6.3 LTS — 6000.3.20f1** ile açılmalıdır.
-
-1. Repoyu klonlayın.
-2. Unity Hub üzerinden projeyi `6000.3.20f1` Editor sürümüyle açın.
-3. Unity'nin paketleri ve assetleri içe aktarmasını bekleyin.
-4. `Assets/_Project/Scenes/FlightTest.unity` sahnesini açın.
-5. Console'da kritik hata bulunmadığını kontrol edin.
-6. Play Mode ile mevcut test ortamını çalıştırın.
+Use **Unity 6.3 LTS — 6000.3.20f1**.
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/Flonq/uav-flight-simulator.git
 ```
 
-> Repo public olarak yayımlanmadan önce üçüncü taraf assetlerin yeniden dağıtım koşulları ayrıca kontrol edilecektir.
+Then:
+
+1. Open the repository from Unity Hub using `6000.3.20f1`.
+2. Allow Unity to import packages and project assets.
+3. Open `Assets/_Project/Scenes/FlightTest.unity`.
+4. Confirm there are no critical Console errors.
+5. Enter Play Mode to run the current test environment.
 
 ---
 
-## Geliştirme Yol Haritası
+## 09 / DOCUMENTATION
 
-- [x] Proje fikrinin ve MVP kapsamının belirlenmesi
-- [x] Başlangıç dokümantasyonunun hazırlanması
-- [x] Unity projesinin oluşturulması
-- [x] Temel klasör ve Git yapısının hazırlanması
-- [x] Test havaalanının hazırlanması
-- [x] İHA modelinin projeye eklenmesi
-- [x] Rigidbody fizik kökü ve temel collider yapısının hazırlanması
-- [x] Girdi sisteminin geliştirilmesi
-- [ ] Motor ve throttle sisteminin geliştirilmesi
-- [ ] Temel uçuş fiziğinin geliştirilmesi
-- [ ] Yer hareketi, kalkış ve iniş sistemlerinin geliştirilmesi
-- [ ] Kamera sisteminin geliştirilmesi
-- [ ] Telemetri arayüzünün geliştirilmesi
-- [ ] Waypoint ve görev sisteminin geliştirilmesi
-- [ ] EO kamera ve hedefleme sisteminin geliştirilmesi
-- [ ] Ses ve görsel iyileştirmeler
-- [ ] Optimizasyon
-- [ ] Windows build
-- [ ] Tanıtım videosu ve portföy sunumu
-
-Ayrıntılı görev listesi için [`TASKS.md`](TASKS.md) dosyasına bakılabilir.
+| File | Purpose |
+| --- | --- |
+| [`PROJECT_OVERVIEW.md`](PROJECT_OVERVIEW.md) | Scope, goals, MVP and current state |
+| [`TECHNICAL_DECISIONS.md`](TECHNICAL_DECISIONS.md) | Architectural decisions and reasoning |
+| [`TASKS.md`](TASKS.md) | Detailed development phases and task tracking |
+| [`README.md`](README.md) | Public project and portfolio overview |
 
 ---
 
-## Bilinen Eksikler
+## 10 / THIRD-PARTY CONTENT
 
-Proje henüz uçuş mekaniği geliştirme aşamasına geçmemiştir. Bu nedenle şu sistemler henüz mevcut değildir:
+Third-party content is isolated under `Assets/ThirdParty` and remains subject to its original license terms.
 
-- Motor ve throttle sistemi
-- Lift, drag ve kontrol torklarını uygulayan uçuş fiziği
-- Kalkış ve iniş sistemi
-- Kamera modları
-- Telemetri arayüzü
-- Yer kontrol istasyonu kullanıcı arayüzü
-- Waypoint görevi
-- EO kamera hedefleme sistemi
-- Windows build
+The test environment uses a **Military Base Pack** whose materials were adapted for URP. The UAV visual model was generated for this project through Meshy and then adjusted for Unity scale, orientation and physics hierarchy. Flight behavior is implemented independently from the visual model.
+
+Licensing and redistribution requirements for the content currently included in the repository have been reviewed before public release.
 
 ---
 
-## Üçüncü Taraf İçerikler
+## 11 / SCOPE & DISCLAIMER
 
-Projede üçüncü taraf içerikler `Assets/ThirdParty` altında tutulmaktadır.
+This repository is an **independent software-engineering and simulation portfolio project**. It is not a certified flight-training simulator and does not attempt to reproduce real UAV avionics, classified systems, operational data or military-grade aerodynamic models.
 
-### Military Base Pack
-
-Test havaalanı ve üs çevresi için **Military Base Pack** kullanılmaktadır.
-
-- Paket, test ortamının çevre modeli olarak kullanılmaktadır.
-- Materyalleri URP ile uyumlu hâle getirilmiştir.
-- Paket lisansı proje geliştirme sırasında kontrol edilmiştir.
-- Ham assetlerin yeniden dağıtım koşulları nedeniyle repo public hâle getirilmeden önce lisans durumu yeniden değerlendirilecektir.
-
-### İHA modeli
-
-İHA görsel modeli Meshy kullanılarak proje için üretilmiştir.
-
-- Model, ücretli Meshy planı kapsamında özel lisans ile oluşturulmuştur.
-- Modelin görsel yönü, ölçeği ve fizik hiyerarşisi Unity için ayrıca düzenlenmiştir.
-- Uçuş fiziği hazır model davranışına bağlı değildir; proje içinde ayrı olarak geliştirilecektir.
-
-Diğer üçüncü taraf model, ses, doku ve paketler kendi lisanslarına tabidir.
+The project is not an official Baykar product and is not sponsored, endorsed or maintained by Baykar.
 
 ---
 
-## Dokümantasyon
-
-| Dosya | Açıklama |
-|---|---|
-| [`PROJECT_OVERVIEW.md`](PROJECT_OVERVIEW.md) | Projenin amacı, kapsamı, başarı kriterleri ve güncel durumu |
-| [`TECHNICAL_DECISIONS.md`](TECHNICAL_DECISIONS.md) | Alınan teknik kararlar ve gerekçeleri |
-| [`TASKS.md`](TASKS.md) | Geliştirme aşamaları ve görev takibi |
-| [`README.md`](README.md) | GitHub ve portföy tanıtımı |
-
----
-
-## Ekran Görüntüleri
-
-Portföy sunumuna uygun ekran görüntüleri proje görsel olarak olgunlaştıkça eklenecektir.
-
-Planlanan yapı:
-
-```text
-docs/images/
-├── test-environment.png
-├── takeoff.png
-├── flight.png
-├── eo-camera.png
-└── landing.png
-```
-
----
-
-## Gelecek Geliştirmeler
-
-MVP tamamlandıktan sonra değerlendirilebilecek özellikler:
-
-- Joystick ve HOTAS desteği
-- Rüzgâr ve türbülans sistemi
-- Farklı hava koşulları
-- Gece uçuşu
-- İniş takımı animasyonu
-- Yakıt veya enerji yönetimi
-- Otomatik pilot
-- Gelişmiş harita sistemi
-- Birden fazla görev
-- Yeniden oynatma sistemi
-- Uçuş veri kaydı
-- Yapay zekâ destekli hedef davranışları
-
----
-
-## Lisans
-
-Kaynak kod lisansı proje public olarak yayımlanmadan önce belirlenecektir.
-
-Üçüncü taraf içerikler kendi lisanslarına tabidir ve proje reposunun dağıtım biçimi bu lisans koşulları dikkate alınarak belirlenecektir.
-
----
-
-## Geliştirici
-
-**Mert Kaan**  
-Yazılım Mühendisi / Unity Geliştiricisi
-
-Bu proje; Unity, C#, fizik tabanlı sistemler, modüler yazılım mimarisi, teknik dokümantasyon ve sürüm kontrolü yetkinliklerini göstermek amacıyla geliştirilmektedir.
+<p align="center">
+  <strong>Mert Kaan Kindar</strong><br/>
+  Software Engineer · Unity / Simulation Systems
+</p>
