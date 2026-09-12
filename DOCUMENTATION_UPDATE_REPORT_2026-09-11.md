@@ -1,5 +1,7 @@
 # Documentation Update Report — 2026-09-11
 
+> **Tarihsel kayıt:** Bu rapor 2026-09-11 belge teslimini açıklar. Canlı proje ve güncel belge seti için `DOCUMENTATION_UPDATE_REPORT_2026-09-12.md` ile `PROJECT_HANDOFF_2026-09-12.md` esas alınmalıdır. Bu raporda anılan `CODEX_START_PROMPT.md` güncel repository'de bulunmamaktadır.
+
 ## Sonuç
 
 Kök proje belgeleri, geliştiricinin 2026-09-11 tarihli son teyidine göre güncellendi. Canlı Unity repository'si bu ortamda bulunmadığı için kod, sahne, prefab, paket ve Git durumu değiştirilmedi veya doğrulanmış gibi gösterilmedi.

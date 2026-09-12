@@ -197,7 +197,7 @@ Tek bir büyük `AircraftController` sınıfı yerine sorumlulukları ayrılmı�
 AircraftInputReader
 AircraftPhysics
 AircraftEngine
-AircraftControlSurfaces
+AircraftControlSurfaceAnimator
 AircraftGroundController
 AircraftTelemetry
 AircraftAudio
@@ -506,7 +506,7 @@ Asset Serialization: Force Text
 ## TD-018 — Özel Blender İHA Modeli ve Görsel/Fizik Ayrımı
 
 **Durum:** Kabul edildi  
-**Tarih:** 2026-09-11
+**Tarih:** 2026-09-11; Unity doğrulaması 2026-09-12
 
 ### Karar
 
@@ -522,9 +522,11 @@ AircraftRoot
 ### Sonuçlar
 
 - Görsel model fizik kökünü sürmez; simülasyon durumunu görsel olarak takip eder.
-- Mevcut çalışan Unity görseli, özel model doğrulanmadan silinmez veya üzerine yazılmaz.
-- Unity importunda ölçek, +Z burun yönü, pivotlar, normaller, materyaller ve hareketli parça hiyerarşisi ayrıca doğrulanır.
-- Blender referansları, helper/cutter nesneleri ve geçici guide nesneleri export edilmez.
+- Model `Assets/_Project/Art/Aircraft/CustomUAV/UAV_Custom.fbx` yoluna temiz export olarak alınmıştır; referans/helper/cutter/guide nesneleri runtime hiyerarşisine taşınmamıştır.
+- Metre ölçeği, Unity yerel `+Z` burun yönü, pivotlar, normaller, URP materyali ve hareketli parça hiyerarşisi doğrulanmıştır.
+- `PF_CustomUAVVisual` ile `PF_CustomUAVAircraftPrototype` ayrı tutulmuştur.
+- Doğrulanmış özel model aktif hâle getirilmiş, önceki çalışan Meshy görseli geri dönüş için inactive `AircraftRoot_Meshy_Backup` olarak korunmuştur.
+- Import doğrulamasında 33 renderer/benzersiz mesh, 44.922 triangle ve `(12.14, 1.84, 6.79)` görsel boyutu ölçülmüştür.
 
 ---
 
@@ -566,14 +568,42 @@ Throttle durumunun input ve motor bileşenlerinde iki kez sahiplenilmesini önle
 
 ---
 
+## TD-021 — Özel UAV Fizik Prefabı ve Görsel Kontrol Yüzeyi Sınırı
+
+**Durum:** Kabul edildi
+
+**Tarih:** 2026-09-12
+
+### Karar
+
+- Özel UAV fizik prototipi tek kök `Rigidbody` ve çocuklarda 10 primitive collider kullanan compound collider yapısında tutulacaktır.
+- Elle ayarlanmış colliderlar otomatik prefab yeniden oluşturma sırasında korunacaktır.
+- `AircraftControlSurfaceAnimator` yalnızca input komutlarını görsel yüzey sapmalarına dönüştürür; fizik kuvveti, throttle state, RPM veya propulsion sahiplenmez.
+- Aileronlar ve ruddervatorlar yerel X ekseninde; `Rotor_Pivot` yerel Y ekseninde döner.
+- Rotorun sürekli dönüş hızı ileride `AircraftEngine` tarafından üretilen RPM verisinden beslenecektir.
+
+### Doğrulama
+
+- Her iki aileronda yerel `+15°`, arka kenarı yukarı taşır.
+- Her iki ruddervatorda yerel `+15°`, yüzeyi yukarı taşır.
+- `Rotor_Pivot` yerel Y pozitif yönde saat yönünün tersine ve merkezden kaymadan döner.
+- `FlightTest` Play Mode testinde uçak sıçramadan, savrulmadan ve zeminden geçmeden üç teker üzerinde kararlı kalmıştır.
+
+### Açık kalibrasyon
+
+`Rigidbody.mass = 100`, Automatic Center of Mass ve Automatic Tensor mevcut prototip değerleridir. Gerçek araç kütlesi ve ağırlık merkezi verisi olmadan fiziksel doğruluk iddiası taşımaz.
+
+---
+
 ## Karar Bekleyen Konular
 
 - [ ] Yakıt sistemi veya batarya sistemi
 - [ ] Harita çözümü
 - [ ] Test framework kapsamı
 - [ ] Cinemachine kullanımı
-- [ ] Özel İHA modelinin Unity import ayarları ve prefab hiyerarşisi
 - [ ] LOD kapsamı
+- [ ] Gerçek araç kütlesi, ağırlık merkezi ve inertia verileri
+- [ ] Görsel animatörün final prefab mı yoksa sahne bileşeni mi olacağı
 
 Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene kadar karar bekleyen MVP maddesi değildir.
 
@@ -586,3 +616,4 @@ Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene
 | Proje başlangıcı | TD-001 – TD-016 | İlk teknik karar taslağı oluşturuldu |
 | 2026-09-11 | TD-009, TD-010 | URP ve uGUI + TextMeshPro kararları kabul edildi olarak güncellendi |
 | 2026-09-11 | TD-017 – TD-020 | Unity temeli, özel model, üçüncü taraf asset ve kuvvet sorumlulukları belgelendi |
+| 2026-09-12 | TD-018, TD-021 | Özel UAV Unity entegrasyonu, compound collider ve görsel kontrol yüzeyi sınırları doğrulandı |

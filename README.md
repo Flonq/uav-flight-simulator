@@ -26,16 +26,18 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 
 ## Proje Durumu
 
-**Son güncelleme:** 11 Eylül 2026  
-**Mevcut aşama:** Özel İHA modelinin Unity entegrasyonu öncesi proje denetimi
+**Son güncelleme:** 12 Eylül 2026
+
+**Mevcut aşama:** Özel İHA entegrasyonu tamamlandı; motor, throttle ve propulsion geliştirmesi sırada
 
 | Sistem | Durum |
 |---|---|
 | Unity 6.3 LTS / URP proje kurulumu | Tamamlandı |
 | Test havaalanı ve çevre | Çalışır prototip |
-| Rigidbody fizik kökü ve collider prototipi | Tamamlandı |
-| Input System — klavye ve gamepad | Tamamlandı |
-| Özel Blender İHA modeli | Modelleme tamamlandı, Unity importu bekleniyor |
+| Rigidbody fizik kökü ve 10 parçalı compound collider | Tamamlandı ve Play Mode'da doğrulandı |
+| Input System — klavye ve gamepad | Tamamlandı; aktif uçak/debug bağlantısı doğrulandı |
+| Özel Blender İHA modeli | Unity importu, URP materyali ve prefab entegrasyonu tamamlandı |
+| Görsel kontrol yüzeyi animasyonları | Tamamlandı ve Play Mode'da doğrulandı |
 | Motor ve gerçek thrust | Başlanmadı |
 | Aerodinamik uçuş fiziği | Başlanmadı |
 | Kamera ve EO sistemi | Planlandı |
@@ -138,7 +140,7 @@ Planlanan temel bileşenler:
 AircraftInputReader
 AircraftPhysics
 AircraftEngine
-AircraftControlSurfaces
+AircraftControlSurfaceAnimator
 AircraftGroundController
 AircraftTelemetry
 CameraModeController
@@ -251,7 +253,8 @@ Windows build yayımlandığında:
 | [`TECHNICAL_DECISIONS.md`](TECHNICAL_DECISIONS.md) | Alınan teknik kararlar ve gerekçeleri |
 | [`TASKS.md`](TASKS.md) | Geliştirme aşamaları ve görev takibi |
 | [`README.md`](README.md) | GitHub ve portföy tanıtımı |
-| [`PROJECT_HANDOFF_2026-09-11.md`](PROJECT_HANDOFF_2026-09-11.md) | Yeni Codex oturumu için güncel proje devri |
+| [`PROJECT_HANDOFF_2026-09-12.md`](PROJECT_HANDOFF_2026-09-12.md) | Yeni Codex oturumu için güncel proje devri |
+| [`DOCUMENTATION_UPDATE_REPORT_2026-09-12.md`](DOCUMENTATION_UPDATE_REPORT_2026-09-12.md) | Entegrasyon sonrası dokümantasyon eşitleme raporu |
 | [`WORKING_RULES_UAV_SIMULATOR.md`](WORKING_RULES_UAV_SIMULATOR.md) | Güvenlik, çalışma ve doğrulama kuralları |
 | [`AGENTS.md`](AGENTS.md) | Codex'in repository genelinde izleyeceği talimatlar |
 
@@ -287,7 +290,9 @@ docs/images/
 - [x] Rigidbody fizik kökü ve collider prototipinin hazırlanması
 - [x] Girdi sisteminin geliştirilmesi
 - [x] Özel İHA modelinin Blender'da tamamlanması
-- [ ] Özel İHA modelinin Unity'ye aktarılması ve doğrulanması
+- [x] Özel İHA modelinin Unity'ye aktarılması ve doğrulanması
+- [x] Compound colliderların ayarlanması ve yer temasının doğrulanması
+- [x] Görsel kontrol yüzeyi animasyonlarının uygulanması
 - [ ] Motor ve throttle sisteminin geliştirilmesi
 - [ ] Temel uçuş fiziğinin geliştirilmesi
 - [ ] Kalkış ve iniş sisteminin geliştirilmesi
@@ -307,7 +312,10 @@ Ayrıntılı görev listesi için [`TASKS.md`](TASKS.md) dosyasına bakılabilir
 
 Mevcut doğrulanmış eksikler:
 
-- Özel Blender İHA modelinin Unity importu ve `VisualPivot` entegrasyonu
+- Gerçek kütle, ağırlık merkezi ve inertia değerlerinin fiziksel verilerle kalibre edilmesi
+- `AircraftControlSurfaceAnimator` bileşeninin final prefab/sahne sahipliğinin kesinleştirilmesi
+- `AssetReview` sahnesinde final model smoke testinin kaydedilmesi
+- Son sistem doğrulamaları bitince eski Meshy yedeği ve iki inactive uçak instance'ının temizlenmesi
 - Gerçek motor thrust sistemi
 - Lift, drag, stall ve aerodinamik kontrol kuvvetleri
 - Tam yer hareketi, kalkış ve iniş sistemi
@@ -318,7 +326,7 @@ Mevcut doğrulanmış eksikler:
 - Ses sistemi
 - Windows build
 
-Mevcut Unity görsel/fizik prototipi korunacak; özel İHA modeli doğrulanmadan çalışan `AircraftRoot > VisualPivot` yapısı bozulmayacaktır.
+Doğrulanmış özel İHA prefabı ve elle ayarlanmış colliderlar korunacaktır. Eski Meshy yedeği, yeni uçağın motor ve uçuş fiziği de doğrulanmadan silinmeyecektir.
 
 Bu bölüm geliştirme süresince düzenli olarak güncellenecektir.
 

@@ -15,10 +15,10 @@ namespace MertKaan.UAVSimulator.UI.Debugging
 
         private void Awake()
         {
-            if (_inputReader == null)
+            if (!TryResolveInputReader())
             {
                 Debug.LogError(
-                    $"{nameof(InputDebugPanel)} requires an {nameof(AircraftInputReader)} reference.",
+                    $"{nameof(InputDebugPanel)} requires exactly one active {nameof(AircraftInputReader)}.",
                     this
                 );
 
@@ -35,6 +35,28 @@ namespace MertKaan.UAVSimulator.UI.Debugging
 
                 enabled = false;
             }
+        }
+
+        private bool TryResolveInputReader()
+        {
+            if (_inputReader != null && _inputReader.isActiveAndEnabled)
+            {
+                return true;
+            }
+
+            AircraftInputReader[] activeReaders =
+                FindObjectsByType<AircraftInputReader>(
+                    FindObjectsInactive.Exclude,
+                    FindObjectsSortMode.None
+                );
+
+            if (activeReaders.Length != 1)
+            {
+                return false;
+            }
+
+            _inputReader = activeReaders[0];
+            return true;
         }
 
         private void LateUpdate()

@@ -113,18 +113,20 @@ Proje hatasız açılmalı, boş test sahnesi çalışmalı ve GitHub üzerinde 
 - [x] Sağ/sol ruddervatorları ayrı hareketli mesh olarak tamamla
 - [x] Kontrol yüzeylerindeki son görsel/geometrik sorunları düzelt
 - [x] Model sahipliğini doğrula — proje için geliştirici tarafından oluşturulan özel model
-- [ ] Unity export kopyasını ve temiz export hiyerarşisini hazırla
-- [ ] Blender referans/helper/cutter/guide nesnelerinin export dışında kaldığını doğrula
-- [ ] Modeli Unity projesindeki `Assets/_Project/Art/Aircraft/CustomUAV/` alanına aktar
-- [ ] Import ölçeğini metre birimine göre doğrula
-- [ ] Modelin Unity yerel `+Z` burun yönünü doğrula
-- [ ] Aileron, ruddervator ve propeller pivot/yerel eksenlerini Unity'de doğrula
-- [ ] Normals, tangents, materyal slotları ve triangle sayısını doğrula
-- [ ] Özel görseli mevcut `VisualPivot` altında test et
-- [ ] Mevcut geçici görseli yalnızca yeni model doğrulandıktan sonra devre dışı bırak
-- [ ] Collider ve Center of Mass değerlerini yeni model boyutlarına göre yeniden değerlendir
-- [ ] Final uçak prefabını oluştur veya mevcut prefabı güvenli biçimde güncelle
-- [ ] `AssetReview` ve `FlightTest` sahnelerinde Play Mode smoke testi yap
+- [x] Unity export kopyasını ve temiz export hiyerarşisini hazırla
+- [x] Blender referans/helper/cutter/guide nesnelerinin export dışında kaldığını doğrula
+- [x] Modeli Unity projesindeki `Assets/_Project/Art/Aircraft/CustomUAV/` alanına aktar
+- [x] Import ölçeğini metre birimine göre doğrula
+- [x] Modelin Unity yerel `+Z` burun yönünü doğrula
+- [x] Aileron, ruddervator ve propeller pivot/yerel eksenlerini Unity'de doğrula
+- [x] Normals, tangents, materyal slotları ve triangle sayısını doğrula
+- [x] Özel görseli mevcut `VisualPivot` altında test et
+- [x] Mevcut geçici görseli yalnızca yeni model doğrulandıktan sonra devre dışı bırak
+- [~] Collider ve Center of Mass değerlerini yeni model boyutlarına göre yeniden değerlendir — 10 collider ve otomatik COM ile kararlı; gerçek kütle/CG verisi bekleniyor
+- [~] Final uçak prefabını oluştur veya mevcut prefabı güvenli biçimde güncelle — prototip korunuyor; animatörün final prefab sahipliği kararlaştırılacak
+- [ ] `AssetReview` sahnesinde final model Play Mode smoke testi yap
+- [x] `FlightTest` sahnesinde final model Play Mode smoke testi yap
+- [x] Aileron ve ruddervatorları input komutlarıyla görsel olarak hareket ettir
 
 ### Çıkış kriteri
 
@@ -146,6 +148,7 @@ Proje hatasız açılmalı, boş test sahnesi çalışmalı ve GitHub üzerinde 
 - [x] C# sınıf üretimini etkinleştir
 - [x] `AircraftInputReader` scriptini oluştur
 - [x] Girdi değerlerini pasif debug panelinde göster
+- [x] Debug panelini sahnedeki aktif `AircraftInputReader` bileşenine bağla
 - [x] Klavye ve fare girdilerini test et
 - [x] DualSense'i genel `<Gamepad>` bindingleriyle test et
 - [x] Joystick/HOTAS desteğini MVP sonrasına ertele
@@ -479,11 +482,13 @@ Yeni bir hata bulunduğunda aşağıdaki biçimde eklenmelidir:
 
 Mevcut doğrulanması gereken teknik borçlar:
 
-- [ ] Kök dokümantasyon ile canlı repository durumunu Codex salt-okunur denetiminde karşılaştır
-- [ ] `FlightTest` içindeki üç `AircraftRoot` instance'ından ikisinin neden inactive olduğunu doğrula
+- [x] Kök dokümantasyon ile canlı repository durumunu Codex salt-okunur denetiminde karşılaştır
+- [~] `FlightTest` içindeki eski/inactive uçak instance'larını koru ve final sistem kabulünden sonra temizle
 - [ ] `AircraftInputReader` içindeki throttle state/ramp sorumluluğunu Phase 5 öncesinde `AircraftEngine` bileşenine taşı
 - [ ] Military Base Pack'in `.gitignore` kuralını ve temiz Git geçmişini koru
-- [ ] Özel UAV modelinin Unity import/eksen/pivot/materyal testini tamamla
+- [x] Özel UAV modelinin Unity import/eksen/pivot/materyal testini tamamla
+- [ ] Gerçek kütle, ağırlık merkezi ve inertia değerlerini fiziksel verilerle kalibre et
+- [ ] `AircraftControlSurfaceAnimator` bileşeninin final prefab/sahne sahipliğini kesinleştir
 
 ---
 
@@ -491,6 +496,6 @@ Mevcut doğrulanması gereken teknik borçlar:
 
 Bu bölüm her çalışma oturumunun sonunda güncellenmelidir.
 
-1. Codex ile tüm Unity projesini salt-okunur incele ve durum/tutarlılık/risk raporu al.
-2. Raporu geliştiriciyle değerlendir; açık onay olmadan dosya değiştirme.
-3. Özel Blender İHA modelini temiz export ile Unity'ye aktar ve `VisualPivot` altında doğrula.
+1. `AircraftControlSurfaceAnimator` ve aktif input referanslarını final prefab/sahne düzeninde tekilleştir.
+2. Throttle state/ramp sahipliğini `AircraftInputReader` bileşeninden yeni `AircraftEngine` bileşenine taşı.
+3. Motor RPM, thrust ve fixed-timestep propulsion uygulamasını geliştir; `Rotor_Pivot` görselini RPM verisine bağla.

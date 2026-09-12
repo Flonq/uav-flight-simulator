@@ -1,5 +1,7 @@
 # Project Handoff — UAV Flight Simulator
 
+> **Tarihsel kayıt:** Bu belge 2026-09-11 durumunu korur. Güncel devir kaynağı `PROJECT_HANDOFF_2026-09-12.md` dosyasıdır.
+
 **Tarih:** 2026-09-11  
 **Durum:** Yeni Codex sohbeti için güncel devir özeti  
 **Proje kökü:** `C:\Users\mertk\Desktop\Projeler\Unity Projects\UAVFlightSimulator`

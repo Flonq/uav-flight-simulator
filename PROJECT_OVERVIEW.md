@@ -273,8 +273,9 @@ Proje aşağıdaki koşullar sağlandığında başarılı kabul edilecektir:
 
 ## 13. Mevcut Durum
 
-**Son güncelleme:** 2026-09-11  
-**Durum:** Özel İHA modeli tamamlandı; Unity proje denetimi ve model entegrasyonu sıradaki aşama.
+**Son güncelleme:** 2026-09-12
+
+**Durum:** Özel İHA modeli Unity'ye entegre edildi; fizik kökü, compound colliderlar, input ve görsel kontrol yüzeyi animasyonları Play Mode'da doğrulandı. Sıradaki aşama motor/throttle sorumluluklarının uygulanmasıdır.
 
 Doğrulanmış mevcut durum:
 
@@ -282,19 +283,22 @@ Doğrulanmış mevcut durum:
 - URP, Windows 64-bit, Linear color space ve uGUI + TextMeshPro kararları kesinleşti.
 - `FlightTest` ve `AssetReview` sahneleri mevcut.
 - Military Base Pack tabanlı test havaalanı yerel olarak çalışıyor ve üçüncü taraf asset dosyaları Git dışında tutuluyor.
-- `AircraftRoot > VisualPivot` ayrımı, Rigidbody ve geçici collider prototipi doğrulandı.
-- Unity Input System, klavye ve DualSense girdileri ile pasif input debug paneli tamamlandı.
-- Blender 5.2.1 LTS ile geliştirilen özel İHA modeli; ayrı aileronlar, ruddervatorlar, pusher pervane ve iniş takımıyla tamamlandı.
-- Özel İHA modeli henüz Unity içinde ölçek, eksen, pivot, materyal, hiyerarşi ve prefab açısından doğrulanmadı.
+- `AircraftRoot > VisualPivot` ayrımı, tek kök Rigidbody ve elle ayarlanmış 10 primitive collider doğrulandı.
+- Unity Input System, klavye ve DualSense girdileri ile pasif input debug paneli tamamlandı; panel aktif uçak input okuyucusuna bağlandı.
+- Blender 5.2.1 LTS ile geliştirilen özel İHA modeli; ayrı aileronlar, ruddervatorlar, pusher pervane ve iniş takımıyla Unity'ye aktarıldı.
+- Modelin metre ölçeği, `+Z` burun yönü, hareketli parça pivotları, materyali, hiyerarşisi ve 44.922 üçgenlik geometri bütçesi doğrulandı.
+- `PF_CustomUAVVisual` ve collider ayarlarını koruyan `PF_CustomUAVAircraftPrototype` prefabları oluşturuldu.
+- `AircraftControlSurfaceAnimator`, pitch/roll/yaw komutlarını yalnızca görsel yüzey sapmalarına dönüştürecek şekilde eklendi ve Play Mode'da doğrulandı.
+- `FlightTest` sahnesindeki özel uçak üç teker üzerinde kararlı duruyor; sıçrama, savrulma veya zeminden geçme gözlenmedi.
 - `AircraftEngine`, gerçek thrust, aerodinamik uçuş fiziği ve sonraki oyun sistemleri henüz uygulanmadı.
 
 Sıradaki kontrollü akış:
 
-1. Codex mevcut yerel projeyi salt-okunur olarak ayrıntılı inceleyecek.
-2. Kod, sahne, prefab, paket, Git ve dokümantasyon tutarlılık raporu sunacak.
-3. Geliştirici raporu değerlendirmeden hiçbir proje dosyası değiştirilmeyecek.
-4. Onaydan sonra özel İHA modeli Unity'ye test amaçlı aktarılacak.
-5. Yeni görsel yalnızca doğrulandıktan sonra `VisualPivot` altında mevcut geçici görselin yerini alacak.
+1. `AircraftControlSurfaceAnimator` ve aktif input referanslarının sahne override'ı mı yoksa final prefab bileşeni mi olacağı kesinleştirilecek.
+2. Throttle state/ramp sahipliği `AircraftInputReader` içinden `AircraftEngine` bileşenine taşınacak.
+3. Motor RPM, thrust ve propulsion kuvveti fixed-timestep yolunda uygulanacak.
+4. `Rotor_Pivot` görsel dönüşü motor RPM verisine bağlanacak.
+5. Aerodinamik lift, drag ve kontrol torkları ayrı `AircraftPhysics` bileşeninde geliştirilecek.
 
 ---
 

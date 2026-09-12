@@ -1,6 +1,7 @@
 # Working Rules — UAV Flight Simulator
 
-**Son güncelleme:** 2026-09-11  
+**Son güncelleme:** 2026-09-12
+
 **Kapsam:** Unity proje kökünde açılan Codex oturumları
 
 Bu dosyanın amacı Codex'in projeyi güvenli, kanıta dayalı ve tutarlı biçimde incelemesini ve geliştirmesini sağlamaktır.
@@ -161,23 +162,23 @@ AircraftRoot
 
 ## 7. Özel İHA Modeli
 
-Geliştiricinin 2026-09-11 tarihli son teyidine göre özel Blender İHA modeli modelleme açısından tamamlanmıştır. Model; gövde, ana kanat, çift tail boom, V-tail, pusher pervane, iniş takımları, ayrı aileronlar ve ayrı ruddervatorlar içerir.
+Özel Blender İHA modeli 2026-09-12 tarihinde Unity içinde doğrulanmıştır. Runtime model `Assets/_Project/Art/Aircraft/CustomUAV/`, URP materyali `Assets/_Project/Art/Materials/` ve prefablar `Assets/_Project/Prefabs/Aircraft/` altında tutulur.
 
-Unity importunda ayrıca doğrulanacaklar:
+Doğrulanmış entegrasyon sabitleri:
 
-- metre ölçeği ve transform değerleri,
-- Unity yerel `+Z` burun yönü,
-- aileron, ruddervator, pervane ve tekerlek pivot/yerel eksenleri,
-- normals, tangents ve shading,
-- materyal slotları ve URP uyumluluğu,
-- triangle sayısı, hiyerarşi ve isimler,
-- Blender referans/helper/cutter/guide nesnelerinin export dışında kalması,
-- prefab referansları,
-- mevcut collider ve Center of Mass uyumu,
-- Input ve fizik prototipinin bozulmaması,
-- `AssetReview` ve `FlightTest` sahnelerinde Console/Play Mode kontrolü.
+- metre ölçeği ve Unity yerel `+Z` burun yönü,
+- ayrı aileron/ruddervatorlar ve merkezden kaymayan `Rotor_Pivot`,
+- 33 renderer/benzersiz mesh ve 44.922 triangle,
+- `AircraftRoot > VisualPivot` hiyerarşisi,
+- tek kök Rigidbody ile 10 primitive collider,
+- `PF_CustomUAVVisual` ve `PF_CustomUAVAircraftPrototype` ayrımı,
+- input ile çalışan, yalnızca görsel `AircraftControlSurfaceAnimator`.
 
-Özel model doğrulanana kadar mevcut çalışan Unity görselini veya Meshy `SilentSentinel` deneyini silme ya da üzerine yazma.
+`Build or Update Aircraft Prototype` mevcut prototip prefabını bulduğunda yeniden üretmez; böylece elle ayarlanmış colliderlar ve sonradan eklenen bileşenler korunur.
+
+Gerçek kütle/CG verisi gelene kadar `mass = 100`, Automatic Center of Mass ve Automatic Tensor yalnızca kararlı prototip değeridir. `AssetReview` final smoke testi ile animatörün final prefab/sahne sahipliği hâlâ açıktır.
+
+Yeni uçağın motor ve uçuş fiziği de kabul edilene kadar `AircraftRoot_Meshy_Backup` ile eski inactive uçak instance'larını silme. Doğrulanmış özel prefabın colliderlarını otomatik yeniden kurma veya üzerine yazma.
 
 ---
 
@@ -219,7 +220,7 @@ Bilgiler çelişirse şu sıra kullanılır:
 ```text
 1. Geliştiricinin en yeni açık teyidi
 2. Canlı repository ve güncel araç çıktısı
-3. PROJECT_HANDOFF_2026-09-11.md
+3. PROJECT_HANDOFF_2026-09-12.md
 4. TECHNICAL_DECISIONS.md
 5. TASKS.md
 6. PROJECT_OVERVIEW.md

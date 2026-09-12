@@ -4,7 +4,7 @@ Bu talimatlar repository'nin tamamı için geçerlidir.
 
 ## Zorunlu İlk Oturum Protokolü
 
-Yeni bir sohbette önce `PROJECT_HANDOFF_2026-09-11.md`, `WORKING_RULES_UAV_SIMULATOR.md`, `TECHNICAL_DECISIONS.md`, `TASKS.md`, `PROJECT_OVERVIEW.md` ve `README.md` dosyalarını tamamen oku.
+Yeni bir sohbette önce `PROJECT_HANDOFF_2026-09-12.md`, `WORKING_RULES_UAV_SIMULATOR.md`, `TECHNICAL_DECISIONS.md`, `TASKS.md`, `PROJECT_OVERVIEW.md` ve `README.md` dosyalarını tamamen oku.
 
 Ardından projeyi salt okunur incele. İlk rapor tamamlanana ve kullanıcı açıkça uygulamaya geçmeni isteyene kadar:
 
@@ -99,6 +99,6 @@ Military Base Pack yalnızca yerel bağımlılıktır ve açık Git deposuna ekl
 Assets/ThirdParty/Tiny Teacup Studio/Military Base Pack/
 ```
 
-Özel Blender İHA modeli Unity'de doğrulanmadan mevcut çalışan Unity görselini veya Meshy `SilentSentinel` deneyini silme/üzerine yazma.
+Unity'de doğrulanan özel Blender İHA modelini, prefablarını veya elle ayarlanmış collider'larını yeniden oluşturma işlemiyle ezme. Meshy yedeğini ve eski pasif uçak instance'larını final uçuş sistemleri doğrulanmadan silme.
 
 Ayrıntılı kurallar için `WORKING_RULES_UAV_SIMULATOR.md` dosyasını esas al.
