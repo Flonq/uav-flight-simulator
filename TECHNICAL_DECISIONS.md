@@ -288,20 +288,19 @@ Proje küçük kalırsa gereğinden fazla ScriptableObject kullanımı karmaşı
 ## TD-009 — Render Pipeline Seçimi
 
 **Durum:** Kabul edildi  
-**Tarih:** 18 Temmuz 2026
+**Tarih:** 2026-09-06 öncesinde doğrulandı
 
 ### Karar
 
-Proje Universal Render Pipeline kullanılarak geliştirilecektir.
+Universal Render Pipeline (URP) kullanılacaktır.
 
 ### Gerekçe
 
-- Windows için yeterli görsel kalite sağlaması
-- Built-in Render Pipeline'a göre daha modern bir iş akışı sunması
-- HDRP'ye göre daha düşük sistem gereksinimine sahip olması
-- Performans ve görsel kalite arasında dengeli olması
-- Sis, post-processing, Render Texture ve çevre efektleri için yeterli özellik sunması
-- Hedeflenen 1080p ve 60 FPS performansıyla uyumlu olması
+- Windows için yeterli görsel kalite
+- Built-in Render Pipeline'a göre modern iş akışı
+- HDRP'ye göre daha düşük sistem gereksinimi
+- Performans ve kalite arasında dengeli yapı
+- Sis, post-processing ve çevre efektleri için yeterli özellik
 
 ### Alternatifler
 
@@ -310,40 +309,35 @@ Proje Universal Render Pipeline kullanılarak geliştirilecektir.
 
 ### Sonuçlar
 
-- Proje `Universal 3D` şablonuyla oluşturulmuştur.
-- URP ayar assetleri sürüm kontrolüne dahil edilecektir.
-- Eklenecek materyal ve assetlerin URP uyumluluğu kontrol edilecektir.
-- Render Pipeline değişikliği yalnızca önemli bir teknik gerekçe oluşursa değerlendirilecektir.
+- Proje Unity 6000.3.20f1 üzerinde URP ile kurulmuştur.
+- Military Base Pack materyalleri `URP/Lit` ile uyumlu hâle getirilmiştir.
+- HDRP ve Built-in Render Pipeline MVP kapsamı dışındadır.
 
 ---
 
 ## TD-010 — Kullanıcı Arayüzü Teknolojisi
 
 **Durum:** Kabul edildi  
-**Tarih:** 18 Temmuz 2026
+**Tarih:** 2026-09-06 öncesinde doğrulandı
+
+### Seçenekler
+
+- UI Toolkit
+- UGUI
 
 ### Karar
 
-MVP kullanıcı arayüzü uGUI ve TextMeshPro kullanılarak geliştirilecektir.
+İlk sürümde uGUI ve TextMeshPro kullanılacaktır.
 
-### Gerekçe
+### Karar kriterleri
 
-- Runtime telemetri arayüzlerinin hızlı hazırlanabilmesi
-- GameObject ve MonoBehaviour tabanlı sistemlerle kolay entegrasyon
-- EO kamera görüntüsü için RawImage ve Render Texture kullanımının uygun olması
-- Inspector üzerinden hızlı prototipleme yapılabilmesi
-- Tek geliştiricili MVP kapsamında daha düşük başlangıç karmaşıklığı oluşturması
+- Telemetri ekranının karmaşıklığı
+- Harita ve kamera paneli ihtiyacı
+- Kullanılacak hazır UI assetleri
+- Geliştirme hızı
+- Responsive tasarım ihtiyacı
 
-### Alternatifler
-
-- UI Toolkit
-- Özel çizim sistemi
-
-### Sonuçlar
-
-- Telemetri, görev paneli, uyarılar ve kamera arayüzleri uGUI ile hazırlanacaktır.
-- Metin bileşenlerinde TextMeshPro kullanılacaktır.
-- UI Toolkit, MVP tamamlandıktan sonra yalnızca açık bir ihtiyaç oluşursa yeniden değerlendirilecektir.
+Mevcut pasif input debug arayüzü bu teknolojiyle oluşturulmuş ve doğrulanmıştır.
 
 ---
 
@@ -488,195 +482,100 @@ Yeni bir sistem eklenmeden önce mevcut sistemin çalışır hâli commit edilme
 
 ---
 
-## TD-017 — Unity Sürümü
+## TD-017 — Unity Sürümü ve Temel Proje Ayarları
 
 **Durum:** Kabul edildi  
-**Tarih:** 18 Temmuz 2026
+**Tarih:** 2026-09-06 öncesinde doğrulandı
 
 ### Karar
-
-Proje Unity 6.3 LTS sürümünün `6000.3.20f1` Editor sürümüyle geliştirilecektir.
-
-### Gerekçe
-
-- Uzun süreli desteklenen bir Unity sürümü olması
-- Yeni başlayan projede eski sürüm bağımlılığı bulunmaması
-- URP ve Unity Input System ile güncel ve uyumlu bir geliştirme ortamı sunması
-- Portföy projesi için güncel Unity iş akışlarını göstermesi
-- Proje geliştirme süresince kararlı bir sürüm tabanı sağlaması
-
-### Alternatifler
-
-- Unity 2022.3 LTS
-- Unity 6'nın daha yeni desteklenen güncellemeleri
-
-### Sonuçlar
-
-- Unity sürümü `ProjectSettings/ProjectVersion.txt` üzerinden Git ile takip edilecektir.
-- Proje geliştirme sırasında Editor sürümü sebepsiz yere yükseltilmeyecektir.
-- Sürüm yükseltme gerekirse ayrı bir Git branch üzerinde yedek ve test yapılarak uygulanacaktır.
-
----
-
-## TD-018 — Cinemachine Paketinin Ertelenmesi
-
-**Durum:** Kabul edildi  
-**Tarih:** 18 Temmuz 2026
-
-### Karar
-
-Cinemachine paketi ilk proje kurulumu sırasında eklenmeyecektir.
-
-### Gerekçe
-
-- İlk prototipte kullanılmayan bir bağımlılık oluşturmamak
-- Kamera sistemini uçuş sisteminden bağımsız özel bileşenlerle tasarlamak
-- Projenin temel kamera ihtiyaçlarını önce küçük bir prototiple doğrulamak
-- Gereksiz paket ve proje karmaşıklığından kaçınmak
-
-### Sonuçlar
-
-Cinemachine ihtiyacı Faz 8 kamera sistemi geliştirilirken tekrar değerlendirilecektir.
-
----
-
-## TD-019 — Test Ortamında Military Base Pack Kullanılması
-
-**Durum:** Kabul edildi  
-**Tarih:** 25 Ağustos 2026
-
-### Karar
-
-İHA geliştirme ve fizik testleri için Military Base Pack tabanlı havaalanı ve üs ortamı kullanılacaktır.
-
-### Gerekçe
-
-- Sıfırdan çevre modellemek yerine geliştirme süresini ana teknik sistemlere ayırmak
-- Pist, hangar ve üs yapılarıyla yeterli görsel ölçek referansı sağlamak
-- Rigidbody ve yer teması testleri için kullanılabilir bir test ortamına hızlı şekilde ulaşmak
-- Portföy sunumunda boş prototip sahnesi yerine anlaşılır bir operasyon ortamı göstermek
-
-### Sonuçlar
-
-- Paket `Assets/ThirdParty` altında izole tutulacaktır.
-- Paketin temel mekaniklere herhangi bir kod bağımlılığı olmayacaktır.
-- Built-in materyaller URP ile uyumlu hâle getirilmiştir.
-- Gereksiz Spot Light gölgeleri performans amacıyla kapatılmıştır.
-- Üçüncü taraf asset lisansları repo public hâle getirilmeden önce yeniden değerlendirilecektir.
-
----
-
-## TD-020 — Görsel Model ile Fizik Kökünün Ayrılması
-
-**Durum:** Kabul edildi  
-**Tarih:** 25 Ağustos 2026
-
-### Karar
-
-İHA'nın görsel modeli doğrudan fizik nesnesi olarak kullanılmayacak; ayrı bir `AircraftRoot` fizik kökü altında tutulacaktır.
-
-### Gerekçe
-
-- Modelin pivot ve eksen farklılıklarını fizik sisteminden bağımsız düzeltebilmek
-- Görsel model ölçeğini ve rotasyonunu Rigidbody davranışını bozmadan ayarlayabilmek
-- Collider yapısını görsel mesh geometrisinden bağımsız tasarlamak
-- İleride görsel model değiştirilse bile uçuş fiziği mimarisini korumak
-
-### Sonuçlar
-
-- Rigidbody fizik kök nesnesi üzerinde bulunacaktır.
-- Görsel model fizik kökünün child nesnesi olacaktır.
-- Gövde, kanat ve iniş takımı colliderları ayrı primitive colliderlarla temsil edilecektir.
-- Uçuş kuvvetleri ileride fizik köküne uygulanacaktır.
-
----
-
-## TD-021 — Automatic Center Of Mass Kullanılması
-
-**Durum:** Kabul edildi  
-**Tarih:** 25 Ağustos 2026
-
-### Karar
-
-İlk uçuş prototipinde Rigidbody için Unity'nin `Automatic Center Of Mass` hesaplaması kullanılacaktır.
-
-### Gerekçe
-
-- Mevcut collider yapısının genel olarak simetrik olması
-- Pist temas ve yerçekimi testlerinde anormal yana yatma veya dönüş gözlenmemesi
-- Uçuş fiziği geliştirilmeden önce gereksiz manuel Center of Mass ayarı yapmamak
-- Özel Center of Mass değerinin gerçek uçuş davranışı gözlemlendikten sonra daha anlamlı şekilde ayarlanabilmesi
-
-### Sonuçlar
-
-- Şimdilik manuel Center of Mass offset değeri kullanılmayacaktır.
-- Uçuş fiziği ve stall davranışı geliştirilirken Center of Mass yeniden değerlendirilecektir.
-- Gerekirse daha sonraki fazlarda özel bir Center of Mass konumu tanımlanabilecektir.
-
----
-
-## TD-022 — Cihazdan Bağımsız Girdi Katmanı ve Gamepad Binding Stratejisi
-
-**Durum:** Kabul edildi  
-**Tarih:** 27 Ağustos 2026
-
-### Karar
-
-Kullanıcı girdileri Unity Input System üzerinden cihazdan bağımsız action'lar olarak okunacaktır.
-
-Klavye, fare ve gamepad aynı `Aircraft.inputactions` asseti üzerinden yönetilecek; fizik sistemi doğrudan herhangi bir fiziksel cihazı okumayacaktır.
-
-Gamepad bindinglerinde cihaz özelinde DualSense pathleri yerine genel `Gamepad` control pathleri kullanılacaktır.
-
-### Uygulanan Action Map'ler
 
 ```text
-Aircraft
-├── Pitch
-├── Roll
-├── Yaw
-├── Throttle
-└── Brake
-
-Camera
-├── SwitchCamera
-└── EOZoom
-
-UI
-└── Pause
+Unity:               6000.3.20f1 / Unity 6.3 LTS
+Platform:            Windows 64-bit
+Color Space:         Linear
+Asset Serialization: Force Text
 ```
-
-### Gerekçe
-
-- Girdi sistemi ile uçuş fiziğini birbirinden bağımsız tutmak
-- Aynı uçuş komutlarını farklı giriş cihazlarından okuyabilmek
-- DualSense testlerine rağmen PlayStation'a özel bir bağımlılık oluşturmamak
-- Daha sonra Xbox gamepad veya farklı uyumlu kontrolcülerin eklenmesini kolaylaştırmak
-- Joystick ve HOTAS desteğinin ileride mevcut action yapısı genişletilerek eklenebilmesini sağlamak
 
 ### Sonuçlar
 
-- `AircraftInputReader` fizik kuvveti uygulamaz; yalnızca kullanıcı komutlarını yayınlar.
-- Klavye ve DualSense gamepad girdileri Play Mode'da doğrulanmıştır.
-- Fare doğrudan pitch, roll veya yaw kontrolünde kullanılmayacaktır.
-- Fare EO kamera, zoom ve UI etkileşimleri için ayrılmıştır.
-- Özel joystick/HOTAS desteği MVP sonrasına ertelenmiştir.
-- Input System tarafından üretilen `AircraftInputActions.cs` dosyası manuel olarak düzenlenmeyecektir.
+- Yeni paket veya API önerileri bu Unity sürümüyle uyumlu olmalıdır.
+- Proje sürümü, paketler ve ayarlar canlı repository üzerinden denetlenmeden değiştirilmemelidir.
+
+---
+
+## TD-018 — Özel Blender İHA Modeli ve Görsel/Fizik Ayrımı
+
+**Durum:** Kabul edildi  
+**Tarih:** 2026-09-11
+
+### Karar
+
+Blender 5.2.1 LTS ile sıfırdan geliştirilen özel İHA modeli ana görsel yön olarak kullanılacaktır. Model; ayrı aileronlar, ayrı ruddervatorlar, pusher pervane ve iniş takımı içerir ve geliştirici tarafından modelleme açısından tamamlanmış olarak onaylanmıştır.
+
+Unity yapısı korunacaktır:
+
+```text
+AircraftRoot
+└── VisualPivot
+```
+
+### Sonuçlar
+
+- Görsel model fizik kökünü sürmez; simülasyon durumunu görsel olarak takip eder.
+- Mevcut çalışan Unity görseli, özel model doğrulanmadan silinmez veya üzerine yazılmaz.
+- Unity importunda ölçek, +Z burun yönü, pivotlar, normaller, materyaller ve hareketli parça hiyerarşisi ayrıca doğrulanır.
+- Blender referansları, helper/cutter nesneleri ve geçici guide nesneleri export edilmez.
+
+---
+
+## TD-019 — Üçüncü Taraf Military Base Pack Politikası
+
+**Durum:** Kabul edildi  
+**Tarih:** 2026-09-06
+
+### Karar
+
+Military Base Pack yerel geliştirme ortamında tutulacak, fakat lisans nedeniyle açık Git deposuna eklenmeyecektir.
+
+### Sonuçlar
+
+```text
+Assets/ThirdParty/Tiny Teacup Studio/Military Base Pack/
+```
+
+klasörü ve `.meta` dosyası `.gitignore` kapsamında kalmalıdır. Eski Git referansları veya ham asset dosyaları yeniden repository geçmişine sokulmamalıdır.
+
+---
+
+## TD-020 — Motor ve Aerodinamik Kuvvet Sorumlulukları
+
+**Durum:** Kabul edildi  
+**Tarih:** 2026-09-11 — önceki handoff önerisi güncellendi
+
+### Karar
+
+- `AircraftInputReader` yalnızca ham kullanıcı komutlarını sağlar.
+- `AircraftEngine`, throttle durumu, throttle rampası, motor açık/kapalı durumu, RPM, thrust hesabı ve propulsion kuvvetinden sorumludur.
+- `AircraftPhysics`, lift, drag ve aerodinamik dönme kuvvetlerinden sorumludur.
+- `AircraftGroundController`, fren ve yer hareketi davranışından sorumludur.
+- Rigidbody kuvvetleri fixed-timestep yolunda uygulanır.
+
+### Gerekçe
+
+Throttle durumunun input ve motor bileşenlerinde iki kez sahiplenilmesini önlemek ve her sistemin tek sorumlulukla test edilebilmesini sağlamak.
 
 ---
 
 ## Karar Bekleyen Konular
 
-- [x] Unity sürümünün tam numarası — Unity 6.3 LTS, 6000.3.20f1
-- [x] Render Pipeline seçimi — Universal Render Pipeline
-- [x] UI teknolojisi — uGUI ve TextMeshPro
-- [x] Kullanılacak İHA modelinin kesinleştirilmesi — Meshy ile özel lisans kapsamında üretilen sabit kanatlı İHA modeli
-- [x] İlk sürümde joystick desteği — MVP kapsamında özel joystick/HOTAS bindingleri eklenmeyecek; sonraki sürüme ertelendi
 - [ ] Yakıt sistemi veya batarya sistemi
 - [ ] Harita çözümü
 - [ ] Test framework kapsamı
-- [ ] Cinemachine ihtiyacının Faz 8 sırasında yeniden değerlendirilmesi
-- [x] Terrain veya modüler çevre kullanımı — Military Base Pack tabanlı test ortamı
+- [ ] Cinemachine kullanımı
+- [ ] Özel İHA modelinin Unity import ayarları ve prefab hiyerarşisi
+- [ ] LOD kapsamı
+
+Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene kadar karar bekleyen MVP maddesi değildir.
 
 ---
 
@@ -685,6 +584,5 @@ UI
 | Tarih | Karar | Değişiklik |
 |---|---|---|
 | Proje başlangıcı | TD-001 – TD-016 | İlk teknik karar taslağı oluşturuldu |
-| 18 Temmuz 2026 | TD-017 – TD-018 | Unity sürümü kesinleştirildi ve Cinemachine kullanımı kamera fazına ertelendi |
-| 25 Ağustos 2026 | TD-019 – TD-021 | Test ortamı, fizik kökü ve Center of Mass kararları belgelendi |
-| 27 Ağustos 2026 | TD-022 | Cihazdan bağımsız Input System ve generic Gamepad binding stratejisi belgelendi |
+| 2026-09-11 | TD-009, TD-010 | URP ve uGUI + TextMeshPro kararları kabul edildi olarak güncellendi |
+| 2026-09-11 | TD-017 – TD-020 | Unity temeli, özel model, üçüncü taraf asset ve kuvvet sorumlulukları belgelendi |

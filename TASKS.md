@@ -21,10 +21,10 @@ Bu dosya projenin geliştirme planını ve ilerleme durumunu takip etmek için k
 - [x] `TECHNICAL_DECISIONS.md` oluşturuldu
 - [x] `TASKS.md` oluşturuldu
 - [x] `README.md` oluşturuldu
-- [x] Unity sürümünü kesinleştir
-- [x] Render Pipeline seçimini kesinleştir
-- [x] UI teknolojisini kesinleştir
-- [x] İHA modelini kesinleştir
+- [x] Unity sürümünü kesinleştir — `6000.3.20f1 / Unity 6.3 LTS`
+- [x] Render Pipeline seçimini kesinleştir — URP
+- [x] UI teknolojisini kesinleştir — uGUI + TextMeshPro
+- [x] İHA modelini kesinleştir — Blender'da geliştirilen özel UAV modeli
 - [ ] Proje takvimini oluştur
 
 ### Çıkış kriteri
@@ -36,22 +36,24 @@ Projenin teknik temeli ve ilk sürüm kapsamı açıkça tanımlanmış olmalıd
 # FAZ 1 — Unity Proje Kurulumu
 
 - [x] Yeni Unity projesini oluştur
-- [x] Proje adını belirle
-- [x] Windows hedef platformunu ayarla
-- [x] Renk uzayını kontrol et
+- [x] Proje adını belirle — `UAVFlightSimulator`
+- [x] Windows 64-bit hedef platformunu ayarla
+- [x] Linear renk uzayını ayarla
+- [x] URP kurulumunu doğrula
 - [x] Input System paketini kur
 - [x] TextMeshPro temel kaynaklarını ekle
-- [x] Gerekliyse Cinemachine paketini kur
-  - İlk prototip için gerekli görülmedi; Faz 8 sırasında tekrar değerlendirilecek.
+- [x] Cinemachine'i şimdilik kullanmama kararını kaydet
 - [x] `_Project` ana klasörünü oluştur
 - [x] Önerilen alt klasör yapısını oluştur
 - [x] İlk test sahnesini oluştur
 - [x] Sahneyi `FlightTest` adıyla kaydet
-- [x] Proje ayarlarının ilk yedeğini al
+- [x] `AssetReview` sahnesini oluştur
+- [x] Asset Serialization ayarını Force Text yap
+- [x] Proje/Git güvenlik yedeklerini al
 - [x] Git deposunu başlat
 - [x] Unity için `.gitignore` ekle
 - [x] İlk commit'i oluştur
-- [x] GitHub reposunu oluştur
+- [x] GitHub reposunu oluştur — `Flonq/uav-flight-simulator`
 - [x] Yerel repoyu GitHub'a push et
 
 ### Çıkış kriteri
@@ -62,23 +64,22 @@ Proje hatasız açılmalı, boş test sahnesi çalışmalı ve GitHub üzerinde 
 
 # FAZ 2 — Test Ortamı ve Havaalanı
 
-- [x] Test zemini ve havaalanı çevresini hazırla
-  - Military Base Pack test ortamının temel çevresi olarak kullanılıyor.
-- [x] Pist / test yüzeyini hazırla
-- [x] Pist collider davranışını Play Mode'da doğrula
-- [x] İHA spawn noktası oluştur
-- [x] Hangar ve üs çevresini ekle
-- [x] Yer kontrol istasyonu alanını belirle
-- [x] Directional Light temel ayarlarını doğrula
-- [x] Skybox kullanımını değerlendir
-- [x] Sis kullanımını değerlendir
-- [x] Test kamerasını doğrula
-- [x] Çevre ölçeğini İHA ile karşılaştırarak doğrula
-- [x] Havaalanı sahnesinde performans testi yap
-- [x] Military Base Pack lisansını kontrol et
-- [x] Military Base Pack URP materyal uyumluluğunu düzelt
-- [x] Gereksiz Spot Light gölgelerini kapat
-- [x] Play Mode testinde Console'u hatasız ve uyarısız doğrula
+- [x] Military Base Pack tabanlı test ortamını yerel olarak kur
+- [x] Pist ve zemin alanını hazırla
+- [x] Pist/zemin temasını collider ile doğrula
+- [x] İHA spawn noktasını oluştur
+- [x] Hangar ve üs çevresini test ortamında hazırla
+- [x] Mantıksal `GroundControlStationArea` işaretini oluştur
+- [x] Directional Light ayarla
+- [x] Skybox ayarla
+- [x] Sis ayarını değerlendir — kapalı
+- [x] Military Base Pack materyallerini `URP/Lit` ile uyumlu hâle getir
+- [x] 53 Spot Light için gölgeleri kapat
+- [x] Çevre ölçeğini metre birimine göre kontrol et
+- [x] Git geçmişinden yeniden dağıtılamayan üçüncü taraf assetleri temizle
+- [x] Military Base Pack klasörünün yerel kalıp Git tarafından yok sayıldığını doğrula
+- [x] Git temizliği sonrasında Unity smoke testini tamamla
+- [ ] Havaalanı sahnesinde 60 FPS testi yap
 
 ### Çıkış kriteri
 
@@ -88,23 +89,42 @@ Proje hatasız açılmalı, boş test sahnesi çalışmalı ve GitHub üzerinde 
 
 # FAZ 3 — İHA Modeli ve Fizik Kökü
 
-- [x] İHA modelini projeye aktar
-- [x] Modelin lisansını belgeleyerek kontrol et
-- [x] Model ölçeğini metre birimine göre ayarla
-- [x] Pivot noktasını kontrol et
-- [x] Model yönünü Unity eksenlerine göre düzelt
-- [x] Fizik kök nesnesi oluştur
+## 3A — Mevcut Unity prototipi
+
+- [x] Geçici/önceki UAV görselini Unity'ye aktar
+- [x] `AircraftRoot > VisualPivot` ayrımını oluştur
 - [x] Görsel modeli fizik kökünün altına yerleştir
 - [x] Rigidbody ekle
-- [x] Kütle değerini belirle
-- [x] Center of Mass ayarını kontrol et
-  - Rigidbody Automatic Center Of Mass kullanılıyor; özel CoM ayarı uçuş fiziği geliştirilirken gerekirse yeniden değerlendirilecek.
-- [x] Ana collider yapısını oluştur
-- [x] Kanat colliderlarını değerlendir
-- [x] Tekerlek veya iniş takımı colliderlarını oluştur
-- [x] Prefab oluştur
-- [x] Prefabı test sahnesine ekle
-- [x] Yerçekimi ve pist temas testini gerçekleştir
+- [x] Prototip kütle değerini `100` olarak belirle
+- [x] Automatic Center of Mass ile başlangıç testi yap
+- [x] Ana gövde capsule collider prototipini oluştur
+- [x] Kanat box collider prototipini oluştur
+- [x] Tekerlek sphere collider prototiplerini oluştur
+- [x] Yer çekimi ve pist temasını doğrula
+- [x] `PF_AircraftVisualPrototype` prefabını oluştur
+- [x] `PF_AircraftPrototype` prefabını oluştur
+- [x] Prototipi `FlightTest` sahnesine ekle
+
+## 3B — Özel Blender İHA modeli
+
+- [x] Özel UAV modelini Blender 5.2.1 LTS ile sıfırdan oluştur
+- [x] Fuselage, ana kanat, tail boom, V-tail, pusher pervane ve iniş takımlarını tamamla
+- [x] Sağ/sol aileronları ayrı hareketli mesh olarak tamamla
+- [x] Sağ/sol ruddervatorları ayrı hareketli mesh olarak tamamla
+- [x] Kontrol yüzeylerindeki son görsel/geometrik sorunları düzelt
+- [x] Model sahipliğini doğrula — proje için geliştirici tarafından oluşturulan özel model
+- [ ] Unity export kopyasını ve temiz export hiyerarşisini hazırla
+- [ ] Blender referans/helper/cutter/guide nesnelerinin export dışında kaldığını doğrula
+- [ ] Modeli Unity projesindeki `Assets/_Project/Art/Aircraft/CustomUAV/` alanına aktar
+- [ ] Import ölçeğini metre birimine göre doğrula
+- [ ] Modelin Unity yerel `+Z` burun yönünü doğrula
+- [ ] Aileron, ruddervator ve propeller pivot/yerel eksenlerini Unity'de doğrula
+- [ ] Normals, tangents, materyal slotları ve triangle sayısını doğrula
+- [ ] Özel görseli mevcut `VisualPivot` altında test et
+- [ ] Mevcut geçici görseli yalnızca yeni model doğrulandıktan sonra devre dışı bırak
+- [ ] Collider ve Center of Mass değerlerini yeni model boyutlarına göre yeniden değerlendir
+- [ ] Final uçak prefabını oluştur veya mevcut prefabı güvenli biçimde güncelle
+- [ ] `AssetReview` ve `FlightTest` sahnelerinde Play Mode smoke testi yap
 
 ### Çıkış kriteri
 
@@ -125,14 +145,11 @@ Proje hatasız açılmalı, boş test sahnesi çalışmalı ve GitHub üzerinde 
 - [x] Pause action oluştur
 - [x] C# sınıf üretimini etkinleştir
 - [x] `AircraftInputReader` scriptini oluştur
-- [x] Girdi değerlerini debug panelinde göster
-- [x] Klavye kontrolünü test et
-- [x] Fare kontrolü gerekip gerekmediğini değerlendir
-  - Fare doğrudan uçuş kontrolünde kullanılmayacak; EO kamera, zoom ve UI etkileşimleri için ayrılacak.
-- [x] Gamepad desteğini test et
-  - DualSense gamepad ile pitch, roll, yaw, throttle, brake, kamera değiştirme, EO zoom ve pause girdileri doğrulandı.
-- [x] Joystick desteğini sonraki sürüm için değerlendir
-  - Unity Input System mimarisi joystick desteğine genişletilebilir bırakıldı; fiziksel joystick/HOTAS desteği MVP sonrasına ertelendi.
+- [x] Girdi değerlerini pasif debug panelinde göster
+- [x] Klavye ve fare girdilerini test et
+- [x] DualSense'i genel `<Gamepad>` bindingleriyle test et
+- [x] Joystick/HOTAS desteğini MVP sonrasına ertele
+- [ ] Phase 5 başlamadan önce throttle sahipliğini `AircraftInputReader` → `AircraftEngine` yönünde refactor et
 
 ### Çıkış kriteri
 
@@ -460,12 +477,20 @@ Yeni bir hata bulunduğunda aşağıdaki biçimde eklenmelidir:
   - Öncelik:
 ```
 
+Mevcut doğrulanması gereken teknik borçlar:
+
+- [ ] Kök dokümantasyon ile canlı repository durumunu Codex salt-okunur denetiminde karşılaştır
+- [ ] `FlightTest` içindeki üç `AircraftRoot` instance'ından ikisinin neden inactive olduğunu doğrula
+- [ ] `AircraftInputReader` içindeki throttle state/ramp sorumluluğunu Phase 5 öncesinde `AircraftEngine` bileşenine taşı
+- [ ] Military Base Pack'in `.gitignore` kuralını ve temiz Git geçmişini koru
+- [ ] Özel UAV modelinin Unity import/eksen/pivot/materyal testini tamamla
+
 ---
 
 # SONRAKİ ÜÇ GÖREV
 
 Bu bölüm her çalışma oturumunun sonunda güncellenmelidir.
 
-1. Faz 5 için `AircraftEngine` mimarisini ve sorumluluklarını belirle
-2. Throttle girdisini `AircraftEngine` sistemine bağla
-3. Rigidbody üzerine ileri yönlü thrust kuvveti uygulayıp pist hızlanma testini gerçekleştir
+1. Codex ile tüm Unity projesini salt-okunur incele ve durum/tutarlılık/risk raporu al.
+2. Raporu geliştiriciyle değerlendir; açık onay olmadan dosya değiştirme.
+3. Özel Blender İHA modelini temiz export ile Unity'ye aktar ve `VisualPivot` altında doğrula.

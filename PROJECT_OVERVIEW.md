@@ -10,11 +10,11 @@
 
 ## 2. Projenin Amacı
 
-Bu proje, Unity kullanılarak geliştirilen masaüstü tabanlı bir insansız hava aracı uçuş simülatörüdür.
+Bu proje, Unity kullanılarak geliştirilecek masaüstü tabanlı bir insansız hava aracı uçuş simülatörüdür.
 
 Projenin temel amacı; yazılım mimarisi, oyun motoru kullanımı, fizik tabanlı sistem geliştirme, kullanıcı arayüzü tasarımı, görev akışı oluşturma ve teknik dokümantasyon becerilerimi tek bir portföy çalışmasında göstermektir.
 
-Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak üzere geliştirilmektedir.
+Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak üzere geliştirilecektir.
 
 Bu çalışma resmî bir Baykar ürünü değildir ve Baykar tarafından desteklendiği veya onaylandığı iddiasını taşımaz.
 
@@ -65,39 +65,36 @@ Simülasyonun planlanan temel akışı:
 ## 5. Hedef Platform
 
 - **Birincil platform:** Windows masaüstü
-- **Kontrol yöntemi:** Klavye, fare ve gamepad
-- **İleri aşama seçeneği:** Joystick veya HOTAS desteği
+- **Kontrol yöntemi:** Klavye ve fare
+- **İleri aşama seçeneği:** Gamepad veya joystick desteği
 - **Ekran modu:** 16:9 çözünürlükler
 - **Hedef performans:** Orta seviye bir bilgisayarda kararlı 60 FPS
 
 ---
 
-## 6. Kullanılan Teknolojiler
+## 6. Kullanılacak Teknolojiler
 
 | Alan | Teknoloji |
 |---|---|
-| Oyun motoru | Unity 6.3 LTS — 6000.3.20f1 |
+| Oyun motoru | Unity 6000.3.20f1 (Unity 6.3 LTS) |
 | Programlama dili | C# |
-| Render Pipeline | Universal Render Pipeline |
 | Sürüm kontrolü | Git |
-| Kod deposu | GitHub |
+| Kod deposu | GitHub — `Flonq/uav-flight-simulator` |
+| Geliştirme ortamı | Visual Studio veya JetBrains Rider |
 | Girdi sistemi | Unity Input System |
 | Fizik sistemi | Unity Rigidbody tabanlı fizik |
-| Kullanıcı arayüzü | uGUI ve TextMeshPro |
-| Hedef platform | Windows |
+| Render Pipeline | Universal Render Pipeline (URP) |
+| Kullanıcı arayüzü | uGUI + TextMeshPro |
+| Hedef platform | Windows 64-bit |
+| Renk uzayı | Linear |
 
-### Mevcut teknik kararlar
+### Ertelenen veya daha sonra doğrulanacak kararlar
 
-- Proje `Universal 3D` şablonu ile oluşturulmuştur.
-- Renk uzayı `Linear` olarak kullanılmaktadır.
-- Kullanıcı girdileri Unity Input System üzerinden yönetilecektir.
-- İHA hareketi `Rigidbody` tabanlı yarı gerçekçi bir fizik modeli ile geliştirilecektir.
-- Görsel model ile fizik kök nesnesi birbirinden ayrılmıştır.
-- Kullanıcı arayüzü için uGUI ve TextMeshPro kullanılacaktır.
-- Cinemachine ilk prototip için gerekli görülmemiştir; kamera sistemi geliştirilirken tekrar değerlendirilecektir.
-- Joystick desteği MVP sonrasında veya ihtiyaç oluşması durumunda değerlendirilecektir.
+- Cinemachine gereksinimi kamera fazında yeniden değerlendirilecek.
+- Joystick/HOTAS desteği MVP sonrasına ertelendi.
+- Harita çözümü ve yakıt/enerji sistemi henüz kesinleştirilmedi.
 
-Ayrıntılı teknik kararlar `TECHNICAL_DECISIONS.md` dosyasında tutulmaktadır.
+Kesinleşen kararların gerekçeleri `TECHNICAL_DECISIONS.md` içinde tutulur.
 
 ---
 
@@ -120,7 +117,7 @@ Ayrıntılı teknik kararlar `TECHNICAL_DECISIONS.md` dosyasında tutulmaktadır
 
 - Takip kamerası
 - Serbest gözlem kamerası
-- Gövde kamerası
+- Kokpit veya gövde kamerası
 - Elektro-optik hedefleme kamerası
 - Kamera modları arasında geçiş
 - Zoom ve hedef takibi
@@ -143,6 +140,7 @@ Ayrıntılı teknik kararlar `TECHNICAL_DECISIONS.md` dosyasında tutulmaktadır
 - Yön
 - Pitch, roll ve yaw değerleri
 - Motor gücü
+- Yakıt veya enerji seviyesi
 - Görev süresi
 - Waypoint mesafesi
 
@@ -171,7 +169,7 @@ Ayrıntılı teknik kararlar `TECHNICAL_DECISIONS.md` dosyasında tutulmaktadır
 
 - Tek bir sabit kanatlı İHA
 - Tek bir havaalanı veya test sahası
-- Klavye, fare ve gamepad ile kontrol
+- Klavye ve fare ile kontrol
 - Temel fizik tabanlı uçuş
 - Kalkış ve iniş
 - Takip kamerası
@@ -203,15 +201,22 @@ Bu proje bir portföy ve yazılım demonstrasyon çalışmasıdır; sertifikalı
 
 ---
 
-## 10. Proje Klasör Yapısı
+## 10. Önerilen Proje Klasör Yapısı
 
 ```text
 Assets/
 ├── _Project/
 │   ├── Art/
+│   │   ├── Aircraft/
+│   │   ├── Environment/
+│   │   ├── Materials/
+│   │   └── UI/
 │   ├── Audio/
 │   ├── Prefabs/
-│   │   └── Aircraft/
+│   │   ├── Aircraft/
+│   │   ├── Environment/
+│   │   ├── Mission/
+│   │   └── UI/
 │   ├── Scenes/
 │   ├── Scripts/
 │   │   ├── Aircraft/
@@ -223,20 +228,17 @@ Assets/
 │   │   └── UI/
 │   ├── Settings/
 │   └── Tests/
+├── Plugins/
 └── ThirdParty/
 ```
-
-Proje tarafından geliştirilen içerikler mümkün olduğunca `Assets/_Project` altında tutulmaktadır.
-
-Harici modeller ve asset paketleri `Assets/ThirdParty` altında izole edilmektedir.
 
 ---
 
 ## 11. Geliştirme Yaklaşımı
 
-Proje küçük ve test edilebilir aşamalar hâlinde geliştirilmektedir.
+Proje küçük ve test edilebilir aşamalar hâlinde geliştirilecektir.
 
-Her özellik için uygulanan temel süreç:
+Her özellik için uygulanacak temel süreç:
 
 1. Gereksinimi tanımla
 2. Mevcut sistemi incele
@@ -248,26 +250,7 @@ Her özellik için uygulanan temel süreç:
 8. Git commit oluştur
 9. Dokümantasyonu güncelle
 
-### Mimari yaklaşım
-
-Tek bir büyük kontrol sınıfı yerine sorumlulukları ayrılmış bileşenler kullanılacaktır.
-
-Planlanan temel bileşenler:
-
-```text
-AircraftInputReader
-AircraftPhysics
-AircraftEngine
-AircraftControlSurfaces
-AircraftGroundController
-AircraftTelemetry
-CameraModeController
-MissionManager
-Waypoint
-GroundControlUI
-```
-
-Kullanıcı girdisi, fizik sistemi, kamera, telemetri, görev sistemi ve kullanıcı arayüzü birbirinden mümkün olduğunca bağımsız tutulacaktır.
+Yeni Codex oturumunun ilk aşaması salt okunur proje denetimidir. Geliştiricinin rapor sonrasında verdiği açık görev ve onay kapsamında Codex kod veya proje dosyalarını düzenleyebilir; Unity Editor içinde güvenli biçimde otomatikleştirilemeyen adımlar geliştirici tarafından uygulanır.
 
 ---
 
@@ -290,50 +273,32 @@ Proje aşağıdaki koşullar sağlandığında başarılı kabul edilecektir:
 
 ## 13. Mevcut Durum
 
-**Mevcut aşama:** Faz 4 tamamlandı — Faz 5 Motor ve Throttle Sistemi geliştirmesine geçiliyor.
+**Son güncelleme:** 2026-09-11  
+**Durum:** Özel İHA modeli tamamlandı; Unity proje denetimi ve model entegrasyonu sıradaki aşama.
 
-### Tamamlanan temel çalışmalar
+Doğrulanmış mevcut durum:
 
-- Unity 6.3 LTS projesi oluşturuldu ve temel proje ayarları tamamlandı.
-- Universal Render Pipeline yapılandırıldı.
-- Unity Input System ve TextMeshPro proje altyapısına dahil edildi.
-- Modüler `_Project` klasör yapısı oluşturuldu.
-- `FlightTest` ana test sahnesi hazırlandı.
-- Military Base Pack kullanılarak havaalanı ve üs test ortamı oluşturuldu.
-- Harici environment materyalleri URP ile uyumlu hâle getirildi.
-- Sahnedeki gereksiz gerçek zamanlı gölge maliyetleri azaltıldı.
-- İHA spawn noktası ve yer kontrol istasyonu için mantıksal alan belirlendi.
-- İHA görsel modeli projeye aktarıldı.
-- İHA görsel yönü ve ölçeği Unity sahnesine uygun hâle getirildi.
-- Ayrı bir fizik kök nesnesi oluşturuldu.
-- Rigidbody ve temel gövde, kanat ve iniş takımı collider yapısı oluşturuldu.
-- Rigidbody için otomatik Center of Mass kullanımı doğrulandı.
-- Yerçekimi ve pist temas davranışı Play Mode'da test edildi.
-- Test sahnesinde Console hatasız ve uyarısız çalışacak duruma getirildi.
-- Faz 2 ve Faz 3 geliştirmeleri `main` branch'ine birleştirildi.
-- `Aircraft`, `Camera` ve `UI` Action Map'lerini içeren Input System yapısı oluşturuldu.
-- `AircraftInputReader` ile kullanıcı girdisi fizik sisteminden ayrıldı.
-- Klavye ve DualSense gamepad kontrolleri Play Mode'da doğrulandı.
-- EO zoom için fare ve gamepad girdileri hazırlandı.
-- Girdi değerlerini doğrulamak için geliştirme amaçlı debug paneli oluşturuldu.
-- Özel joystick/HOTAS desteğinin MVP sonrasına ertelenmesine karar verildi.
+- Unity 6000.3.20f1 / Unity 6.3 LTS projesi oluşturuldu.
+- URP, Windows 64-bit, Linear color space ve uGUI + TextMeshPro kararları kesinleşti.
+- `FlightTest` ve `AssetReview` sahneleri mevcut.
+- Military Base Pack tabanlı test havaalanı yerel olarak çalışıyor ve üçüncü taraf asset dosyaları Git dışında tutuluyor.
+- `AircraftRoot > VisualPivot` ayrımı, Rigidbody ve geçici collider prototipi doğrulandı.
+- Unity Input System, klavye ve DualSense girdileri ile pasif input debug paneli tamamlandı.
+- Blender 5.2.1 LTS ile geliştirilen özel İHA modeli; ayrı aileronlar, ruddervatorlar, pusher pervane ve iniş takımıyla tamamlandı.
+- Özel İHA modeli henüz Unity içinde ölçek, eksen, pivot, materyal, hiyerarşi ve prefab açısından doğrulanmadı.
+- `AircraftEngine`, gerçek thrust, aerodinamik uçuş fiziği ve sonraki oyun sistemleri henüz uygulanmadı.
 
-### Sıradaki geliştirme
+Sıradaki kontrollü akış:
 
-Bir sonraki aşama **Faz 5 — Motor ve Throttle Sistemi** olacaktır.
-
-Bu aşamada:
-
-- `AircraftEngine` bileşeni oluşturulacak
-- Throttle girdisi motor sistemine bağlanacak
-- Motor thrust değeri hesaplanacak
-- Rigidbody üzerine ileri yönlü kuvvet uygulanacak
-- Motor ve throttle değerleri Inspector üzerinden ayarlanabilir tutulacak
-- Sistem uçuş aerodinamiğinden bağımsız olarak test edilecektir
+1. Codex mevcut yerel projeyi salt-okunur olarak ayrıntılı inceleyecek.
+2. Kod, sahne, prefab, paket, Git ve dokümantasyon tutarlılık raporu sunacak.
+3. Geliştirici raporu değerlendirmeden hiçbir proje dosyası değiştirilmeyecek.
+4. Onaydan sonra özel İHA modeli Unity'ye test amaçlı aktarılacak.
+5. Yeni görsel yalnızca doğrulandıktan sonra `VisualPivot` altında mevcut geçici görselin yerini alacak.
 
 ---
 
-## 14. Proje Sahibi
+## 14. İletişim ve Proje Sahibi
 
 **Geliştirici:** Mert Kaan  
 **Rol:** Yazılım Mühendisi / Unity Geliştiricisi  
