@@ -228,8 +228,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MertKaan.UAVSimulator.Aircraft.AircraftEngine
   _inputReader: {fileID: 1184735321776206417}
+  _rigidbody: {fileID: 8385554076756208212}
   _throttleChangeRate: 0.5
   _initialThrottle: 0
+  _startRunning: 1
+  _idleRpm: 1200
+  _maxRpm: 6000
+  _rpmChangeRate: 3000
+  _maxThrustNewtons: 1000
 --- !u!1 &2780235931759866103
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,7 +275,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2780235931759866103}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 776f1299f58f91647bbbd1cf9a878bcb, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -322,7 +328,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3655355422770932527}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 776f1299f58f91647bbbd1cf9a878bcb, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -589,7 +595,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8305591082394127851}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 776f1299f58f91647bbbd1cf9a878bcb, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

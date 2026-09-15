@@ -26,9 +26,9 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 
 ## Proje Durumu
 
-**Son güncelleme:** 12 Eylül 2026
+**Son güncelleme:** 15 Eylül 2026
 
-**Mevcut aşama:** Özel İHA entegrasyonu ve motorun throttle yönetimi tamamlandı; RPM, thrust ve propulsion geliştirmesi sırada
+**Mevcut aşama:** Throttle, motor RPM ve itki prototipi tamamlandı; sıradaki adım pervane görselini RPM verisine bağlamak
 
 | Sistem | Durum |
 |---|---|
@@ -38,7 +38,7 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 | Input System — klavye ve gamepad | Tamamlandı; aktif uçak/debug bağlantısı doğrulandı |
 | Özel Blender İHA modeli | Unity importu, URP materyali ve prefab entegrasyonu tamamlandı |
 | Görsel kontrol yüzeyi animasyonları | Tamamlandı ve Play Mode'da doğrulandı |
-| Motor ve gerçek thrust | Başlanmadı |
+| Motor, RPM ve itki | Sabit fizik adımında çalışan prototip; kısa pist hızlanması doğrulandı |
 | Aerodinamik uçuş fiziği | Başlanmadı |
 | Kamera ve EO sistemi | Planlandı |
 | Telemetri ve görev sistemi | Planlandı |
@@ -290,6 +290,7 @@ docs/images/
 - [x] Compound colliderların ayarlanması ve yer temasının doğrulanması
 - [x] Görsel kontrol yüzeyi animasyonlarının uygulanması
 - [x] Throttle komutu ile motor durumunun ayrılması ve sabit zaman adımında gaz rampası
+- [x] Motor durumu, RPM geçişi ve ileri yön itki prototipi
 - [ ] Motor ve throttle sisteminin geliştirilmesi
 - [ ] Temel uçuş fiziğinin geliştirilmesi
 - [ ] Kalkış ve iniş sisteminin geliştirilmesi
@@ -307,14 +308,19 @@ Ayrıntılı görev listesi için [`TASKS.md`](TASKS.md) dosyasına bakılabilir
 
 ## Bilinen Eksikler
 
-2026-09-15: Input Reader, Engine ve kontrol yüzeyi Animator'ı uçak prefabının kökündedir. Engine, throttle değerini 0–1 aralığında saniyede 0,5 hızla yönetir; debug panel gaz komutunu ve motorun throttle değerini ayrı gösterir. RPM ve itki henüz uygulanmamıştır.
+2026-09-15: Input Reader, Engine ve kontrol yüzeyi Animator'ı uçak prefabının kökündedir. Debug panel gaz komutunu, throttle, motor durumunu, RPM ve itkiyi gösterir. Motor prototipi 1.200 rölanti / 6.000 maksimum RPM, 3.000 RPM/s geçiş ve 1.000 N maksimum itki kullanır. Bu değerler gerçek araç verileri değildir.
+
+Play Mode'da gaz komutu için Game View'a odaklanın. `AircraftRoot > AircraftEngine` bileşen menüsündeki `Start Engine` / `Stop Engine` motor durumunu değiştirir. Motor kapatma itkiyi keser; fren işlevi sağlamaz. Kısa testten sonra Play Mode'dan çıkın.
 
 Mevcut doğrulanmış eksikler:
 
 - Gerçek kütle, ağırlık merkezi ve inertia değerlerinin fiziksel verilerle kalibre edilmesi
 - `AssetReview` sahnesinde final model smoke testinin kaydedilmesi
 - Son sistem doğrulamaları bitince eski Meshy yedeği ve iki inactive uçak instance'ının temizlenmesi
-- Gerçek motor thrust sistemi
+- Motor/propeller verilerine dayalı itki kalibrasyonu ve hıza bağlı propeller verimi
+- RPM verisine bağlı pervane görsel dönüşü
+- Tekerlek prototipinde sıfır temas sürtünmesi yerine yönlü yer tutuşu ve fren uygulaması
+- Drag modeli ve nihai hız doğrulaması — mevcut prototipte itkiyle hızlanmayı sınırlayan aerodinamik sistem yoktur
 - Lift, drag, stall ve aerodinamik kontrol kuvvetleri
 - Tam yer hareketi, kalkış ve iniş sistemi
 - Yer kontrol istasyonu arayüzü

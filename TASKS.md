@@ -166,13 +166,13 @@ Bütün kullanıcı komutları fizik sisteminden bağımsız şekilde okunabilme
 - [x] Minimum throttle tanımla — 0
 - [x] Maksimum throttle tanımla — 1
 - [x] Throttle artış ve azalış hızını belirle — 0,5/s; FixedUpdate
-- [ ] Motor thrust değerini hesapla
-- [ ] İleri yön kuvvetini uygula
-- [ ] Motor açık ve kapalı durumu ekle
-- [ ] Motor devri değerini üret
-- [ ] Motor sesi için temel parametre üret
-- [ ] Inspector ayarlarını grupla
-- [ ] Pist üzerinde hızlanmayı test et
+- [x] Motor thrust değerini hesapla — rölanti üzerindeki normalize RPM'nin karesi; prototip
+- [x] İleri yön kuvvetini uygula — root Rigidbody +Z; FixedUpdate / ForceMode.Force
+- [x] Motor açık ve kapalı durumu ekle — API ve Play Mode bileşen menüsü
+- [x] Motor devri değerini üret — rölanti/maksimum RPM ve geçiş hızı
+- [x] Motor sesi için temel parametre üret — Rpm ve NormalizedRpm; ses bağlantısı ayrı fazda
+- [x] Inspector ayarlarını grupla
+- [x] Pist üzerinde hızlanmayı test et — kontrollü üç saniyelik gaz rampası (2026-09-15)
 - [ ] Maksimum yer hızını kontrol et
 
 ### Çıkış kriteri
@@ -489,6 +489,9 @@ Mevcut doğrulanması gereken teknik borçlar:
 - [x] Özel UAV modelinin Unity import/eksen/pivot/materyal testini tamamla
 - [ ] Gerçek kütle, ağırlık merkezi ve inertia değerlerini fiziksel verilerle kalibre et
 - [x] `AircraftControlSurfaceAnimator` ve `AircraftInputReader` sahipliğini uçak prefabında kesinleştir (TD-022)
+- [ ] Üç tekerlekteki sıfır temas sürtünmesini yönlü yer tutuşu, yuvarlanma direnci ve frenlerle tamamla (`AircraftGroundController`)
+- [ ] Propeller itki eğrisini gerçek araç verileriyle kalibre et; mevcut 1.000 N yalnızca prototip değeridir
+- [ ] Drag modeli eklendikten sonra nihai yer/uçuş hızını doğrula
 
 ---
 
@@ -496,6 +499,6 @@ Mevcut doğrulanması gereken teknik borçlar:
 
 Bu bölüm her çalışma oturumunun sonunda güncellenmelidir.
 
-1. Motor RPM, thrust ve fixed-timestep propulsion uygulamasını geliştir.
-2. `Rotor_Pivot` görselini motor RPM verisine bağla.
-3. `AssetReview` sahnesinde final model Play Mode smoke testini tamamla.
+1. `Rotor_Pivot` görselini motor RPM verisine bağla.
+2. `AssetReview` sahnesinde final model Play Mode smoke testini tamamla.
+3. `AircraftPhysics` içinde temel lift, drag ve kontrol torklarını geliştir.

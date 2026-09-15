@@ -40,6 +40,9 @@ namespace MertKaan.UAVSimulator.Editor
         private const string AircraftPrefabPath =
             "Assets/_Project/Prefabs/Aircraft/PF_CustomUAVAircraftPrototype.prefab";
 
+        private const string WheelMaterialPath =
+            "Assets/_Project/Settings/Physics/PM_AircraftWheelPrototype.physicMaterial";
+
         private const string FlightTestScenePath =
             "Assets/_Project/Scenes/FlightTest.unity";
 
@@ -216,6 +219,13 @@ namespace MertKaan.UAVSimulator.Editor
                     "Existing custom aircraft prototype has no colliders to preserve.");
             }
 
+            SphereCollider[] wheels = aircraftRoot.GetComponentsInChildren<SphereCollider>(true);
+            PhysicsMaterial wheelMaterial = RequireAsset<PhysicsMaterial>(WheelMaterialPath);
+            if (wheels.Length != 3 || wheels.Any(wheel => wheel.sharedMaterial != wheelMaterial))
+            {
+                throw new InvalidOperationException("Custom aircraft requires three wheels with its prototype physics material.");
+            }
+
             ValidateRuntimeComponents(aircraftRoot);
         }
 
@@ -225,6 +235,7 @@ namespace MertKaan.UAVSimulator.Editor
             AircraftEngine engine = aircraftRoot.AddComponent<AircraftEngine>();
             SerializedObject serializedEngine = new SerializedObject(engine);
             serializedEngine.FindProperty("_inputReader").objectReferenceValue = input;
+            serializedEngine.FindProperty("_rigidbody").objectReferenceValue = aircraftRoot.GetComponent<Rigidbody>();
             serializedEngine.ApplyModifiedPropertiesWithoutUndo();
             AircraftControlSurfaceAnimator animator = aircraftRoot.AddComponent<AircraftControlSurfaceAnimator>();
             SerializedObject serialized = new SerializedObject(animator);
@@ -253,9 +264,11 @@ namespace MertKaan.UAVSimulator.Editor
                 throw new InvalidOperationException("Custom aircraft prefab requires one root Input Reader, Engine and Animator.");
             }
 
-            if (new SerializedObject(engine).FindProperty("_inputReader").objectReferenceValue != input)
+            SerializedObject serializedEngine = new SerializedObject(engine);
+            if (serializedEngine.FindProperty("_inputReader").objectReferenceValue != input ||
+                serializedEngine.FindProperty("_rigidbody").objectReferenceValue != aircraftRoot.GetComponent<Rigidbody>())
             {
-                throw new InvalidOperationException("Engine must reference its prefab's root Input Reader.");
+                throw new InvalidOperationException("Engine must reference its prefab's root Input Reader and Rigidbody.");
             }
 
             SerializedObject serialized = new SerializedObject(animator);
@@ -560,6 +573,7 @@ namespace MertKaan.UAVSimulator.Editor
             GameObject colliderObject = new GameObject(name);
             colliderObject.transform.SetParent(parent, false);
             SphereCollider collider = colliderObject.AddComponent<SphereCollider>();
+            collider.sharedMaterial = RequireAsset<PhysicsMaterial>(WheelMaterialPath);
             collider.center = center;
             collider.radius = radius;
         }

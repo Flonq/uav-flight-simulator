@@ -273,9 +273,9 @@ Proje aşağıdaki koşullar sağlandığında başarılı kabul edilecektir:
 
 ## 13. Mevcut Durum
 
-**Son güncelleme:** 2026-09-12
+**Son güncelleme:** 2026-09-15
 
-**Durum:** Özel İHA modeli, fizik kökü, input ve kontrol yüzeyi animasyonları doğrulandı. Motorun throttle state/ramp yönetimi uygulandı; sıradaki aşama RPM ve propulsion sistemidir.
+**Durum:** Özel İHA modeli, input ve kontrol yüzeyi animasyonları doğrulandı. Throttle, motor RPM ve propulsion prototipi uygulandı; sıradaki aşama RPM verisine bağlı pervane animasyonudur.
 
 Doğrulanmış mevcut durum:
 
@@ -290,13 +290,16 @@ Doğrulanmış mevcut durum:
 - `PF_CustomUAVVisual` ve collider ayarlarını koruyan `PF_CustomUAVAircraftPrototype` prefabları oluşturuldu.
 - `AircraftControlSurfaceAnimator`, pitch/roll/yaw komutlarını yalnızca görsel yüzey sapmalarına dönüştürecek şekilde eklendi ve Play Mode'da doğrulandı.
 - `FlightTest` sahnesindeki özel uçak üç teker üzerinde kararlı duruyor; sıçrama, savrulma veya zeminden geçme gözlenmedi.
-- `AircraftEngine` throttle state/ramp yönetimini sabit fizik adımlarında uygular. Gerçek thrust, RPM, aerodinamik uçuş fiziği ve sonraki oyun sistemleri henüz uygulanmadı.
+- `AircraftEngine`, throttle state/ramp, motor durumu, RPM geçişi ve root Rigidbody'nin +Z yönünde itki kuvvetini sabit fizik adımlarında uygular.
+- Üç primitive tekerlek, düşük hızda temas kaynaklı eğilmeyi önlemek için sıfır sürtünmeli prototip materyali kullanır. Collider geometrisi ve Rigidbody ayarları korunmuştur; yönlü yer tutuşu ve frenler sonraki aşamadadır.
+- Kontrollü Left Shift girdisiyle üç saniyelik pist testinde yaklaşık 15,3 m ilerleme / 16,8 m/s hız, belirgin eğilme olmadan ölçüldü. Bu kısa test nihai hız veya fiziksel uçuş doğrulaması değildir.
+- Aerodinamik drag/lift, gerçek propeller kalibrasyonu ve sonraki oyun sistemleri henüz uygulanmadı.
 
 Sıradaki kontrollü akış:
 
 1. Tamamlandı (2026-09-15): `AircraftInputReader` ve `AircraftControlSurfaceAnimator` uçak prefabına taşındı; debug panel sahnede aktif instance'a bağlı kaldı (TD-022).
 2. Tamamlandı (2026-09-15): Throttle state/ramp sahipliği `AircraftEngine` bileşenine taşındı; Input Reader yalnızca komut sağlar.
-3. Motor RPM, thrust ve propulsion kuvveti fixed-timestep yolunda uygulanacak.
+3. Tamamlandı (2026-09-15): Motor RPM, prototip thrust ve propulsion kuvveti fixed-timestep yolunda uygulandı; kısa pist testi doğrulandı.
 4. `Rotor_Pivot` görsel dönüşü motor RPM verisine bağlanacak.
 5. Aerodinamik lift, drag ve kontrol torkları ayrı `AircraftPhysics` bileşeninde geliştirilecek.
 

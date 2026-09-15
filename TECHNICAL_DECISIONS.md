@@ -650,6 +650,34 @@ Play Mode'da kontrollü Input System girdileriyle yükselme, azalma, nötrde tut
 
 ---
 
+## TD-024 — RPM Tabanlı Propulsion Prototipi ve Tekerlek Teması
+
+**Durum:** Kabul edildi ve uygulandı
+
+**Tarih:** 2026-09-15
+
+### Karar
+
+`AircraftEngine` motor durumunu, RPM geçişini ve itkiyi yönetir. Açık motorun hedef RPM'si throttle ile rölanti/maksimum arasında doğrusal hesaplanır; RPM hedefe saniyede belirlenen hızla yaklaşır. İtki, rölanti üzerindeki normalize RPM'nin karesi ile maksimum itkinin çarpımıdır. Rölantide itki sıfırdır. Motor kapalıyken itki sıfır olur, RPM zamanla sıfıra iner. Bileşen devre dışı bırakıldığında RPM ve itki çıkışları sıfırlanır.
+
+Kuvvet `FixedUpdate` içinde root Rigidbody'nin fizik rotasyonuna göre yerel +Z yönünde, kütle merkezine `ForceMode.Force` ile uygulanır. Kuvvet ayrıca delta time ile çarpılmaz. Kinematic Rigidbody'ye kuvvet uygulanmaz. `Rpm`, `NormalizedRpm` ve `ThrustNewtons` görsel/ses/UI tüketicilerine veri sağlar; bu tüketiciler motor durumunu sahiplenmez.
+
+### Prototip değerleri ve sınırlar
+
+Başlangıçta motor açık, throttle 0'dır. Rölanti 1.200 RPM, maksimum 6.000 RPM, geçiş hızı 3.000 RPM/s, maksimum itki 1.000 N'dir. Bu değerler Inspector'da ayarlanabilir; gerçek motor/propeller verileri olarak sunulmaz. Motor kapatmak frenleme sağlamaz. Drag modeli henüz olmadığı için sürekli itki altında nihai hız tanımlı değildir.
+
+Üç tekerlek SphereCollider'ına `PM_AircraftWheelPrototype` atanır: static/dynamic friction 0, bounciness 0, combine Minimum. Primitive sphere'lar tüm uçak Rigidbody'sine bağlıdır; ayrı dönen tekerlek fiziği sağlamaz. Varsayılan sürtünme ile itki altında yaklaşık 14° eğilme ve çok az ilerleme gözlendi. Geçici düz zemin karşılaştırması sorunun temas sürtünmesinden kaynaklandığını doğruladı. 0,02 sürtünme tam gaz geçişinde yeterli olsa da gaz rampasında eğilmeyi gideremedi; final prototip değeri 0 seçildi. Bu temas çözümü yanal tutuş/fren sağlamaz; yönlü tutuş ve yuvarlanma direnci Ground Controller kapsamındadır. Collider boyutları, yerleşimleri ve Rigidbody ayarları korunur.
+
+### Doğrulama
+
+- İzole Unity fizik sahnesinde rölanti, RPM geçişi, kısmi/tam itki, kapatma, yeniden başlatma ve disabled input davranışı doğrulandı.
+- 1.000 N / 100 kg, döndürülmüş gövdede bir saniyede 10 m/s hız üretti; 10/20/40 ms fizik adımlarında aynı sonuç alındı. 200 kg gövdede sonuç 5 m/s oldu. Yapay dönme torku oluşmadı.
+- FlightTest'te kontrollü Left Shift komutu, throttle rampası ve üç saniyelik fizik simülasyonu yaklaşık 15,3 m ilerleme / 16,8 m/s hız üretti; yükseklik değişimi ihmal edilebilir, belirgin eğilme yoktu.
+- Testler kontrollü Input System olayları ve fizik simülasyonu kullanır; fiziksel kontrol cihazıyla kullanıcı uçuşu, performans veya nihai hız testi değildir.
+- Debug panelde motor/RPM/itki okumaları için 450 px panel / 420 px metin alanı kullanılır; hesaplanan 385,59 px içerik sığar.
+
+---
+
 ## Karar Bekleyen Konular
 
 - [ ] Yakıt sistemi veya batarya sistemi
@@ -673,3 +701,4 @@ Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene
 | 2026-09-12 | TD-018, TD-021 | Özel UAV Unity entegrasyonu, compound collider ve görsel kontrol yüzeyi sınırları doğrulandı |
 | 2026-09-15 | TD-022 | Input Reader ve görsel Animator prefab sahipliği uygulandı |
 | 2026-09-15 | TD-023 | Throttle state/ramp Engine'e taşındı; sabit zaman adımı ve input ayrımı doğrulandı |
+| 2026-09-15 | TD-024 | RPM/itki prototipi ve tekerlek temas materyali uygulandı; kısa pist hızlanması doğrulandı |

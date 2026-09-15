@@ -67,12 +67,15 @@ namespace MertKaan.UAVSimulator.UI.Debugging
         private void LateUpdate()
         {
             _debugText.text =
-                $"INPUT DEBUG\n\n" +
+                $"AIRCRAFT DEBUG\n\n" +
                 $"Pitch: {_inputReader.Pitch:F2}\n" +
                 $"Roll: {_inputReader.Roll:F2}\n" +
                 $"Yaw: {_inputReader.Yaw:F2}\n" +
                 $"Throttle Input: {_inputReader.ThrottleInput:F2}\n" +
                 $"Throttle: {(_engine != null ? _engine.Throttle.ToString("F2") : "N/A")}\n" +
+                $"Engine: {(_engine != null ? (!_engine.isActiveAndEnabled ? "Disabled" : (_engine.IsRunning ? "Running" : "Stopped")) : "N/A")}\n" +
+                $"RPM: {(_engine != null ? _engine.Rpm.ToString("F0") : "N/A")}\n" +
+                $"Thrust: {(_engine != null ? _engine.ThrustNewtons.ToString("F0") : "N/A")} N\n" +
                 $"Brake: {_inputReader.BrakePressed}\n" +
                 $"Camera Switch: {_inputReader.SwitchCameraPressed}\n" +
                 $"EO Zoom: {_inputReader.EOZoom:F2}\n" +
