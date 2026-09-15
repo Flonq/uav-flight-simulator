@@ -123,7 +123,7 @@ Proje hatasız açılmalı, boş test sahnesi çalışmalı ve GitHub üzerinde 
 - [x] Özel görseli mevcut `VisualPivot` altında test et
 - [x] Mevcut geçici görseli yalnızca yeni model doğrulandıktan sonra devre dışı bırak
 - [~] Collider ve Center of Mass değerlerini yeni model boyutlarına göre yeniden değerlendir — 10 collider ve otomatik COM ile kararlı; gerçek kütle/CG verisi bekleniyor
-- [~] Final uçak prefabını oluştur veya mevcut prefabı güvenli biçimde güncelle — prototip korunuyor; animatörün final prefab sahipliği kararlaştırılacak
+- [x] Mevcut uçak prefabını güvenli biçimde güncelle — Input Reader ve Animator prefab kökünde; elle ayarlanmış fizik yapısı korundu (2026-09-15)
 - [ ] `AssetReview` sahnesinde final model Play Mode smoke testi yap
 - [x] `FlightTest` sahnesinde final model Play Mode smoke testi yap
 - [x] Aileron ve ruddervatorları input komutlarıyla görsel olarak hareket ettir
@@ -482,13 +482,13 @@ Yeni bir hata bulunduğunda aşağıdaki biçimde eklenmelidir:
 
 Mevcut doğrulanması gereken teknik borçlar:
 
-- [x] Kök dokümantasyon ile canlı repository durumunu Codex salt-okunur denetiminde karşılaştır
+- [x] Kök dokümantasyon ile repository durumunu karşılaştır
 - [~] `FlightTest` içindeki eski/inactive uçak instance'larını koru ve final sistem kabulünden sonra temizle
 - [ ] `AircraftInputReader` içindeki throttle state/ramp sorumluluğunu Phase 5 öncesinde `AircraftEngine` bileşenine taşı
 - [ ] Military Base Pack'in `.gitignore` kuralını ve temiz Git geçmişini koru
 - [x] Özel UAV modelinin Unity import/eksen/pivot/materyal testini tamamla
 - [ ] Gerçek kütle, ağırlık merkezi ve inertia değerlerini fiziksel verilerle kalibre et
-- [ ] `AircraftControlSurfaceAnimator` bileşeninin final prefab/sahne sahipliğini kesinleştir
+- [x] `AircraftControlSurfaceAnimator` ve `AircraftInputReader` sahipliğini uçak prefabında kesinleştir (TD-022)
 
 ---
 
@@ -496,6 +496,6 @@ Mevcut doğrulanması gereken teknik borçlar:
 
 Bu bölüm her çalışma oturumunun sonunda güncellenmelidir.
 
-1. `AircraftControlSurfaceAnimator` ve aktif input referanslarını final prefab/sahne düzeninde tekilleştir.
-2. Throttle state/ramp sahipliğini `AircraftInputReader` bileşeninden yeni `AircraftEngine` bileşenine taşı.
-3. Motor RPM, thrust ve fixed-timestep propulsion uygulamasını geliştir; `Rotor_Pivot` görselini RPM verisine bağla.
+1. Throttle state/ramp sahipliğini `AircraftInputReader` bileşeninden yeni `AircraftEngine` bileşenine taşı.
+2. Motor RPM, thrust ve fixed-timestep propulsion uygulamasını geliştir; `Rotor_Pivot` görselini RPM verisine bağla.
+3. `AssetReview` sahnesinde final model Play Mode smoke testini tamamla.

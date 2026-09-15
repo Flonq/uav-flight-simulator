@@ -65,3 +65,10 @@ Desktop.ini
 # Third-party environment assets - local only
 /Assets/ThirdParty/Tiny Teacup Studio/Military Base Pack/
 /Assets/ThirdParty/Tiny Teacup Studio/Military Base Pack.meta
+
+# Local development configuration and session notes
+/.codex/
+/AGENTS.md
+/WORKING_RULES_UAV_SIMULATOR.md
+/PROJECT_HANDOFF_*.md
+/DOCUMENTATION_UPDATE_REPORT_*.md

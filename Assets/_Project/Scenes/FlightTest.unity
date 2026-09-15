@@ -24022,13 +24022,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1855187489322148508, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2045742861}
-    - targetCorrespondingSourceObject: {fileID: 1855187489322148508, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2045742864}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
 --- !u!1001 &683209628
 PrefabInstance:
@@ -35028,11 +35022,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5412017221204367677, guid: abe3d47b915ca924a9e06dd6d3321396, type: 3}
   m_PrefabInstance: {fileID: 1028001170}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1031457780 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 744433965739714177, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
-  m_PrefabInstance: {fileID: 682847201}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1033250700
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37290,11 +37279,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1108101273}
   m_Mesh: {fileID: -5495902117074765545, guid: cf4c16720fab71d439b0e6f26e63d921, type: 3}
---- !u!4 &1108259102 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1951302500919157580, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
-  m_PrefabInstance: {fileID: 682847201}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1110307159
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43300,11 +43284,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7998025327058000213, guid: 627facdd61ffa7744abeb35cc25c6c03, type: 3}
   m_PrefabInstance: {fileID: 1303383876}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1305808631 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7766466268972979752, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
-  m_PrefabInstance: {fileID: 682847201}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1310018037
 PrefabInstance:
@@ -62239,11 +62218,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
---- !u!4 &1940533823 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7207714713807710465, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
-  m_PrefabInstance: {fileID: 682847201}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1941991918
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -65394,47 +65368,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2045430771}
   m_Mesh: {fileID: -5495902117074765545, guid: cf4c16720fab71d439b0e6f26e63d921, type: 3}
---- !u!1 &2045742860 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1855187489322148508, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
+--- !u!114 &2045742861 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1184735321776206417, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
   m_PrefabInstance: {fileID: 682847201}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2045742861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2045742860}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d19b41be333f816489e6f28830b86200, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MertKaan.UAVSimulator.InputSystem.AircraftInputReader
-  _throttleChangeRate: 0.5
-  _initialThrottle: 0
---- !u!114 &2045742864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2045742860}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 766f4d757f7e7e34c8797041fb7ce11a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MertKaan.UAVSimulator.Aircraft.AircraftControlSurfaceAnimator
-  _inputReader: {fileID: 2045742861}
-  _leftAileron: {fileID: 1940533823}
-  _rightAileron: {fileID: 1108259102}
-  _leftRuddervator: {fileID: 1305808631}
-  _rightRuddervator: {fileID: 1031457780}
-  _maxAileronAngle: 20
-  _maxRuddervatorPitchAngle: 20
-  _maxRuddervatorYawAngle: 15
-  _maxRuddervatorCombinedAngle: 25
-  _surfaceSpeed: 90
 --- !u!1001 &2049225855
 PrefabInstance:
   m_ObjectHideFlags: 0

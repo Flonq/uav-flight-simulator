@@ -192,7 +192,7 @@ MVP tamamlanmadan gelişmiş özelliklere geçilmeyecektir.
 - Silah sistemi
 - Gerçek operasyon verileri
 - Çok oyunculu yapı
-- Gelişmiş yapay zekâ pilotu
+- Gelişmiş otonom pilot
 - Büyük ve açık dünya haritası
 - VR desteği
 - Profesyonel pilot eğitim sertifikasyonu
@@ -250,7 +250,7 @@ Her özellik için uygulanacak temel süreç:
 8. Git commit oluştur
 9. Dokümantasyonu güncelle
 
-Yeni Codex oturumunun ilk aşaması salt okunur proje denetimidir. Geliştiricinin rapor sonrasında verdiği açık görev ve onay kapsamında Codex kod veya proje dosyalarını düzenleyebilir; Unity Editor içinde güvenli biçimde otomatikleştirilemeyen adımlar geliştirici tarafından uygulanır.
+Her geliştirme görevi mevcut durumun incelenmesiyle başlar. Değişiklikler kapsamı belirli adımlarla uygulanır, Unity Editor içinde doğrulanır ve sürüm kontrolüne kaydedilir.
 
 ---
 
@@ -294,7 +294,7 @@ Doğrulanmış mevcut durum:
 
 Sıradaki kontrollü akış:
 
-1. `AircraftControlSurfaceAnimator` ve aktif input referanslarının sahne override'ı mı yoksa final prefab bileşeni mi olacağı kesinleştirilecek.
+1. Tamamlandı (2026-09-15): `AircraftInputReader` ve `AircraftControlSurfaceAnimator` uçak prefabına taşındı; debug panel sahnede aktif instance'a bağlı kaldı (TD-022).
 2. Throttle state/ramp sahipliği `AircraftInputReader` içinden `AircraftEngine` bileşenine taşınacak.
 3. Motor RPM, thrust ve propulsion kuvveti fixed-timestep yolunda uygulanacak.
 4. `Rotor_Pivot` görsel dönüşü motor RPM verisine bağlanacak.

@@ -595,6 +595,35 @@ Throttle durumunun input ve motor bileşenlerinde iki kez sahiplenilmesini önle
 
 ---
 
+## TD-022 — Runtime Bileşenlerinin Prefab Sahipliği
+
+**Durum:** Kabul edildi ve uygulandı
+**Tarih:** 2026-09-15
+
+### Karar
+
+`AircraftInputReader` ve `AircraftControlSurfaceAnimator`, `PF_CustomUAVAircraftPrototype` kökünde tutulur. Animator, aynı prefabın Input Reader ve dört kontrol yüzeyine referans verir. `InputDebugPanel` sahnede kalır ve aktif uçak instance'ına bağlanır.
+
+### Gerekçe ve alternatif
+
+Sahneye eklenen bileşenler yerine prefab sahipliği seçildi; yeni instance, input ve görsel kontrol yüzeyleri için eksiksiz bağlantılarla oluşturulur.
+
+### Sonuçlar
+
+FlightTest added-component override'ları prefab üzerine uygulandı. Entegrasyon aracı prefabın runtime bağlantılarını doğrular, yeni prototip oluşturma yolunda bu bileşenleri bağlar ve staging sırasında eski input bileşenini kopyalamaz. Mevcut collider ve Rigidbody ayarları korunur. Throttle state/ramp aktarımı ayrı görevdir.
+
+### Doğrulama (2026-09-15)
+
+- Unity MCP üzerinden derleme ve Play Mode başlangıcı: hata/uyarı yok.
+- FlightTest'te added-component override sayısı 0; debug panel aktif prefab instance'ına bağlı.
+- Geçici yeni runtime instance'ında tek Input Reader/Animator ve instance içi referanslar doğrulandı.
+- Kontrollü sanal gamepad testi: pitch=-1, roll=1, yaw=1; aileronlar -20/+20°, ruddervatorlar -5/-25°. Bu test Input System güncellemesini ve bileşen metotlarını kontrollü çağırır; fiziksel klavye/gamepad ile kullanıcı testi değildir.
+- Yeni prototip runtime bağlantı kurucusu geçici preview sahnesinde, mevcut prefab doğrulayıcısı asset üzerinde başarıyla çalıştı.
+- Rigidbody ve 10 collider'ın serialized blokları HEAD ile birebir aynı.
+- AssetReview final smoke testi ve staging menüsünün tam sahne geçişi bu görevde çalıştırılmadı.
+
+---
+
 ## Karar Bekleyen Konular
 
 - [ ] Yakıt sistemi veya batarya sistemi
@@ -603,7 +632,6 @@ Throttle durumunun input ve motor bileşenlerinde iki kez sahiplenilmesini önle
 - [ ] Cinemachine kullanımı
 - [ ] LOD kapsamı
 - [ ] Gerçek araç kütlesi, ağırlık merkezi ve inertia verileri
-- [ ] Görsel animatörün final prefab mı yoksa sahne bileşeni mi olacağı
 
 Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene kadar karar bekleyen MVP maddesi değildir.
 
@@ -617,3 +645,4 @@ Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene
 | 2026-09-11 | TD-009, TD-010 | URP ve uGUI + TextMeshPro kararları kabul edildi olarak güncellendi |
 | 2026-09-11 | TD-017 – TD-020 | Unity temeli, özel model, üçüncü taraf asset ve kuvvet sorumlulukları belgelendi |
 | 2026-09-12 | TD-018, TD-021 | Özel UAV Unity entegrasyonu, compound collider ve görsel kontrol yüzeyi sınırları doğrulandı |
+| 2026-09-15 | TD-022 | Input Reader ve görsel Animator prefab sahipliği uygulandı |

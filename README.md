@@ -253,10 +253,6 @@ Windows build yayımlandığında:
 | [`TECHNICAL_DECISIONS.md`](TECHNICAL_DECISIONS.md) | Alınan teknik kararlar ve gerekçeleri |
 | [`TASKS.md`](TASKS.md) | Geliştirme aşamaları ve görev takibi |
 | [`README.md`](README.md) | GitHub ve portföy tanıtımı |
-| [`PROJECT_HANDOFF_2026-09-12.md`](PROJECT_HANDOFF_2026-09-12.md) | Yeni Codex oturumu için güncel proje devri |
-| [`DOCUMENTATION_UPDATE_REPORT_2026-09-12.md`](DOCUMENTATION_UPDATE_REPORT_2026-09-12.md) | Entegrasyon sonrası dokümantasyon eşitleme raporu |
-| [`WORKING_RULES_UAV_SIMULATOR.md`](WORKING_RULES_UAV_SIMULATOR.md) | Güvenlik, çalışma ve doğrulama kuralları |
-| [`AGENTS.md`](AGENTS.md) | Codex'in repository genelinde izleyeceği talimatlar |
 
 ---
 
@@ -310,10 +306,11 @@ Ayrıntılı görev listesi için [`TASKS.md`](TASKS.md) dosyasına bakılabilir
 
 ## Bilinen Eksikler
 
+2026-09-15: `AircraftInputReader` ve `AircraftControlSurfaceAnimator`, uçak prefabının köküne taşındı; sahne debug paneli aktif instance'a bağlıdır (TD-022).
+
 Mevcut doğrulanmış eksikler:
 
 - Gerçek kütle, ağırlık merkezi ve inertia değerlerinin fiziksel verilerle kalibre edilmesi
-- `AircraftControlSurfaceAnimator` bileşeninin final prefab/sahne sahipliğinin kesinleştirilmesi
 - `AssetReview` sahnesinde final model smoke testinin kaydedilmesi
 - Son sistem doğrulamaları bitince eski Meshy yedeği ve iki inactive uçak instance'ının temizlenmesi
 - Gerçek motor thrust sistemi
@@ -347,7 +344,7 @@ MVP tamamlandıktan sonra değerlendirilebilecek özellikler:
 - Birden fazla görev
 - Yeniden oynatma sistemi
 - Uçuş veri kaydı
-- Yapay zekâ destekli hedef davranışları
+- Dinamik hedef davranışları
 
 ---
 

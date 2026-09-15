@@ -118,6 +118,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4714858000967673353}
   - component: {fileID: 8385554076756208212}
+  - component: {fileID: 1184735321776206417}
+  - component: {fileID: 2128975544336416412}
   m_Layer: 0
   m_Name: PF_CustomUAVAircraftPrototype
   m_TagString: Untagged
@@ -178,6 +180,42 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &1184735321776206417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855187489322148508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d19b41be333f816489e6f28830b86200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MertKaan.UAVSimulator.InputSystem.AircraftInputReader
+  _throttleChangeRate: 0.5
+  _initialThrottle: 0
+--- !u!114 &2128975544336416412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855187489322148508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 766f4d757f7e7e34c8797041fb7ce11a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MertKaan.UAVSimulator.Aircraft.AircraftControlSurfaceAnimator
+  _inputReader: {fileID: 1184735321776206417}
+  _leftAileron: {fileID: 7207714713807710465}
+  _rightAileron: {fileID: 1951302500919157580}
+  _leftRuddervator: {fileID: 7766466268972979752}
+  _rightRuddervator: {fileID: 744433965739714177}
+  _maxAileronAngle: 20
+  _maxRuddervatorPitchAngle: 20
+  _maxRuddervatorYawAngle: 15
+  _maxRuddervatorCombinedAngle: 25
+  _surfaceSpeed: 90
 --- !u!1 &2780235931759866103
 GameObject:
   m_ObjectHideFlags: 0
@@ -663,8 +701,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d3d5fa6d60e3c84d9ac721d960ffedf, type: 3}
+--- !u!4 &744433965739714177 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2580897204220569670, guid: 7d3d5fa6d60e3c84d9ac721d960ffedf, type: 3}
+  m_PrefabInstance: {fileID: 2992064614931041991}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1951302500919157580 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3643862500579290507, guid: 7d3d5fa6d60e3c84d9ac721d960ffedf, type: 3}
+  m_PrefabInstance: {fileID: 2992064614931041991}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2906030969991562212 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 131089476177530147, guid: 7d3d5fa6d60e3c84d9ac721d960ffedf, type: 3}
+  m_PrefabInstance: {fileID: 2992064614931041991}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7207714713807710465 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5585308728231880646, guid: 7d3d5fa6d60e3c84d9ac721d960ffedf, type: 3}
+  m_PrefabInstance: {fileID: 2992064614931041991}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7766466268972979752 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4777744187838372079, guid: 7d3d5fa6d60e3c84d9ac721d960ffedf, type: 3}
   m_PrefabInstance: {fileID: 2992064614931041991}
   m_PrefabAsset: {fileID: 0}

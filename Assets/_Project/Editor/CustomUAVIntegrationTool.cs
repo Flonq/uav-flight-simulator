@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using MertKaan.UAVSimulator.Aircraft;
 using MertKaan.UAVSimulator.InputSystem;
+using MertKaan.UAVSimulator.UI.Debugging;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -145,6 +147,7 @@ namespace MertKaan.UAVSimulator.Editor
                 ResetLocalTransform(visualPivot.transform);
 
                 CreatePrototypeColliders(aircraftRoot, visualPivot);
+                ConfigureRuntimeComponents(aircraftRoot);
 
                 GameObject prefab = PrefabUtility.SaveAsPrefabAsset(
                     aircraftRoot,
@@ -212,6 +215,54 @@ namespace MertKaan.UAVSimulator.Editor
                 throw new InvalidOperationException(
                     "Existing custom aircraft prototype has no colliders to preserve.");
             }
+
+            ValidateRuntimeComponents(aircraftRoot);
+        }
+
+        private static void ConfigureRuntimeComponents(GameObject aircraftRoot)
+        {
+            AircraftInputReader input = aircraftRoot.AddComponent<AircraftInputReader>();
+            AircraftControlSurfaceAnimator animator = aircraftRoot.AddComponent<AircraftControlSurfaceAnimator>();
+            SerializedObject serialized = new SerializedObject(animator);
+            serialized.FindProperty("_inputReader").objectReferenceValue = input;
+            string[] fields = { "_leftAileron", "_rightAileron", "_leftRuddervator", "_rightRuddervator" };
+            string[] names = { "Aileron_Left", "Aileron_Right", "Ruddervator_Left", "Ruddervator_Right" };
+            for (int i = 0; i < fields.Length; i++)
+            {
+                serialized.FindProperty(fields[i]).objectReferenceValue =
+                    FindDescendant(aircraftRoot.transform.Find("VisualPivot"), names[i]);
+            }
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+            ValidateRuntimeComponents(aircraftRoot);
+        }
+
+        private static void ValidateRuntimeComponents(GameObject aircraftRoot)
+        {
+            AircraftInputReader input = aircraftRoot.GetComponent<AircraftInputReader>();
+            AircraftControlSurfaceAnimator animator = aircraftRoot.GetComponent<AircraftControlSurfaceAnimator>();
+            if (input == null || animator == null ||
+                aircraftRoot.GetComponentsInChildren<AircraftInputReader>(true).Length != 1 ||
+                aircraftRoot.GetComponentsInChildren<AircraftControlSurfaceAnimator>(true).Length != 1)
+            {
+                throw new InvalidOperationException("Custom aircraft prefab requires one root Input Reader and Animator.");
+            }
+
+            SerializedObject serialized = new SerializedObject(animator);
+            if (serialized.FindProperty("_inputReader").objectReferenceValue != input)
+            {
+                throw new InvalidOperationException("Animator must reference its prefab's root Input Reader.");
+            }
+            Transform visualPivot = aircraftRoot.transform.Find("VisualPivot");
+            string[] fields = { "_leftAileron", "_rightAileron", "_leftRuddervator", "_rightRuddervator" };
+            string[] names = { "Aileron_Left", "Aileron_Right", "Ruddervator_Left", "Ruddervator_Right" };
+            for (int i = 0; i < fields.Length; i++)
+            {
+                Transform surface = serialized.FindProperty(fields[i]).objectReferenceValue as Transform;
+                if (surface == null || visualPivot == null || !surface.IsChildOf(visualPivot) || surface.name != names[i])
+                {
+                    throw new InvalidOperationException($"Animator has an invalid prefab reference: {fields[i]}");
+                }
+            }
         }
 
         [MenuItem("Tools/UAV Simulator/Custom UAV/Stage Aircraft in Clean FlightTest")]
@@ -239,6 +290,7 @@ namespace MertKaan.UAVSimulator.Editor
 
             GameObject physicsTemplate = RequireAsset<GameObject>(PhysicsTemplatePath);
             GameObject customAircraftPrefab = RequireAsset<GameObject>(AircraftPrefabPath);
+            ValidateExistingAircraftPrototype(customAircraftPrefab);
             GameObject[] candidates = scene.GetRootGameObjects()
                 .Where(root =>
                     root.activeSelf &&
@@ -278,11 +330,20 @@ namespace MertKaan.UAVSimulator.Editor
                 oldAircraft.transform.rotation);
             customAircraft.transform.localScale = Vector3.one;
 
-            AircraftInputReader sourceInput = oldAircraft.GetComponent<AircraftInputReader>();
-            if (sourceInput != null)
+            AircraftInputReader oldInput = oldAircraft.GetComponent<AircraftInputReader>();
+            AircraftInputReader newInput = customAircraft.GetComponent<AircraftInputReader>();
+            foreach (InputDebugPanel panel in scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<InputDebugPanel>(true)))
             {
-                AircraftInputReader targetInput = Undo.AddComponent<AircraftInputReader>(customAircraft);
-                EditorUtility.CopySerialized(sourceInput, targetInput);
+                SerializedObject serializedPanel = new SerializedObject(panel);
+                SerializedProperty inputReference = serializedPanel.FindProperty("_inputReader");
+                if (oldInput != null && inputReference.objectReferenceValue == oldInput)
+                {
+                    Undo.RecordObject(panel, "Rebind Aircraft Input Debug Panel");
+                    inputReference.objectReferenceValue = newInput;
+                    serializedPanel.ApplyModifiedProperties();
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(panel);
+                }
             }
 
             AlignLowestVisualPointToGround(customAircraft, 0f);
