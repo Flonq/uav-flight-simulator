@@ -28,7 +28,7 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 
 **Son güncelleme:** 12 Eylül 2026
 
-**Mevcut aşama:** Özel İHA entegrasyonu tamamlandı; motor, throttle ve propulsion geliştirmesi sırada
+**Mevcut aşama:** Özel İHA entegrasyonu ve motorun throttle yönetimi tamamlandı; RPM, thrust ve propulsion geliştirmesi sırada
 
 | Sistem | Durum |
 |---|---|
@@ -289,6 +289,7 @@ docs/images/
 - [x] Özel İHA modelinin Unity'ye aktarılması ve doğrulanması
 - [x] Compound colliderların ayarlanması ve yer temasının doğrulanması
 - [x] Görsel kontrol yüzeyi animasyonlarının uygulanması
+- [x] Throttle komutu ile motor durumunun ayrılması ve sabit zaman adımında gaz rampası
 - [ ] Motor ve throttle sisteminin geliştirilmesi
 - [ ] Temel uçuş fiziğinin geliştirilmesi
 - [ ] Kalkış ve iniş sisteminin geliştirilmesi
@@ -306,7 +307,7 @@ Ayrıntılı görev listesi için [`TASKS.md`](TASKS.md) dosyasına bakılabilir
 
 ## Bilinen Eksikler
 
-2026-09-15: `AircraftInputReader` ve `AircraftControlSurfaceAnimator`, uçak prefabının köküne taşındı; sahne debug paneli aktif instance'a bağlıdır (TD-022).
+2026-09-15: Input Reader, Engine ve kontrol yüzeyi Animator'ı uçak prefabının kökündedir. Engine, throttle değerini 0–1 aralığında saniyede 0,5 hızla yönetir; debug panel gaz komutunu ve motorun throttle değerini ayrı gösterir. RPM ve itki henüz uygulanmamıştır.
 
 Mevcut doğrulanmış eksikler:
 

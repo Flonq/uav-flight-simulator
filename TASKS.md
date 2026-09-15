@@ -152,7 +152,7 @@ Proje hatasız açılmalı, boş test sahnesi çalışmalı ve GitHub üzerinde 
 - [x] Klavye ve fare girdilerini test et
 - [x] DualSense'i genel `<Gamepad>` bindingleriyle test et
 - [x] Joystick/HOTAS desteğini MVP sonrasına ertele
-- [ ] Phase 5 başlamadan önce throttle sahipliğini `AircraftInputReader` → `AircraftEngine` yönünde refactor et
+- [x] Throttle sahipliğini `AircraftInputReader` → `AircraftEngine` yönünde refactor et (2026-09-15)
 
 ### Çıkış kriteri
 
@@ -162,10 +162,10 @@ Bütün kullanıcı komutları fizik sisteminden bağımsız şekilde okunabilme
 
 # FAZ 5 — Motor ve Throttle Sistemi
 
-- [ ] `AircraftEngine` scriptini oluştur
-- [ ] Minimum throttle tanımla
-- [ ] Maksimum throttle tanımla
-- [ ] Throttle artış ve azalış hızını belirle
+- [x] `AircraftEngine` scriptini oluştur — throttle state/ramp temeli
+- [x] Minimum throttle tanımla — 0
+- [x] Maksimum throttle tanımla — 1
+- [x] Throttle artış ve azalış hızını belirle — 0,5/s; FixedUpdate
 - [ ] Motor thrust değerini hesapla
 - [ ] İleri yön kuvvetini uygula
 - [ ] Motor açık ve kapalı durumu ekle
@@ -484,7 +484,7 @@ Mevcut doğrulanması gereken teknik borçlar:
 
 - [x] Kök dokümantasyon ile repository durumunu karşılaştır
 - [~] `FlightTest` içindeki eski/inactive uçak instance'larını koru ve final sistem kabulünden sonra temizle
-- [ ] `AircraftInputReader` içindeki throttle state/ramp sorumluluğunu Phase 5 öncesinde `AircraftEngine` bileşenine taşı
+- [x] `AircraftInputReader` içindeki throttle state/ramp sorumluluğunu `AircraftEngine` bileşenine taşı
 - [ ] Military Base Pack'in `.gitignore` kuralını ve temiz Git geçmişini koru
 - [x] Özel UAV modelinin Unity import/eksen/pivot/materyal testini tamamla
 - [ ] Gerçek kütle, ağırlık merkezi ve inertia değerlerini fiziksel verilerle kalibre et
@@ -496,6 +496,6 @@ Mevcut doğrulanması gereken teknik borçlar:
 
 Bu bölüm her çalışma oturumunun sonunda güncellenmelidir.
 
-1. Throttle state/ramp sahipliğini `AircraftInputReader` bileşeninden yeni `AircraftEngine` bileşenine taşı.
-2. Motor RPM, thrust ve fixed-timestep propulsion uygulamasını geliştir; `Rotor_Pivot` görselini RPM verisine bağla.
+1. Motor RPM, thrust ve fixed-timestep propulsion uygulamasını geliştir.
+2. `Rotor_Pivot` görselini motor RPM verisine bağla.
 3. `AssetReview` sahnesinde final model Play Mode smoke testini tamamla.

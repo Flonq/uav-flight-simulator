@@ -4,18 +4,11 @@ namespace MertKaan.UAVSimulator.InputSystem
 {
     public sealed class AircraftInputReader : MonoBehaviour
     {
-        [Header("Throttle")]
-        [SerializeField, Min(0f)]
-        private float _throttleChangeRate = 0.5f;
-
-        [SerializeField, Range(0f, 1f)]
-        private float _initialThrottle = 0f;
-
         public float Pitch { get; private set; }
         public float Roll { get; private set; }
         public float Yaw { get; private set; }
 
-        public float Throttle { get; private set; }
+        public float ThrottleInput { get; private set; }
 
         public bool BrakePressed { get; private set; }
 
@@ -29,8 +22,6 @@ namespace MertKaan.UAVSimulator.InputSystem
         private void Awake()
         {
             _inputActions = new AircraftInputActions();
-
-            Throttle = _initialThrottle;
         }
 
         private void OnEnable()
@@ -45,6 +36,7 @@ namespace MertKaan.UAVSimulator.InputSystem
             _inputActions.Aircraft.Disable();
             _inputActions.Camera.Disable();
             _inputActions.UI.Disable();
+            ThrottleInput = 0f;
         }
 
         private void OnDestroy()
@@ -65,12 +57,8 @@ namespace MertKaan.UAVSimulator.InputSystem
             Roll = _inputActions.Aircraft.Roll.ReadValue<float>();
             Yaw = _inputActions.Aircraft.Yaw.ReadValue<float>();
 
-            float throttleInput =
+            ThrottleInput =
                 _inputActions.Aircraft.Throttle.ReadValue<float>();
-
-            Throttle = Mathf.Clamp01(
-                Throttle + throttleInput * _throttleChangeRate * Time.deltaTime
-            );
 
             BrakePressed = _inputActions.Aircraft.Brake.IsPressed();
         }

@@ -552,7 +552,7 @@ klasörü ve `.meta` dosyası `.gitignore` kapsamında kalmalıdır. Eski Git re
 ## TD-020 — Motor ve Aerodinamik Kuvvet Sorumlulukları
 
 **Durum:** Kabul edildi  
-**Tarih:** 2026-09-11 — önceki handoff önerisi güncellendi
+**Tarih:** 2026-09-11
 
 ### Karar
 
@@ -614,13 +614,39 @@ FlightTest added-component override'ları prefab üzerine uygulandı. Entegrasyo
 
 ### Doğrulama (2026-09-15)
 
-- Unity MCP üzerinden derleme ve Play Mode başlangıcı: hata/uyarı yok.
+- Unity Editor içinde derleme ve Play Mode başlangıcı: hata/uyarı yok.
 - FlightTest'te added-component override sayısı 0; debug panel aktif prefab instance'ına bağlı.
 - Geçici yeni runtime instance'ında tek Input Reader/Animator ve instance içi referanslar doğrulandı.
 - Kontrollü sanal gamepad testi: pitch=-1, roll=1, yaw=1; aileronlar -20/+20°, ruddervatorlar -5/-25°. Bu test Input System güncellemesini ve bileşen metotlarını kontrollü çağırır; fiziksel klavye/gamepad ile kullanıcı testi değildir.
 - Yeni prototip runtime bağlantı kurucusu geçici preview sahnesinde, mevcut prefab doğrulayıcısı asset üzerinde başarıyla çalıştı.
 - Rigidbody ve 10 collider'ın serialized blokları HEAD ile birebir aynı.
 - AssetReview final smoke testi ve staging menüsünün tam sahne geçişi bu görevde çalıştırılmadı.
+
+---
+
+## TD-023 — Throttle Komutu ve Motor Durumunun Ayrılması
+
+**Durum:** Kabul edildi ve uygulandı
+
+**Tarih:** 2026-09-15
+
+### Karar
+
+`AircraftInputReader.ThrottleInput` yalnızca -1…+1 kullanıcı komutunu sağlar. `AircraftEngine.Throttle`, 0…1 aralığındaki tek throttle durumudur. Engine, `FixedUpdate` içinde komut × değişim hızı × fizik adımı kadar artış/azalış uygular. Varsayılan başlangıç 0 ve değişim hızı 0,5/s olarak korunmuştur.
+
+### Sonuçlar
+
+- Komut sıfır olduğunda throttle korunur; sınırlar 0 ve 1'dir.
+- Input Reader devre dışı kalınca gaz komutu sıfırlanır; Engine mevcut throttle değerini korur.
+- Engine yeniden etkinleştiğinde throttle korunur; yeni instance başlangıç değerini kullanır.
+- Engine uçak prefabının kökünde, kendi Input Reader'ına bağlıdır.
+- Debug panel hem ham komutu hem Engine throttle değerini gösterir. Engine olmayan eski prototiplerde durum N/A olarak gösterilir.
+- Debug panel yüksekliği yeni okuma satırına uyacak şekilde 350 px yapıldı; 320 px metin alanında hesaplanan 302,79 px içerik sığıyor.
+- RPM, motor açma/kapama, thrust ve kuvvet uygulaması sonraki aşamadadır.
+
+### Doğrulama
+
+Play Mode'da kontrollü Input System girdileriyle yükselme, azalma, nötrde tutma, alt/üst sınır, yarım analog komut, devre dışı input, farklı başlangıç değeri ve yeniden etkinleştirme doğrulandı. 10/20/40 ms fizik adımlarında bir saniye tam komut aynı 0,5 throttle sonucunu verdi. Kontrol yüzeyi ve debug panel regresyon kontrolleri geçti; Console hata/uyarı sayısı sıfır. Bunlar kontrollü bileşen testleridir; fiziksel kontrol cihazıyla uçuş veya performans testi değildir.
 
 ---
 
@@ -646,3 +672,4 @@ Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene
 | 2026-09-11 | TD-017 – TD-020 | Unity temeli, özel model, üçüncü taraf asset ve kuvvet sorumlulukları belgelendi |
 | 2026-09-12 | TD-018, TD-021 | Özel UAV Unity entegrasyonu, compound collider ve görsel kontrol yüzeyi sınırları doğrulandı |
 | 2026-09-15 | TD-022 | Input Reader ve görsel Animator prefab sahipliği uygulandı |
+| 2026-09-15 | TD-023 | Throttle state/ramp Engine'e taşındı; sabit zaman adımı ve input ayrımı doğrulandı |

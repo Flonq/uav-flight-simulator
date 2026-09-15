@@ -222,6 +222,10 @@ namespace MertKaan.UAVSimulator.Editor
         private static void ConfigureRuntimeComponents(GameObject aircraftRoot)
         {
             AircraftInputReader input = aircraftRoot.AddComponent<AircraftInputReader>();
+            AircraftEngine engine = aircraftRoot.AddComponent<AircraftEngine>();
+            SerializedObject serializedEngine = new SerializedObject(engine);
+            serializedEngine.FindProperty("_inputReader").objectReferenceValue = input;
+            serializedEngine.ApplyModifiedPropertiesWithoutUndo();
             AircraftControlSurfaceAnimator animator = aircraftRoot.AddComponent<AircraftControlSurfaceAnimator>();
             SerializedObject serialized = new SerializedObject(animator);
             serialized.FindProperty("_inputReader").objectReferenceValue = input;
@@ -239,12 +243,19 @@ namespace MertKaan.UAVSimulator.Editor
         private static void ValidateRuntimeComponents(GameObject aircraftRoot)
         {
             AircraftInputReader input = aircraftRoot.GetComponent<AircraftInputReader>();
+            AircraftEngine engine = aircraftRoot.GetComponent<AircraftEngine>();
             AircraftControlSurfaceAnimator animator = aircraftRoot.GetComponent<AircraftControlSurfaceAnimator>();
-            if (input == null || animator == null ||
+            if (input == null || engine == null || animator == null ||
                 aircraftRoot.GetComponentsInChildren<AircraftInputReader>(true).Length != 1 ||
+                aircraftRoot.GetComponentsInChildren<AircraftEngine>(true).Length != 1 ||
                 aircraftRoot.GetComponentsInChildren<AircraftControlSurfaceAnimator>(true).Length != 1)
             {
-                throw new InvalidOperationException("Custom aircraft prefab requires one root Input Reader and Animator.");
+                throw new InvalidOperationException("Custom aircraft prefab requires one root Input Reader, Engine and Animator.");
+            }
+
+            if (new SerializedObject(engine).FindProperty("_inputReader").objectReferenceValue != input)
+            {
+                throw new InvalidOperationException("Engine must reference its prefab's root Input Reader.");
             }
 
             SerializedObject serialized = new SerializedObject(animator);

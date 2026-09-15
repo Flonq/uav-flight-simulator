@@ -1,3 +1,4 @@
+using MertKaan.UAVSimulator.Aircraft;
 using MertKaan.UAVSimulator.InputSystem;
 using TMPro;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace MertKaan.UAVSimulator.UI.Debugging
         [SerializeField]
         private TMP_Text _debugText;
 
+        private AircraftEngine _engine;
+
         private void Awake()
         {
             if (!TryResolveInputReader())
@@ -25,6 +28,8 @@ namespace MertKaan.UAVSimulator.UI.Debugging
                 enabled = false;
                 return;
             }
+
+            _engine = _inputReader.GetComponent<AircraftEngine>();
 
             if (_debugText == null)
             {
@@ -66,7 +71,8 @@ namespace MertKaan.UAVSimulator.UI.Debugging
                 $"Pitch: {_inputReader.Pitch:F2}\n" +
                 $"Roll: {_inputReader.Roll:F2}\n" +
                 $"Yaw: {_inputReader.Yaw:F2}\n" +
-                $"Throttle: {_inputReader.Throttle:F2}\n" +
+                $"Throttle Input: {_inputReader.ThrottleInput:F2}\n" +
+                $"Throttle: {(_engine != null ? _engine.Throttle.ToString("F2") : "N/A")}\n" +
                 $"Brake: {_inputReader.BrakePressed}\n" +
                 $"Camera Switch: {_inputReader.SwitchCameraPressed}\n" +
                 $"EO Zoom: {_inputReader.EOZoom:F2}\n" +

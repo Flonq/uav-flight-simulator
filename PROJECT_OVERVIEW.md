@@ -275,7 +275,7 @@ Proje aşağıdaki koşullar sağlandığında başarılı kabul edilecektir:
 
 **Son güncelleme:** 2026-09-12
 
-**Durum:** Özel İHA modeli Unity'ye entegre edildi; fizik kökü, compound colliderlar, input ve görsel kontrol yüzeyi animasyonları Play Mode'da doğrulandı. Sıradaki aşama motor/throttle sorumluluklarının uygulanmasıdır.
+**Durum:** Özel İHA modeli, fizik kökü, input ve kontrol yüzeyi animasyonları doğrulandı. Motorun throttle state/ramp yönetimi uygulandı; sıradaki aşama RPM ve propulsion sistemidir.
 
 Doğrulanmış mevcut durum:
 
@@ -290,12 +290,12 @@ Doğrulanmış mevcut durum:
 - `PF_CustomUAVVisual` ve collider ayarlarını koruyan `PF_CustomUAVAircraftPrototype` prefabları oluşturuldu.
 - `AircraftControlSurfaceAnimator`, pitch/roll/yaw komutlarını yalnızca görsel yüzey sapmalarına dönüştürecek şekilde eklendi ve Play Mode'da doğrulandı.
 - `FlightTest` sahnesindeki özel uçak üç teker üzerinde kararlı duruyor; sıçrama, savrulma veya zeminden geçme gözlenmedi.
-- `AircraftEngine`, gerçek thrust, aerodinamik uçuş fiziği ve sonraki oyun sistemleri henüz uygulanmadı.
+- `AircraftEngine` throttle state/ramp yönetimini sabit fizik adımlarında uygular. Gerçek thrust, RPM, aerodinamik uçuş fiziği ve sonraki oyun sistemleri henüz uygulanmadı.
 
 Sıradaki kontrollü akış:
 
 1. Tamamlandı (2026-09-15): `AircraftInputReader` ve `AircraftControlSurfaceAnimator` uçak prefabına taşındı; debug panel sahnede aktif instance'a bağlı kaldı (TD-022).
-2. Throttle state/ramp sahipliği `AircraftInputReader` içinden `AircraftEngine` bileşenine taşınacak.
+2. Tamamlandı (2026-09-15): Throttle state/ramp sahipliği `AircraftEngine` bileşenine taşındı; Input Reader yalnızca komut sağlar.
 3. Motor RPM, thrust ve propulsion kuvveti fixed-timestep yolunda uygulanacak.
 4. `Rotor_Pivot` görsel dönüşü motor RPM verisine bağlanacak.
 5. Aerodinamik lift, drag ve kontrol torkları ayrı `AircraftPhysics` bileşeninde geliştirilecek.
