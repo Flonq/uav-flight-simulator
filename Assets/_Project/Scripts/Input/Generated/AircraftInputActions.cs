@@ -138,6 +138,15 @@ namespace MertKaan.UAVSimulator.InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleEngine"",
+                    ""type"": ""Button"",
+                    ""id"": ""77e1b62e-11df-4f74-865b-1daf7c8f1454"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -382,6 +391,28 @@ namespace MertKaan.UAVSimulator.InputSystem
                     ""action"": ""Brake"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1f49a5a4-b8df-453c-8465-46570f4bc6a9"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleEngine"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d991d62e-e2e0-4d8f-8e0e-903b6dc41db3"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleEngine"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -526,6 +557,7 @@ namespace MertKaan.UAVSimulator.InputSystem
             m_Aircraft_Yaw = m_Aircraft.FindAction("Yaw", throwIfNotFound: true);
             m_Aircraft_Throttle = m_Aircraft.FindAction("Throttle", throwIfNotFound: true);
             m_Aircraft_Brake = m_Aircraft.FindAction("Brake", throwIfNotFound: true);
+            m_Aircraft_ToggleEngine = m_Aircraft.FindAction("ToggleEngine", throwIfNotFound: true);
             // Camera
             m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
             m_Camera_SwitchCamera = m_Camera.FindAction("SwitchCamera", throwIfNotFound: true);
@@ -620,6 +652,7 @@ namespace MertKaan.UAVSimulator.InputSystem
         private readonly InputAction m_Aircraft_Yaw;
         private readonly InputAction m_Aircraft_Throttle;
         private readonly InputAction m_Aircraft_Brake;
+        private readonly InputAction m_Aircraft_ToggleEngine;
         /// <summary>
         /// Provides access to input actions defined in input action map "Aircraft".
         /// </summary>
@@ -651,6 +684,10 @@ namespace MertKaan.UAVSimulator.InputSystem
             /// Provides access to the underlying input action "Aircraft/Brake".
             /// </summary>
             public InputAction @Brake => m_Wrapper.m_Aircraft_Brake;
+            /// <summary>
+            /// Provides access to the underlying input action "Aircraft/ToggleEngine".
+            /// </summary>
+            public InputAction @ToggleEngine => m_Wrapper.m_Aircraft_ToggleEngine;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -692,6 +729,9 @@ namespace MertKaan.UAVSimulator.InputSystem
                 @Brake.started += instance.OnBrake;
                 @Brake.performed += instance.OnBrake;
                 @Brake.canceled += instance.OnBrake;
+                @ToggleEngine.started += instance.OnToggleEngine;
+                @ToggleEngine.performed += instance.OnToggleEngine;
+                @ToggleEngine.canceled += instance.OnToggleEngine;
             }
 
             /// <summary>
@@ -718,6 +758,9 @@ namespace MertKaan.UAVSimulator.InputSystem
                 @Brake.started -= instance.OnBrake;
                 @Brake.performed -= instance.OnBrake;
                 @Brake.canceled -= instance.OnBrake;
+                @ToggleEngine.started -= instance.OnToggleEngine;
+                @ToggleEngine.performed -= instance.OnToggleEngine;
+                @ToggleEngine.canceled -= instance.OnToggleEngine;
             }
 
             /// <summary>
@@ -996,6 +1039,13 @@ namespace MertKaan.UAVSimulator.InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnBrake(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ToggleEngine" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnToggleEngine(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Camera" which allows adding and removing callbacks.

@@ -743,6 +743,33 @@ Bileşen devre dışı kaldığında rotor başlangıç yerel rotasyonuna döner
 
 ---
 
+## TD-028 — Motor Toggle Komutu ve Kademeli Kapanış
+
+**Durum:** Kabul edildi ve uygulandı
+
+**Tarih:** 2026-09-16
+
+### Karar
+
+Input System `Aircraft` action mapine `ToggleEngine` button actionı eklendi. Klavye bindingi `I` (Ignition), genel gamepad bindingi batı yüz düğmesidir. Üretilen `AircraftInputActions.cs` dosyası Input Action importer tarafından yeniden oluşturulur ve elle düzenlenmez.
+
+`AircraftInputReader`, tuş basımını `EngineToggleRequested` olayı olarak yayınlar ve motor durumunu sahiplenmez. Aynı kökteki `AircraftEngine` bu olayı tüketerek `IsRunning` durumunu değiştirir. Böylece input yalnızca komut, Engine ise motor state sahibi olmaya devam eder.
+
+Motor kapatıldığında thrust anında sıfırlanır. RPM, normal çalışma geçiş hızından ayrı olan varsayılan 1.200 RPM/s kapanış hızıyla sıfıra yaklaşır. Bu değer rölantiden yaklaşık 1 saniye, prototip maksimum 6.000 RPM'den yaklaşık 5 saniye duruş süresi üretir. `AircraftPropellerAnimator` aynı RPM çıktısını kullandığından pervane de kademeli yavaşlayarak son açısında durur.
+
+Input Debug paneli `Engine Toggle [I]`, motor durumu ve RPM satırlarını birlikte gösterir. Tuş etiketi diğer komutlar gibi Input Action binding metadata'sından üretilir.
+
+### Doğrulama
+
+- Sanal klavye ile ilk `I` basımı çalışan motoru kapattı; ikinci basım yeniden çalıştırdı.
+- Motor kapanışında thrust aynı anda sıfırlandı.
+- 1.200 RPM rölantiden 0,98 saniye sonra yaklaşık 24 RPM, 1,00 saniye sonra 0 RPM ölçüldü.
+- RPM sıfıra indikten sonraki fizik/görsel adımda rotor açısı değişmedi.
+- Debug panel motor toggle bindingini ve `Stopped` durumunu gösterdi; 413,18 px tercih edilen içerik yüksekliği 420 px metin alanına sığdı.
+- Console hata ve uyarı sayısı sıfırdı.
+
+---
+
 ## Karar Bekleyen Konular
 
 - [ ] Yakıt sistemi veya batarya sistemi
@@ -770,3 +797,4 @@ Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene
 | 2026-09-16 | TD-025 | Özel UAV ileri ekseni -Z olarak düzeltildi; sahne yönü Y=90° kaydedildi |
 | 2026-09-16 | TD-026 | Temel yumuşak takip kamerası aktif uçağa bağlandı ve Play Mode'da doğrulandı |
 | 2026-09-16 | TD-027 | Pervane görsel dönüşü motor RPM verisine bağlandı ve prefab üzerinde doğrulandı |
+| 2026-09-16 | TD-028 | Motor toggle inputu ve kademeli RPM/pervane kapanışı uygulandı |

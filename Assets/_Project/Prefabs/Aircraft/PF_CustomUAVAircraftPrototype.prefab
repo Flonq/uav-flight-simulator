@@ -236,6 +236,7 @@ MonoBehaviour:
   _idleRpm: 1200
   _maxRpm: 6000
   _rpmChangeRate: 3000
+  _shutdownRpmChangeRate: 1200
   _maxThrustNewtons: 1000
 --- !u!114 &1664212185993197094
 MonoBehaviour:

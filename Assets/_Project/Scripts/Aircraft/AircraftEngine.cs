@@ -35,6 +35,9 @@ namespace MertKaan.UAVSimulator.Aircraft
         [SerializeField, Min(1f)]
         private float _rpmChangeRate = 3000f;
 
+        [SerializeField, Min(1f)]
+        private float _shutdownRpmChangeRate = 1200f;
+
         [Header("Propulsion")]
         [SerializeField, Min(0f)]
         private float _maxThrustNewtons = 1000f;
@@ -58,6 +61,7 @@ namespace MertKaan.UAVSimulator.Aircraft
             _maxRpm = Mathf.Max(1f, _maxRpm);
             _idleRpm = Mathf.Clamp(_idleRpm, 0f, _maxRpm - 1f);
             _rpmChangeRate = Mathf.Max(1f, _rpmChangeRate);
+            _shutdownRpmChangeRate = Mathf.Max(1f, _shutdownRpmChangeRate);
             _maxThrustNewtons = Mathf.Max(0f, _maxThrustNewtons);
         }
 
@@ -73,6 +77,14 @@ namespace MertKaan.UAVSimulator.Aircraft
             }
         }
 
+        private void OnEnable()
+        {
+            if (_inputReader != null)
+            {
+                _inputReader.EngineToggleRequested += HandleEngineToggleRequested;
+            }
+        }
+
         private void FixedUpdate()
         {
             if (_inputReader.isActiveAndEnabled)
@@ -82,7 +94,8 @@ namespace MertKaan.UAVSimulator.Aircraft
             }
 
             float targetRpm = IsRunning ? Mathf.Lerp(_idleRpm, _maxRpm, Throttle) : 0f;
-            Rpm = Mathf.MoveTowards(Rpm, targetRpm, _rpmChangeRate * Time.fixedDeltaTime);
+            float rpmChangeRate = IsRunning ? _rpmChangeRate : _shutdownRpmChangeRate;
+            Rpm = Mathf.MoveTowards(Rpm, targetRpm, rpmChangeRate * Time.fixedDeltaTime);
 
             float propulsionRpm = Mathf.InverseLerp(_idleRpm, _maxRpm, Rpm);
             ThrustNewtons = IsRunning ? _maxThrustNewtons * propulsionRpm * propulsionRpm : 0f;
@@ -101,6 +114,11 @@ namespace MertKaan.UAVSimulator.Aircraft
             {
                 ThrustNewtons = 0f;
             }
+        }
+
+        private void HandleEngineToggleRequested()
+        {
+            SetEngineRunning(!IsRunning);
         }
 
         [ContextMenu("Start Engine")]
@@ -123,6 +141,11 @@ namespace MertKaan.UAVSimulator.Aircraft
 
         private void OnDisable()
         {
+            if (_inputReader != null)
+            {
+                _inputReader.EngineToggleRequested -= HandleEngineToggleRequested;
+            }
+
             Rpm = 0f;
             ThrustNewtons = 0f;
         }

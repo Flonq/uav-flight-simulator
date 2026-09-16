@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace MertKaan.UAVSimulator.InputSystem
@@ -11,11 +12,14 @@ namespace MertKaan.UAVSimulator.InputSystem
         public float ThrottleInput { get; private set; }
 
         public bool BrakePressed { get; private set; }
+        public bool ToggleEnginePressed { get; private set; }
 
         public bool SwitchCameraPressed { get; private set; }
         public float EOZoom { get; private set; }
 
         public bool PausePressed { get; private set; }
+
+        public event Action EngineToggleRequested;
 
         private AircraftInputActions _inputActions;
 
@@ -37,6 +41,7 @@ namespace MertKaan.UAVSimulator.InputSystem
             _inputActions.Camera.Disable();
             _inputActions.UI.Disable();
             ThrottleInput = 0f;
+            ToggleEnginePressed = false;
         }
 
         private void OnDestroy()
@@ -61,6 +66,13 @@ namespace MertKaan.UAVSimulator.InputSystem
                 _inputActions.Aircraft.Throttle.ReadValue<float>();
 
             BrakePressed = _inputActions.Aircraft.Brake.IsPressed();
+            ToggleEnginePressed =
+                _inputActions.Aircraft.ToggleEngine.WasPressedThisFrame();
+
+            if (ToggleEnginePressed)
+            {
+                EngineToggleRequested?.Invoke();
+            }
         }
 
         private void ReadCameraInput()

@@ -142,6 +142,7 @@ Proje hatasız açılmalı, boş test sahnesi çalışmalı ve GitHub üzerinde 
 - [x] Yaw action oluştur
 - [x] Throttle action oluştur
 - [x] Brake action oluştur
+- [x] Motor açma/kapatma action oluştur — klavye `I`, gamepad batı yüz düğmesi
 - [x] Kamera değiştirme action oluştur
 - [x] EO kamera zoom action oluştur
 - [x] Pause action oluştur
@@ -169,8 +170,9 @@ Bütün kullanıcı komutları fizik sisteminden bağımsız şekilde okunabilme
 - [x] Throttle artış ve azalış hızını belirle — 0,5/s; FixedUpdate
 - [x] Motor thrust değerini hesapla — rölanti üzerindeki normalize RPM'nin karesi; prototip
 - [x] İleri yön kuvvetini uygula — modelin burun yönü olan root Rigidbody -Z; FixedUpdate / ForceMode.Force
-- [x] Motor açık ve kapalı durumu ekle — API ve Play Mode bileşen menüsü
+- [x] Motor açık ve kapalı durumu ekle — API, `I`/gamepad toggle komutu ve Play Mode bileşen menüsü
 - [x] Motor devri değerini üret — rölanti/maksimum RPM ve geçiş hızı
+- [x] Motor kapanışında ayrı RPM düşüş hızı uygula — 1.200 RPM/s; rölantiden yaklaşık 1 saniyede duruş
 - [x] `Rotor_Pivot` görsel dönüşünü `AircraftEngine.Rpm` verisine bağla
 - [x] Motor sesi için temel parametre üret — Rpm ve NormalizedRpm; ses bağlantısı ayrı fazda
 - [x] Inspector ayarlarını grupla

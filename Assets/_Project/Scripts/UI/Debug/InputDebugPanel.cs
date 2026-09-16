@@ -24,6 +24,7 @@ namespace MertKaan.UAVSimulator.UI.Debugging
         private string _yawBinding;
         private string _throttleBinding;
         private string _brakeBinding;
+        private string _engineToggleBinding;
         private string _cameraBinding;
         private string _zoomBinding;
         private string _pauseBinding;
@@ -93,6 +94,7 @@ namespace MertKaan.UAVSimulator.UI.Debugging
                 $"Yaw [{_yawBinding}]: {_inputReader.Yaw:F2}\n" +
                 $"Throttle [{_throttleBinding}]: {_inputReader.ThrottleInput:F2}\n" +
                 $"Throttle State: {(_engine != null ? _engine.Throttle.ToString("F2") : "N/A")}\n" +
+                $"Engine Toggle [{_engineToggleBinding}]: {_inputReader.ToggleEnginePressed}\n" +
                 $"Engine: {(_engine != null ? (!_engine.isActiveAndEnabled ? "Disabled" : (_engine.IsRunning ? "Running" : "Stopped")) : "N/A")}\n" +
                 $"RPM: {(_engine != null ? _engine.Rpm.ToString("F0") : "N/A")}\n" +
                 $"Thrust: {(_engine != null ? _engine.ThrustNewtons.ToString("F0") : "N/A")} N\n" +
@@ -110,6 +112,7 @@ namespace MertKaan.UAVSimulator.UI.Debugging
             _yawBinding = GetDesktopBindingDisplayString(_bindingActions.Aircraft.Yaw);
             _throttleBinding = GetDesktopBindingDisplayString(_bindingActions.Aircraft.Throttle);
             _brakeBinding = GetDesktopBindingDisplayString(_bindingActions.Aircraft.Brake);
+            _engineToggleBinding = GetDesktopBindingDisplayString(_bindingActions.Aircraft.ToggleEngine);
             _cameraBinding = GetDesktopBindingDisplayString(_bindingActions.Camera.SwitchCamera);
             _zoomBinding = GetDesktopBindingDisplayString(_bindingActions.Camera.EOZoom);
             _pauseBinding = GetDesktopBindingDisplayString(_bindingActions.UI.Pause);
@@ -131,7 +134,8 @@ namespace MertKaan.UAVSimulator.UI.Debugging
                 {
                     if (CompositeUsesDesktopDevice(action, i))
                     {
-                        displayStrings.Add(action.GetBindingDisplayString(i));
+                        displayStrings.Add(
+                            NormalizeBindingDisplayString(action.GetBindingDisplayString(i)));
                     }
 
                     continue;
@@ -139,11 +143,22 @@ namespace MertKaan.UAVSimulator.UI.Debugging
 
                 if (IsDesktopBindingPath(binding.effectivePath))
                 {
-                    displayStrings.Add(action.GetBindingDisplayString(i));
+                    displayStrings.Add(
+                        NormalizeBindingDisplayString(action.GetBindingDisplayString(i)));
                 }
             }
 
             return displayStrings.Count > 0 ? string.Join(" | ", displayStrings) : "Unbound";
+        }
+
+        private static string NormalizeBindingDisplayString(string displayString)
+        {
+            if (displayString.Length != 1)
+            {
+                return displayString;
+            }
+
+            return displayString[0] == '\u0131' ? "I" : displayString.ToUpperInvariant();
         }
 
         private static bool CompositeUsesDesktopDevice(InputAction action, int compositeIndex)

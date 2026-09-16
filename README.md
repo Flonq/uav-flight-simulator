@@ -28,14 +28,14 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 
 **Son güncelleme:** 16 Eylül 2026
 
-**Mevcut aşama:** Temel takip kamerası ve RPM tabanlı pervane animasyonu tamamlandı; sıradaki adım `AssetReview` final smoke testidir
+**Mevcut aşama:** Takip kamerası, RPM tabanlı pervane animasyonu ve motor açma/kapatma komutu tamamlandı; sıradaki adım `AssetReview` final smoke testidir
 
 | Sistem | Durum |
 |---|---|
 | Unity 6.3 LTS / URP proje kurulumu | Tamamlandı |
 | Test havaalanı ve çevre | Çalışır prototip |
 | Rigidbody fizik kökü ve 10 parçalı compound collider | Tamamlandı ve Play Mode'da doğrulandı |
-| Input System — klavye ve gamepad | Tamamlandı; aktif uçak/debug bağlantısı doğrulandı |
+| Input System — klavye ve gamepad | Tamamlandı; aktif uçak/debug bağlantısı ve motor toggle komutu doğrulandı |
 | Özel Blender İHA modeli | Unity importu, URP materyali ve prefab entegrasyonu tamamlandı |
 | Görsel kontrol yüzeyi animasyonları | Tamamlandı ve Play Mode'da doğrulandı |
 | Motor, RPM ve itki | Sabit fizik adımında çalışan prototip; görsel burun yönü ve pervane animasyonuyla eşleştirildi |
@@ -206,6 +206,7 @@ Mevcut doğrulanmış klavye/fare kontrolleri:
 | Yaw | Q / E |
 | Throttle artır | Left Shift |
 | Throttle azalt | Left Control |
+| Motor aç/kapat | I |
 | Fren | Space |
 | Kamera değiştir | C |
 | EO kamera zoom | Mouse Wheel |
