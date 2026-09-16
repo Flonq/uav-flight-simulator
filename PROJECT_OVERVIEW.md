@@ -275,7 +275,7 @@ Proje aşağıdaki koşullar sağlandığında başarılı kabul edilecektir:
 
 **Son güncelleme:** 2026-09-16
 
-**Durum:** Özel İHA modeli, input, motor/RPM/propulsion, takip kamerası, pervane animasyonu ve temel aerodinamik kuvvetler doğrulandı; sıradaki aşama yönlü yer hareketi ve fren prototipidir.
+**Durum:** Özel İHA modeli, input, motor/RPM/propulsion, takip kamerası, temel aerodinamik kuvvetler ve yer hareketi/fren prototipi doğrulandı; sıradaki aşama kontrollü kalkış test senaryosudur.
 
 Doğrulanmış mevcut durum:
 
@@ -291,13 +291,13 @@ Doğrulanmış mevcut durum:
 - `AircraftControlSurfaceAnimator`, pitch/roll/yaw komutlarını yalnızca görsel yüzey sapmalarına dönüştürecek şekilde eklendi ve Play Mode'da doğrulandı.
 - `FlightTest` sahnesindeki özel uçak üç teker üzerinde kararlı duruyor; sıçrama, savrulma veya zeminden geçme gözlenmedi.
 - `AircraftEngine`, throttle state/ramp, motor durumu, RPM geçişi ve modelin burun yönü olan root Rigidbody -Z ekseninde itki kuvvetini sabit fizik adımlarında uygular.
-- Üç primitive tekerlek, düşük hızda temas kaynaklı eğilmeyi önlemek için sıfır sürtünmeli prototip materyali kullanır. Collider geometrisi ve Rigidbody ayarları korunmuştur; yönlü yer tutuşu ve frenler sonraki aşamadadır.
-- 2026-09-15 testi, sonradan yanlış olduğu belirlenen +Z ekseninde yaklaşık 15,3 m ilerleme ölçtü. 2026-09-16'da model ileri ekseni -Z olarak düzeltildi. Yeni yönde kontrollü test yaklaşık 14,8 m ileri hareket üretti; pist/temas yönünde yaklaşık 14° eğilme gözlendi ve Ground Controller işi olarak açık tutuldu.
+- Üç primitive tekerlek sıfır sürtünmeli prototip materyalini korur. `AircraftGroundController`, bu colliderları yer probu olarak kullanır ve Rigidbody üzerinde yönlü tutuş, yuvarlanma direnci, fren, düşük hızlı yaw yönlendirmesi ve pist stabilizasyonu uygular.
+- Ground Controller öncesinde -Z pist koşusunda yaklaşık 15° tepe açı değişimi görülüyordu. Güncel kontrollü FlightTest koşusu üç saniyede yaklaşık 12,35 m ilerleme ve 14,14 m/s hız üretirken tepe açı değişimi 0° ve yanal hız yaklaşık 0,00006 m/s ölçüldü.
 - `AircraftFollowCamera`, aktif uçağı modelin gerçek arka tarafı olan yerel +Z yönünden 9 m geride ve 3 m yukarıda takip eder. Konum ve bakış yumuşatması `LateUpdate` yolundadır; sahne başlangıcında hedefe sıçramadan yerleşir.
 - `AircraftPropellerAnimator`, `AircraftEngine.Rpm` çıktısını tüketerek `Rotor_Pivot` nesnesini yerel Y ekseninde döndürür. Görsel hız ölçeği yüksek RPM'de kare örnekleme kaynaklı alias etkisini azaltır; motor simülasyon değerini değiştirmez.
 - `ToggleEngine` komutu klavyede `I`, gamepad'de batı yüz düğmesine bağlıdır. Input Reader yalnızca isteği yayınlar; motor durumu Engine tarafından değiştirilir. Motor kapandığında thrust anında kesilir, RPM ve pervane yaklaşık 1 saniyede rölantiden duruşa iner.
 - `AircraftPhysics`, root Rigidbody üzerinde hava hızını, sabit katsayılı lift/drag kuvvetlerini ve ileri hıza göre etkinleşen pitch/roll/yaw torklarını sabit fizik adımında uygular. Model ileri ekseni root yerel `-Z` olarak korunur.
-- Açı-of-attack, stall, maksimum güvenli hız, gerçek aerodinamik/propeller kalibrasyonu ve sonraki oyun sistemleri henüz uygulanmadı.
+- Açı-of-attack, stall, maksimum güvenli hız, belirlenmiş kalkış hızı, gerçek aerodinamik/propeller kalibrasyonu ve sonraki oyun sistemleri henüz uygulanmadı.
 
 Sıradaki kontrollü akış:
 
@@ -309,7 +309,8 @@ Sıradaki kontrollü akış:
 6. Tamamlandı (2026-09-16): Motor açma/kapatma komutu ve kademeli pervane duruşu uygulandı.
 7. Tamamlandı (2026-09-16): Geçici model inceleme sahnesi kaldırıldı; doğrulama akışı `FlightTest` ve üretim prefabında birleştirildi.
 8. Tamamlandı (2026-09-16): Temel aerodinamik lift, drag ve hıza bağlı kontrol torkları ayrı `AircraftPhysics` bileşeninde uygulandı.
-9. Yönlü yer tutuşu, yuvarlanma direnci ve frenler ayrı `AircraftGroundController` bileşeninde geliştirilecek.
+9. Tamamlandı (2026-09-16): Yönlü yer tutuşu, yuvarlanma direnci, düşük hızlı yönlendirme, pist stabilizasyonu ve fren ayrı `AircraftGroundController` bileşeninde uygulandı.
+10. Aerodinamik ve yer hareketi birlikte çalışırken kalkış hızı ve kontrollü kalkış test senaryosu belirlenecek.
 
 ---
 

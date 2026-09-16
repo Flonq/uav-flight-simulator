@@ -245,6 +245,21 @@ namespace MertKaan.UAVSimulator.Editor
             serializedPhysics.FindProperty("_rigidbody").objectReferenceValue = aircraftRoot.GetComponent<Rigidbody>();
             serializedPhysics.ApplyModifiedPropertiesWithoutUndo();
 
+            AircraftGroundController groundController =
+                aircraftRoot.AddComponent<AircraftGroundController>();
+            SerializedObject serializedGroundController =
+                new SerializedObject(groundController);
+            serializedGroundController.FindProperty("_inputReader").objectReferenceValue = input;
+            serializedGroundController.FindProperty("_rigidbody").objectReferenceValue =
+                aircraftRoot.GetComponent<Rigidbody>();
+            serializedGroundController.FindProperty("_noseWheel").objectReferenceValue =
+                FindDescendant(aircraftRoot.transform, "NoseWheelCollider").GetComponent<SphereCollider>();
+            serializedGroundController.FindProperty("_rightMainWheel").objectReferenceValue =
+                FindDescendant(aircraftRoot.transform, "RightMainWheelCollider").GetComponent<SphereCollider>();
+            serializedGroundController.FindProperty("_leftMainWheel").objectReferenceValue =
+                FindDescendant(aircraftRoot.transform, "LeftMainWheelCollider").GetComponent<SphereCollider>();
+            serializedGroundController.ApplyModifiedPropertiesWithoutUndo();
+
             AircraftControlSurfaceAnimator animator = aircraftRoot.AddComponent<AircraftControlSurfaceAnimator>();
             SerializedObject serialized = new SerializedObject(animator);
             serialized.FindProperty("_inputReader").objectReferenceValue = input;
@@ -272,17 +287,22 @@ namespace MertKaan.UAVSimulator.Editor
             AircraftInputReader input = aircraftRoot.GetComponent<AircraftInputReader>();
             AircraftEngine engine = aircraftRoot.GetComponent<AircraftEngine>();
             AircraftPhysics physics = aircraftRoot.GetComponent<AircraftPhysics>();
+            AircraftGroundController groundController =
+                aircraftRoot.GetComponent<AircraftGroundController>();
             AircraftControlSurfaceAnimator animator = aircraftRoot.GetComponent<AircraftControlSurfaceAnimator>();
             AircraftPropellerAnimator propellerAnimator = aircraftRoot.GetComponent<AircraftPropellerAnimator>();
-            if (input == null || engine == null || physics == null || animator == null || propellerAnimator == null ||
+            if (input == null || engine == null || physics == null ||
+                groundController == null || animator == null || propellerAnimator == null ||
                 aircraftRoot.GetComponentsInChildren<AircraftInputReader>(true).Length != 1 ||
                 aircraftRoot.GetComponentsInChildren<AircraftEngine>(true).Length != 1 ||
                 aircraftRoot.GetComponentsInChildren<AircraftPhysics>(true).Length != 1 ||
+                aircraftRoot.GetComponentsInChildren<AircraftGroundController>(true).Length != 1 ||
                 aircraftRoot.GetComponentsInChildren<AircraftControlSurfaceAnimator>(true).Length != 1 ||
                 aircraftRoot.GetComponentsInChildren<AircraftPropellerAnimator>(true).Length != 1)
             {
                 throw new InvalidOperationException(
-                    "Custom aircraft prefab requires one root Input Reader, Engine, Aircraft Physics, Control Surface Animator and Propeller Animator.");
+                    "Custom aircraft prefab requires one root Input Reader, Engine, Aircraft Physics, " +
+                    "Ground Controller, Control Surface Animator and Propeller Animator.");
             }
 
             SerializedObject serializedEngine = new SerializedObject(engine);
@@ -298,6 +318,19 @@ namespace MertKaan.UAVSimulator.Editor
             {
                 throw new InvalidOperationException(
                     "Aircraft Physics must reference its prefab's root Input Reader and Rigidbody.");
+            }
+
+            SerializedObject serializedGroundController =
+                new SerializedObject(groundController);
+            if (serializedGroundController.FindProperty("_inputReader").objectReferenceValue != input ||
+                serializedGroundController.FindProperty("_rigidbody").objectReferenceValue !=
+                    aircraftRoot.GetComponent<Rigidbody>() ||
+                !HasWheelReference(serializedGroundController, "_noseWheel", aircraftRoot, "NoseWheelCollider") ||
+                !HasWheelReference(serializedGroundController, "_rightMainWheel", aircraftRoot, "RightMainWheelCollider") ||
+                !HasWheelReference(serializedGroundController, "_leftMainWheel", aircraftRoot, "LeftMainWheelCollider"))
+            {
+                throw new InvalidOperationException(
+                    "Ground Controller must reference the root Input Reader, Rigidbody and three wheel colliders.");
             }
 
             SerializedObject serialized = new SerializedObject(animator);
@@ -327,6 +360,21 @@ namespace MertKaan.UAVSimulator.Editor
             {
                 throw new InvalidOperationException("Propeller Animator must reference the root Engine and Rotor_Pivot.");
             }
+        }
+
+        private static bool HasWheelReference(
+            SerializedObject serializedGroundController,
+            string fieldName,
+            GameObject aircraftRoot,
+            string wheelName)
+        {
+            SphereCollider wheel = serializedGroundController
+                .FindProperty(fieldName)
+                .objectReferenceValue as SphereCollider;
+            return wheel != null &&
+                wheel.name == wheelName &&
+                wheel.transform.IsChildOf(aircraftRoot.transform) &&
+                !wheel.isTrigger;
         }
 
         [MenuItem("Tools/UAV Simulator/Custom UAV/Stage Aircraft in Clean FlightTest")]

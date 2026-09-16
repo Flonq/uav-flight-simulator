@@ -210,17 +210,17 @@ Bütün kullanıcı komutları fizik sisteminden bağımsız şekilde okunabilme
 
 # FAZ 7 — Yer Hareketi ve Kalkış
 
-- [ ] `AircraftGroundController` scriptini oluştur
-- [ ] Yerde olma kontrolü ekle
-- [ ] Tekerlek sürtünmesini ayarla
-- [ ] Yaw ile pist yönlendirmesi ekle
-- [ ] Fren sistemi ekle
-- [ ] Pistte yana kaymayı azalt
+- [x] `AircraftGroundController` scriptini oluştur
+- [x] Yerde olma kontrolü ekle — üç mevcut tekerlek SphereCollider probu
+- [x] Tekerlek sürtünmesini ayarla — kuvvet tabanlı yönlü tutuş ve yuvarlanma direnci prototipi
+- [x] Yaw ile pist yönlendirmesi ekle
+- [x] Fren sistemi ekle
+- [x] Pistte yana kaymayı azalt
 - [ ] Kalkış hızını belirle
 - [ ] Kalkış test senaryosu oluştur
 - [ ] Pist dışına çıkma davranışını kontrol et
 - [ ] Tekerleklerin görsel animasyonunu değerlendir
-- [ ] İniş takımı sistemi sonraki faz için not et
+- [x] İniş takımı sistemi sonraki faz için not et — mevcut primitive tekerlekler süspansiyon veya dönen tekerlek fiziği sağlamaz
 
 ### Çıkış kriteri
 
@@ -492,8 +492,8 @@ Mevcut doğrulanması gereken teknik borçlar:
 - [x] Özel UAV modelinin Unity import/eksen/pivot/materyal testini tamamla
 - [ ] Gerçek kütle, ağırlık merkezi ve inertia değerlerini fiziksel verilerle kalibre et
 - [x] `AircraftControlSurfaceAnimator` ve `AircraftInputReader` sahipliğini uçak prefabında kesinleştir (TD-022)
-- [ ] Üç tekerlekteki sıfır temas sürtünmesini yönlü yer tutuşu, yuvarlanma direnci ve frenlerle tamamla (`AircraftGroundController`)
-- [ ] Y=90° / -Z ileri yönünde pist hızlanırken oluşan yaklaşık 14° eğilmeyi Ground Controller ve zemin temasıyla gider
+- [x] Üç tekerlekteki sıfır temas sürtünmesini yönlü yer tutuşu, yuvarlanma direnci ve frenlerle tamamla (`AircraftGroundController`)
+- [x] Y=90° / -Z ileri yönünde pist hızlanırken oluşan yaklaşık 14° eğilmeyi Ground Controller ve zemin temasıyla gider
 - [ ] Propeller itki eğrisini gerçek araç verileriyle kalibre et; mevcut 1.000 N yalnızca prototip değeridir
 - [ ] Mevcut prototip drag modeliyle nihai yer/uçuş hızını doğrula ve maksimum güvenli hız davranışını belirle
 - [ ] Sabit lift katsayısını açı-of-attack/stall modeliyle geliştir; mevcut değer yalnızca temel kuvvet prototipidir
@@ -507,6 +507,6 @@ Mevcut doğrulanması gereken teknik borçlar:
 
 Bu bölüm her çalışma oturumunun sonunda güncellenmelidir.
 
-1. `AircraftGroundController` ile yönlü yer tutuşu, yuvarlanma direnci ve fren prototipini geliştir.
-2. Aerodinamik ve yer hareketi birlikte çalıştıktan sonra kalkış test senaryosunu oluştur.
-3. Sabit lift katsayısını açı-of-attack, stall ve maksimum güvenli hız davranışıyla geliştir.
+1. Aerodinamik ve yer hareketi birlikte çalışırken kalkış hızını belirle ve kontrollü kalkış test senaryosunu oluştur.
+2. Sabit lift katsayısını açı-of-attack, stall ve maksimum güvenli hız davranışıyla geliştir.
+3. Pist dışı davranışı ve gelişmiş tekerlek/süspansiyon ihtiyacını değerlendir.

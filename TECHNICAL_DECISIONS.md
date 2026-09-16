@@ -814,6 +814,34 @@ Lift yalnızca pozitif ileri hızdan üretilen dinamik basınca göre uçak yere
 
 ---
 
+## TD-031 — Kuvvet Tabanlı Yer Hareketi ve Fren Prototipi
+
+**Durum:** Kabul edildi ve uygulandı
+
+**Tarih:** 2026-09-16
+
+### Karar
+
+`AircraftGroundController`, özel UAV prefabının kökünde `AircraftInputReader` ve tek `Rigidbody` ile birlikte yaşar. Yeni Rigidbody, WheelCollider veya temas colliderı eklemez. Mevcut `NoseWheelCollider`, `RightMainWheelCollider` ve `LeftMainWheelCollider` SphereCollider bileşenlerini aşağı yönlü yer probları olarak kullanır; kendi compound collider gövdesini sorgu sonuçlarından çıkarır.
+
+Yer hareketi sabit fizik adımında Rigidbody üzerinde uygulanır. Yanal hız, saniyede 8 tepki oranlı yönlü tutuşla sönümlenir. Yuvarlanma direnci 0,8 m/s², `Space` fren komutu 12 m/s² prototip yavaşlama uygular ve hız yönünü tersine çevirmeden sıfıra yaklaşır. Burun tekeri temastayken yaw komutu 1–6 m/s arasında artan, 20 m/s'ye kadar azalan düşük hızlı pist yönlendirmesi üretir. Yer yaw sönümlemesi kontrolsüz heading sapmasını azaltır.
+
+Pist hizalama desteği düşük hızda gövde up eksenini zemin normaline yaklaştırır ve pitch/roll açısal hızını sönümler. Destek 8 m/s'ye kadar tamdır, 15 m/s'de sıfıra iner; böylece kalkış aşamasında aerodinamik kontrolü devralmak üzere bırakılır. Üç teker için kullanılan 0,2 m prob payı ilk yer hareketi prototipidir ve gerçek süspansiyon geometrisi olarak yorumlanmaz.
+
+Tekerleklerin sıfır sürtünmeli fizik materyali korunmuştur. Yönlü tutuş ve fren davranışı Ground Controller tarafından açık ve test edilebilir kuvvetlerle sağlanır. Dönen tekerlek, süspansiyon, gelişmiş lastik modeli ve iniş davranışı sonraki kapsamdır.
+
+### Doğrulama ve sınırlar
+
+- İzole Unity fizik sahnesinde üç teker temas algısı ve hareketsiz pist stabilitesi doğrulandı.
+- 5 m/s başlangıç yanal hızı bir saniyede yaklaşık 0,001 m/s'ye düştü.
+- 8 m/s başlangıç ileri hızı 0,5 saniyede serbest yuvarlanmada 7,45 m/s, frenlemede 1,53 m/s ölçüldü.
+- İzole üç saniyelik tam gaz koşusu yaklaşık 10,49 m ilerleme, 13,18 m/s hız ve 0° tepe açı değişimi üretti.
+- FlightTest pistindeki kontrollü üç saniyelik koşu yaklaşık 12,35 m ilerleme, 14,14 m/s hız, 1.197 N lift ve 96 N drag üretti. Üç teker probu temasını korudu; tepe açı değişimi 0° ve yanal hız yaklaşık 0,00006 m/s ölçüldü.
+- Unity Console hata/uyarı vermedi. `FlightTest` üzerinde Ground Controller kaynaklı prefab override veya kaydedilmemiş sahne değişikliği oluşmadı.
+- Bu test kalkış hızı veya tam uçuş kabulü değildir. Kalkış rotasyonu, liftoff eşiği, pist dışı davranış, iniş ve gerçek tekerlek/süspansiyon kalibrasyonu sonraki görevlerdir.
+
+---
+
 ## Karar Bekleyen Konular
 
 - [ ] Yakıt sistemi veya batarya sistemi
@@ -844,3 +872,4 @@ Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene
 | 2026-09-16 | TD-028 | Motor toggle inputu ve kademeli RPM/pervane kapanışı uygulandı |
 | 2026-09-16 | TD-029 | Geçici model inceleme sahnesi kaldırıldı; doğrulama akışı FlightTest'te birleştirildi |
 | 2026-09-16 | TD-030 | Temel lift, drag ve hıza bağlı pitch/roll/yaw torkları sabit fizik adımında uygulandı |
+| 2026-09-16 | TD-031 | Üç teker temasına dayalı yönlü yer tutuşu, pist stabilizasyonu, yönlendirme ve fren prototipi uygulandı |

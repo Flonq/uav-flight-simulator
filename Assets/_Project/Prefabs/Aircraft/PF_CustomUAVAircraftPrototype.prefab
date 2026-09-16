@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 6575156145410406327}
   - component: {fileID: 1664212185993197094}
   - component: {fileID: 192771565415276579}
+  - component: {fileID: 2889738314437523748}
   m_Layer: 0
   m_Name: PF_CustomUAVAircraftPrototype
   m_TagString: Untagged
@@ -278,6 +279,40 @@ MonoBehaviour:
   _maxPitchTorque: 250
   _maxRollTorque: 500
   _maxYawTorque: 300
+--- !u!114 &2889738314437523748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855187489322148508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e02e4a905a8014847bb2c81422947790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MertKaan.UAVSimulator.Aircraft.AircraftGroundController
+  _inputReader: {fileID: 1184735321776206417}
+  _rigidbody: {fileID: 8385554076756208212}
+  _noseWheel: {fileID: 4324176535825390938}
+  _rightMainWheel: {fileID: 710214660847680764}
+  _leftMainWheel: {fileID: 4896030370060292718}
+  _groundLayers:
+    serializedVersion: 2
+    m_Bits: 4294967291
+  _groundCheckDistance: 0.2
+  _minimumGroundNormalDot: 0.5
+  _lateralGrip: 8
+  _rollingResistance: 0.8
+  _brakeDeceleration: 12
+  _maximumSteeringAcceleration: 1.5
+  _minimumSteeringSpeed: 1
+  _fullSteeringSpeed: 6
+  _steeringFadeSpeed: 20
+  _groundAlignmentStrength: 30
+  _groundAlignmentDamping: 10
+  _groundYawDamping: 6
+  _fullGroundAlignmentSpeed: 8
+  _groundAlignmentReleaseSpeed: 15
 --- !u!1 &2780235931759866103
 GameObject:
   m_ObjectHideFlags: 0

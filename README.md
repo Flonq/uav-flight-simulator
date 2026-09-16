@@ -28,7 +28,7 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 
 **Son güncelleme:** 16 Eylül 2026
 
-**Mevcut aşama:** Temel lift, drag ve hıza bağlı kontrol torkları tamamlandı; sıradaki adım yönlü yer hareketi ve fren prototipidir
+**Mevcut aşama:** Yönlü yer hareketi, pist stabilizasyonu ve fren prototipi tamamlandı; sıradaki adım kontrollü kalkış test senaryosudur
 
 | Sistem | Durum |
 |---|---|
@@ -40,6 +40,7 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 | Görsel kontrol yüzeyi animasyonları | Tamamlandı ve Play Mode'da doğrulandı |
 | Motor, RPM ve itki | Sabit fizik adımında çalışan prototip; görsel burun yönü ve pervane animasyonuyla eşleştirildi |
 | Aerodinamik uçuş fiziği | Temel lift, drag ve pitch/roll/yaw torkları sabit fizik adımında çalışıyor |
+| Yer hareketi ve fren | Üç teker temas kontrolü, yanal tutuş, yuvarlanma direnci, düşük hızlı yönlendirme ve fren tamamlandı |
 | Kamera ve EO sistemi | Temel takip kamerası tamamlandı; diğer modlar planlandı |
 | Telemetri ve görev sistemi | Planlandı |
 | Yer kontrol istasyonu UI | Planlandı |
@@ -295,6 +296,7 @@ docs/images/
 - [x] `Rotor_Pivot` görsel dönüşünün motor RPM verisine bağlanması
 - [x] Motor ve throttle sisteminin geliştirilmesi
 - [~] Temel uçuş fiziğinin geliştirilmesi — temel kuvvetler ve kontrol torkları tamamlandı; stall ve hız güvenliği planlandı
+- [x] Temel yer hareketi, pist stabilizasyonu ve fren prototipi
 - [ ] Kalkış ve iniş sisteminin geliştirilmesi
 - [~] Kamera sisteminin geliştirilmesi — temel yumuşak takip kamerası tamamlandı
 - [ ] Telemetri arayüzünün geliştirilmesi
@@ -312,19 +314,18 @@ Ayrıntılı görev listesi için [`TASKS.md`](TASKS.md) dosyasına bakılabilir
 
 2026-09-15: Input Reader, Engine ve kontrol yüzeyi Animator'ı uçak prefabının kökündedir. Debug panel gaz komutunu, throttle, motor durumunu, RPM ve itkiyi gösterir. Motor prototipi 1.200 rölanti / 6.000 maksimum RPM, 3.000 RPM/s geçiş ve 1.000 N maksimum itki kullanır. Bu değerler gerçek araç verileri değildir.
 
-2026-09-16: Modelin burun yönü `-Z` olarak düzeltildi ve FlightTest uçak rotasyonu `Y = 90°` kaydedildi. Kontrollü test uçağın görsel burun yönünde ilerlediğini doğruladı. Bu pist yönünde görülen eğilme, Ground Controller aşamasında zemin/tekerlek temasıyla birlikte giderilecektir.
+2026-09-16: Modelin burun yönü `-Z` olarak düzeltildi. `AircraftGroundController`, üç mevcut tekerlek collider'ından yer temasını okur; yanal tutuş, yuvarlanma direnci, düşük hızlı yaw yönlendirmesi, pist stabilizasyonu ve fren uygular. Kontrollü FlightTest koşusunda önceki yaklaşık 15° yön değişimi ölçülmedi.
 
-Play Mode'da giriş komutları için Game View'a odaklanın. `I` tuşu motoru açıp kapatır; `AircraftRoot > AircraftEngine` bileşen menüsündeki `Start Engine` / `Stop Engine` seçenekleri tanısal kullanım içindir. Motor kapatma itkiyi keser; fren işlevi sağlamaz. Kısa testten sonra Play Mode'dan çıkın.
+Play Mode'da giriş komutları için Game View'a odaklanın. `I` tuşu motoru açıp kapatır, `Space` yerde fren uygular. `AircraftRoot > AircraftEngine` bileşen menüsündeki `Start Engine` / `Stop Engine` seçenekleri tanısal kullanım içindir. Motor kapatma itkiyi keser ancak otomatik fren uygulamaz. Kısa testten sonra Play Mode'dan çıkın.
 
 Mevcut doğrulanmış eksikler:
 
 - Gerçek kütle, ağırlık merkezi ve inertia değerlerinin fiziksel verilerle kalibre edilmesi
 - Son sistem doğrulamaları bitince eski Meshy yedeği ve iki inactive uçak instance'ının temizlenmesi
 - Motor/propeller verilerine dayalı itki kalibrasyonu ve hıza bağlı propeller verimi
-- Tekerlek prototipinde sıfır temas sürtünmesi yerine yönlü yer tutuşu ve fren uygulaması
 - Sabit katsayılı temel lift/drag modelinin açı-of-attack, stall ve maksimum güvenli hız davranışıyla geliştirilmesi
 - Prototip drag katsayısıyla nihai yer/uçuş hızının ve kontrol torklarının kullanıcı uçuş testinde kalibre edilmesi
-- Tam yer hareketi, kalkış ve iniş sistemi
+- Kalkış hızı, pist dışı davranış, iniş ve gelişmiş tekerlek/süspansiyon sistemi
 - Yer kontrol istasyonu arayüzü
 - Waypoint görevi
 - EO kamera hedefleme sistemi
