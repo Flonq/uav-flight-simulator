@@ -38,7 +38,7 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 | Input System — klavye ve gamepad | Tamamlandı; aktif uçak/debug bağlantısı doğrulandı |
 | Özel Blender İHA modeli | Unity importu, URP materyali ve prefab entegrasyonu tamamlandı |
 | Görsel kontrol yüzeyi animasyonları | Tamamlandı ve Play Mode'da doğrulandı |
-| Motor, RPM ve itki | Sabit fizik adımında çalışan prototip; kısa pist hızlanması doğrulandı |
+| Motor, RPM ve itki | Sabit fizik adımında çalışan prototip; görsel burun yönüyle eşleştirildi |
 | Aerodinamik uçuş fiziği | Başlanmadı |
 | Kamera ve EO sistemi | Planlandı |
 | Telemetri ve görev sistemi | Planlandı |
@@ -309,6 +309,8 @@ Ayrıntılı görev listesi için [`TASKS.md`](TASKS.md) dosyasına bakılabilir
 ## Bilinen Eksikler
 
 2026-09-15: Input Reader, Engine ve kontrol yüzeyi Animator'ı uçak prefabının kökündedir. Debug panel gaz komutunu, throttle, motor durumunu, RPM ve itkiyi gösterir. Motor prototipi 1.200 rölanti / 6.000 maksimum RPM, 3.000 RPM/s geçiş ve 1.000 N maksimum itki kullanır. Bu değerler gerçek araç verileri değildir.
+
+2026-09-16: Modelin burun yönü `-Z` olarak düzeltildi ve FlightTest uçak rotasyonu `Y = 90°` kaydedildi. Kontrollü test uçağın görsel burun yönünde ilerlediğini doğruladı. Bu pist yönünde görülen eğilme, Ground Controller aşamasında zemin/tekerlek temasıyla birlikte giderilecektir.
 
 Play Mode'da gaz komutu için Game View'a odaklanın. `AircraftRoot > AircraftEngine` bileşen menüsündeki `Start Engine` / `Stop Engine` motor durumunu değiştirir. Motor kapatma itkiyi keser; fren işlevi sağlamaz. Kısa testten sonra Play Mode'dan çıkın.
 

@@ -286,13 +286,13 @@ Doğrulanmış mevcut durum:
 - `AircraftRoot > VisualPivot` ayrımı, tek kök Rigidbody ve elle ayarlanmış 10 primitive collider doğrulandı.
 - Unity Input System, klavye ve DualSense girdileri ile pasif input debug paneli tamamlandı; panel aktif uçak input okuyucusuna bağlandı.
 - Blender 5.2.1 LTS ile geliştirilen özel İHA modeli; ayrı aileronlar, ruddervatorlar, pusher pervane ve iniş takımıyla Unity'ye aktarıldı.
-- Modelin metre ölçeği, `+Z` burun yönü, hareketli parça pivotları, materyali, hiyerarşisi ve 44.922 üçgenlik geometri bütçesi doğrulandı.
+- Modelin metre ölçeği, `-Z` burun yönü, hareketli parça pivotları, materyali, hiyerarşisi ve 44.922 üçgenlik geometri bütçesi doğrulandı.
 - `PF_CustomUAVVisual` ve collider ayarlarını koruyan `PF_CustomUAVAircraftPrototype` prefabları oluşturuldu.
 - `AircraftControlSurfaceAnimator`, pitch/roll/yaw komutlarını yalnızca görsel yüzey sapmalarına dönüştürecek şekilde eklendi ve Play Mode'da doğrulandı.
 - `FlightTest` sahnesindeki özel uçak üç teker üzerinde kararlı duruyor; sıçrama, savrulma veya zeminden geçme gözlenmedi.
-- `AircraftEngine`, throttle state/ramp, motor durumu, RPM geçişi ve root Rigidbody'nin +Z yönünde itki kuvvetini sabit fizik adımlarında uygular.
+- `AircraftEngine`, throttle state/ramp, motor durumu, RPM geçişi ve modelin burun yönü olan root Rigidbody -Z ekseninde itki kuvvetini sabit fizik adımlarında uygular.
 - Üç primitive tekerlek, düşük hızda temas kaynaklı eğilmeyi önlemek için sıfır sürtünmeli prototip materyali kullanır. Collider geometrisi ve Rigidbody ayarları korunmuştur; yönlü yer tutuşu ve frenler sonraki aşamadadır.
-- Kontrollü Left Shift girdisiyle üç saniyelik pist testinde yaklaşık 15,3 m ilerleme / 16,8 m/s hız, belirgin eğilme olmadan ölçüldü. Bu kısa test nihai hız veya fiziksel uçuş doğrulaması değildir.
+- 2026-09-15 testi, sonradan yanlış olduğu belirlenen +Z ekseninde yaklaşık 15,3 m ilerleme ölçtü. 2026-09-16'da model ileri ekseni -Z olarak düzeltildi. Yeni yönde kontrollü test yaklaşık 14,8 m ileri hareket üretti; pist/temas yönünde yaklaşık 14° eğilme gözlendi ve Ground Controller işi olarak açık tutuldu.
 - Aerodinamik drag/lift, gerçek propeller kalibrasyonu ve sonraki oyun sistemleri henüz uygulanmadı.
 
 Sıradaki kontrollü akış:

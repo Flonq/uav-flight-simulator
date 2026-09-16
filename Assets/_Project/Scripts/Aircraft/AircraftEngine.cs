@@ -89,8 +89,8 @@ namespace MertKaan.UAVSimulator.Aircraft
 
             if (ThrustNewtons > 0f && !_rigidbody.isKinematic)
             {
-                Vector3 forward = _rigidbody.rotation * Vector3.forward;
-                _rigidbody.AddForce(forward * ThrustNewtons, ForceMode.Force);
+                Vector3 aircraftForward = _rigidbody.rotation * Vector3.back;
+                _rigidbody.AddForce(aircraftForward * ThrustNewtons, ForceMode.Force);
             }
         }
 

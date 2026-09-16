@@ -523,7 +523,7 @@ AircraftRoot
 
 - Görsel model fizik kökünü sürmez; simülasyon durumunu görsel olarak takip eder.
 - Model `Assets/_Project/Art/Aircraft/CustomUAV/UAV_Custom.fbx` yoluna temiz export olarak alınmıştır; referans/helper/cutter/guide nesneleri runtime hiyerarşisine taşınmamıştır.
-- Metre ölçeği, Unity yerel `+Z` burun yönü, pivotlar, normaller, URP materyali ve hareketli parça hiyerarşisi doğrulanmıştır.
+- Metre ölçeği, Unity yerel `-Z` burun yönü, pivotlar, normaller, URP materyali ve hareketli parça hiyerarşisi doğrulanmıştır.
 - `PF_CustomUAVVisual` ile `PF_CustomUAVAircraftPrototype` ayrı tutulmuştur.
 - Doğrulanmış özel model aktif hâle getirilmiş, önceki çalışan Meshy görseli geri dönüş için inactive `AircraftRoot_Meshy_Backup` olarak korunmuştur.
 - Import doğrulamasında 33 renderer/benzersiz mesh, 44.922 triangle ve `(12.14, 1.84, 6.79)` görsel boyutu ölçülmüştür.
@@ -660,7 +660,7 @@ Play Mode'da kontrollü Input System girdileriyle yükselme, azalma, nötrde tut
 
 `AircraftEngine` motor durumunu, RPM geçişini ve itkiyi yönetir. Açık motorun hedef RPM'si throttle ile rölanti/maksimum arasında doğrusal hesaplanır; RPM hedefe saniyede belirlenen hızla yaklaşır. İtki, rölanti üzerindeki normalize RPM'nin karesi ile maksimum itkinin çarpımıdır. Rölantide itki sıfırdır. Motor kapalıyken itki sıfır olur, RPM zamanla sıfıra iner. Bileşen devre dışı bırakıldığında RPM ve itki çıkışları sıfırlanır.
 
-Kuvvet `FixedUpdate` içinde root Rigidbody'nin fizik rotasyonuna göre yerel +Z yönünde, kütle merkezine `ForceMode.Force` ile uygulanır. Kuvvet ayrıca delta time ile çarpılmaz. Kinematic Rigidbody'ye kuvvet uygulanmaz. `Rpm`, `NormalizedRpm` ve `ThrustNewtons` görsel/ses/UI tüketicilerine veri sağlar; bu tüketiciler motor durumunu sahiplenmez.
+Kuvvet `FixedUpdate` içinde root Rigidbody'nin fizik rotasyonuna göre modelin burun yönü olan yerel -Z ekseninde, kütle merkezine `ForceMode.Force` ile uygulanır. Kuvvet ayrıca delta time ile çarpılmaz. Kinematic Rigidbody'ye kuvvet uygulanmaz. `Rpm`, `NormalizedRpm` ve `ThrustNewtons` görsel/ses/UI tüketicilerine veri sağlar; bu tüketiciler motor durumunu sahiplenmez.
 
 ### Prototip değerleri ve sınırlar
 
@@ -672,9 +672,27 @@ Başlangıçta motor açık, throttle 0'dır. Rölanti 1.200 RPM, maksimum 6.000
 
 - İzole Unity fizik sahnesinde rölanti, RPM geçişi, kısmi/tam itki, kapatma, yeniden başlatma ve disabled input davranışı doğrulandı.
 - 1.000 N / 100 kg, döndürülmüş gövdede bir saniyede 10 m/s hız üretti; 10/20/40 ms fizik adımlarında aynı sonuç alındı. 200 kg gövdede sonuç 5 m/s oldu. Yapay dönme torku oluşmadı.
-- FlightTest'te kontrollü Left Shift komutu, throttle rampası ve üç saniyelik fizik simülasyonu yaklaşık 15,3 m ilerleme / 16,8 m/s hız üretti; yükseklik değişimi ihmal edilebilir, belirgin eğilme yoktu.
+- FlightTest'te 2026-09-15 tarihinde ölçülen yaklaşık 15,3 m ilerleme, daha sonra yanlış olduğu belirlenen +Z eksenindeydi. İleri eksen TD-025 ile -Z olarak düzeltildi; bu eski ölçüm yalnızca motor/rampa büyüklüğü kanıtı olarak tarihsel kayıttır.
 - Testler kontrollü Input System olayları ve fizik simülasyonu kullanır; fiziksel kontrol cihazıyla kullanıcı uçuşu, performans veya nihai hız testi değildir.
 - Debug panelde motor/RPM/itki okumaları için 450 px panel / 420 px metin alanı kullanılır; hesaplanan 385,59 px içerik sığar.
+
+---
+
+## TD-025 — Özel UAV İleri Ekseni Düzeltmesi
+
+**Durum:** Kabul edildi ve uygulandı
+
+**Tarih:** 2026-09-16
+
+### Karar
+
+Özel UAV'nin ileri yönü root yerel `-Z` eksenidir. `NoseGear_Tire` root uzayında yaklaşık `z = -1,70`, pusher `Rotor_Pivot` ise arkada `z = +2,40` konumundadır. Önceki `+Z` kabulü düzeltilmiştir. Engine itkiyi `Rigidbody.rotation * Vector3.back` yönünde uygular. FlightTest uçak yönü kullanıcı düzenlemesine uygun olarak `Y = 90°` kaydedilmiştir.
+
+### Sonuçlar
+
+Motor kuvveti görsel burunla aynı yöndedir. Kamera ve gelecekteki yön/heading hesapları da model ileri ekseni olarak `-Z` kullanmalıdır.
+
+Kontrollü -Z yön testi üç saniyede yaklaşık 14,8 m ileri hareket ve 15,9 m/s hız üretti. FlightTest'in bu yönündeki zemin/tekerlek temasında yaklaşık 14° eğilme görüldü. Yön düzeltmesi doğrulandı; eğilme Ground Controller ve pist teması kapsamında açık teknik borçtur.
 
 ---
 
@@ -702,3 +720,4 @@ Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene
 | 2026-09-15 | TD-022 | Input Reader ve görsel Animator prefab sahipliği uygulandı |
 | 2026-09-15 | TD-023 | Throttle state/ramp Engine'e taşındı; sabit zaman adımı ve input ayrımı doğrulandı |
 | 2026-09-15 | TD-024 | RPM/itki prototipi ve tekerlek temas materyali uygulandı; kısa pist hızlanması doğrulandı |
+| 2026-09-16 | TD-025 | Özel UAV ileri ekseni -Z olarak düzeltildi; sahne yönü Y=90° kaydedildi |

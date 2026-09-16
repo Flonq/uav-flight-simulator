@@ -117,7 +117,7 @@ Proje hatasız açılmalı, boş test sahnesi çalışmalı ve GitHub üzerinde 
 - [x] Blender referans/helper/cutter/guide nesnelerinin export dışında kaldığını doğrula
 - [x] Modeli Unity projesindeki `Assets/_Project/Art/Aircraft/CustomUAV/` alanına aktar
 - [x] Import ölçeğini metre birimine göre doğrula
-- [x] Modelin Unity yerel `+Z` burun yönünü doğrula
+- [x] Modelin Unity yerel `-Z` burun yönünü doğrula — NoseGear önde, pusher rotor arkada
 - [x] Aileron, ruddervator ve propeller pivot/yerel eksenlerini Unity'de doğrula
 - [x] Normals, tangents, materyal slotları ve triangle sayısını doğrula
 - [x] Özel görseli mevcut `VisualPivot` altında test et
@@ -167,7 +167,7 @@ Bütün kullanıcı komutları fizik sisteminden bağımsız şekilde okunabilme
 - [x] Maksimum throttle tanımla — 1
 - [x] Throttle artış ve azalış hızını belirle — 0,5/s; FixedUpdate
 - [x] Motor thrust değerini hesapla — rölanti üzerindeki normalize RPM'nin karesi; prototip
-- [x] İleri yön kuvvetini uygula — root Rigidbody +Z; FixedUpdate / ForceMode.Force
+- [x] İleri yön kuvvetini uygula — modelin burun yönü olan root Rigidbody -Z; FixedUpdate / ForceMode.Force
 - [x] Motor açık ve kapalı durumu ekle — API ve Play Mode bileşen menüsü
 - [x] Motor devri değerini üret — rölanti/maksimum RPM ve geçiş hızı
 - [x] Motor sesi için temel parametre üret — Rpm ve NormalizedRpm; ses bağlantısı ayrı fazda
@@ -490,6 +490,7 @@ Mevcut doğrulanması gereken teknik borçlar:
 - [ ] Gerçek kütle, ağırlık merkezi ve inertia değerlerini fiziksel verilerle kalibre et
 - [x] `AircraftControlSurfaceAnimator` ve `AircraftInputReader` sahipliğini uçak prefabında kesinleştir (TD-022)
 - [ ] Üç tekerlekteki sıfır temas sürtünmesini yönlü yer tutuşu, yuvarlanma direnci ve frenlerle tamamla (`AircraftGroundController`)
+- [ ] Y=90° / -Z ileri yönünde pist hızlanırken oluşan yaklaşık 14° eğilmeyi Ground Controller ve zemin temasıyla gider
 - [ ] Propeller itki eğrisini gerçek araç verileriyle kalibre et; mevcut 1.000 N yalnızca prototip değeridir
 - [ ] Drag modeli eklendikten sonra nihai yer/uçuş hızını doğrula
 
