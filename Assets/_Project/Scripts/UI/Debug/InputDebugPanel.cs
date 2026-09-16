@@ -1,7 +1,10 @@
+using System;
+using System.Collections.Generic;
 using MertKaan.UAVSimulator.Aircraft;
 using MertKaan.UAVSimulator.InputSystem;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace MertKaan.UAVSimulator.UI.Debugging
 {
@@ -15,6 +18,15 @@ namespace MertKaan.UAVSimulator.UI.Debugging
         private TMP_Text _debugText;
 
         private AircraftEngine _engine;
+        private AircraftInputActions _bindingActions;
+        private string _pitchBinding;
+        private string _rollBinding;
+        private string _yawBinding;
+        private string _throttleBinding;
+        private string _brakeBinding;
+        private string _cameraBinding;
+        private string _zoomBinding;
+        private string _pauseBinding;
 
         private void Awake()
         {
@@ -39,7 +51,15 @@ namespace MertKaan.UAVSimulator.UI.Debugging
                 );
 
                 enabled = false;
+                return;
             }
+
+            CacheDesktopBindingLabels();
+        }
+
+        private void OnDestroy()
+        {
+            _bindingActions?.Dispose();
         }
 
         private bool TryResolveInputReader()
@@ -68,18 +88,84 @@ namespace MertKaan.UAVSimulator.UI.Debugging
         {
             _debugText.text =
                 $"AIRCRAFT DEBUG\n\n" +
-                $"Pitch: {_inputReader.Pitch:F2}\n" +
-                $"Roll: {_inputReader.Roll:F2}\n" +
-                $"Yaw: {_inputReader.Yaw:F2}\n" +
-                $"Throttle Input: {_inputReader.ThrottleInput:F2}\n" +
-                $"Throttle: {(_engine != null ? _engine.Throttle.ToString("F2") : "N/A")}\n" +
+                $"Pitch [{_pitchBinding}]: {_inputReader.Pitch:F2}\n" +
+                $"Roll [{_rollBinding}]: {_inputReader.Roll:F2}\n" +
+                $"Yaw [{_yawBinding}]: {_inputReader.Yaw:F2}\n" +
+                $"Throttle [{_throttleBinding}]: {_inputReader.ThrottleInput:F2}\n" +
+                $"Throttle State: {(_engine != null ? _engine.Throttle.ToString("F2") : "N/A")}\n" +
                 $"Engine: {(_engine != null ? (!_engine.isActiveAndEnabled ? "Disabled" : (_engine.IsRunning ? "Running" : "Stopped")) : "N/A")}\n" +
                 $"RPM: {(_engine != null ? _engine.Rpm.ToString("F0") : "N/A")}\n" +
                 $"Thrust: {(_engine != null ? _engine.ThrustNewtons.ToString("F0") : "N/A")} N\n" +
-                $"Brake: {_inputReader.BrakePressed}\n" +
-                $"Camera Switch: {_inputReader.SwitchCameraPressed}\n" +
-                $"EO Zoom: {_inputReader.EOZoom:F2}\n" +
-                $"Pause: {_inputReader.PausePressed}";
+                $"Brake [{_brakeBinding}]: {_inputReader.BrakePressed}\n" +
+                $"Camera [{_cameraBinding}]: {_inputReader.SwitchCameraPressed}\n" +
+                $"Zoom [{_zoomBinding}]: {_inputReader.EOZoom:F2}\n" +
+                $"Pause [{_pauseBinding}]: {_inputReader.PausePressed}";
+        }
+
+        private void CacheDesktopBindingLabels()
+        {
+            _bindingActions = new AircraftInputActions();
+            _pitchBinding = GetDesktopBindingDisplayString(_bindingActions.Aircraft.Pitch);
+            _rollBinding = GetDesktopBindingDisplayString(_bindingActions.Aircraft.Roll);
+            _yawBinding = GetDesktopBindingDisplayString(_bindingActions.Aircraft.Yaw);
+            _throttleBinding = GetDesktopBindingDisplayString(_bindingActions.Aircraft.Throttle);
+            _brakeBinding = GetDesktopBindingDisplayString(_bindingActions.Aircraft.Brake);
+            _cameraBinding = GetDesktopBindingDisplayString(_bindingActions.Camera.SwitchCamera);
+            _zoomBinding = GetDesktopBindingDisplayString(_bindingActions.Camera.EOZoom);
+            _pauseBinding = GetDesktopBindingDisplayString(_bindingActions.UI.Pause);
+        }
+
+        private static string GetDesktopBindingDisplayString(InputAction action)
+        {
+            List<string> displayStrings = new List<string>();
+
+            for (int i = 0; i < action.bindings.Count; i++)
+            {
+                InputBinding binding = action.bindings[i];
+                if (binding.isPartOfComposite)
+                {
+                    continue;
+                }
+
+                if (binding.isComposite)
+                {
+                    if (CompositeUsesDesktopDevice(action, i))
+                    {
+                        displayStrings.Add(action.GetBindingDisplayString(i));
+                    }
+
+                    continue;
+                }
+
+                if (IsDesktopBindingPath(binding.effectivePath))
+                {
+                    displayStrings.Add(action.GetBindingDisplayString(i));
+                }
+            }
+
+            return displayStrings.Count > 0 ? string.Join(" | ", displayStrings) : "Unbound";
+        }
+
+        private static bool CompositeUsesDesktopDevice(InputAction action, int compositeIndex)
+        {
+            for (int i = compositeIndex + 1;
+                 i < action.bindings.Count && action.bindings[i].isPartOfComposite;
+                 i++)
+            {
+                if (IsDesktopBindingPath(action.bindings[i].effectivePath))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsDesktopBindingPath(string path)
+        {
+            return !string.IsNullOrEmpty(path) &&
+                   (path.StartsWith("<Keyboard>", StringComparison.OrdinalIgnoreCase) ||
+                    path.StartsWith("<Mouse>", StringComparison.OrdinalIgnoreCase));
         }
     }
 }

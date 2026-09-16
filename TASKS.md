@@ -148,6 +148,7 @@ Proje hatasız açılmalı, boş test sahnesi çalışmalı ve GitHub üzerinde 
 - [x] C# sınıf üretimini etkinleştir
 - [x] `AircraftInputReader` scriptini oluştur
 - [x] Girdi değerlerini pasif debug panelinde göster
+- [x] Debug panelinde klavye/fare tuş atamalarını Input Action tanımlarından göster
 - [x] Debug panelini sahnedeki aktif `AircraftInputReader` bileşenine bağla
 - [x] Klavye ve fare girdilerini test et
 - [x] DualSense'i genel `<Gamepad>` bindingleriyle test et

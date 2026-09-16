@@ -641,6 +641,7 @@ FlightTest added-component override'ları prefab üzerine uygulandı. Entegrasyo
 - Engine yeniden etkinleştiğinde throttle korunur; yeni instance başlangıç değerini kullanır.
 - Engine uçak prefabının kökünde, kendi Input Reader'ına bağlıdır.
 - Debug panel hem ham komutu hem Engine throttle değerini gösterir. Engine olmayan eski prototiplerde durum N/A olarak gösterilir.
+- Debug paneldeki klavye/fare etiketleri ayrı bir sabit tuş tablosundan değil, üretilen Input Action tanımlarının binding metadata'sından okunur.
 - Debug panel yüksekliği yeni okuma satırına uyacak şekilde 350 px yapıldı; 320 px metin alanında hesaplanan 302,79 px içerik sığıyor.
 - RPM, motor açma/kapama, thrust ve kuvvet uygulaması sonraki aşamadadır.
 
