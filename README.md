@@ -26,9 +26,9 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 
 ## Proje Durumu
 
-**Son güncelleme:** 15 Eylül 2026
+**Son güncelleme:** 16 Eylül 2026
 
-**Mevcut aşama:** Throttle, motor RPM ve itki prototipi tamamlandı; sıradaki adım pervane görselini RPM verisine bağlamak
+**Mevcut aşama:** İleri yön düzeltmesi ve temel takip kamerası tamamlandı; sıradaki adım pervane görselini RPM verisine bağlamak
 
 | Sistem | Durum |
 |---|---|
@@ -40,7 +40,7 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 | Görsel kontrol yüzeyi animasyonları | Tamamlandı ve Play Mode'da doğrulandı |
 | Motor, RPM ve itki | Sabit fizik adımında çalışan prototip; görsel burun yönüyle eşleştirildi |
 | Aerodinamik uçuş fiziği | Başlanmadı |
-| Kamera ve EO sistemi | Planlandı |
+| Kamera ve EO sistemi | Temel takip kamerası tamamlandı; diğer modlar planlandı |
 | Telemetri ve görev sistemi | Planlandı |
 | Yer kontrol istasyonu UI | Planlandı |
 | Windows build | Planlandı |
@@ -294,7 +294,7 @@ docs/images/
 - [ ] Motor ve throttle sisteminin geliştirilmesi
 - [ ] Temel uçuş fiziğinin geliştirilmesi
 - [ ] Kalkış ve iniş sisteminin geliştirilmesi
-- [ ] Kamera sisteminin geliştirilmesi
+- [~] Kamera sisteminin geliştirilmesi — temel yumuşak takip kamerası tamamlandı
 - [ ] Telemetri arayüzünün geliştirilmesi
 - [ ] Waypoint ve görev sisteminin geliştirilmesi
 - [ ] Ses ve görsel iyileştirmeler

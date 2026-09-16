@@ -228,8 +228,8 @@ Bütün kullanıcı komutları fizik sisteminden bağımsız şekilde okunabilme
 # FAZ 8 — Kamera Sistemi
 
 - [ ] `CameraModeController` oluştur
-- [ ] Takip kamerası ekle
-- [ ] Takip kamerasında yumuşak hareket ekle
+- [x] Takip kamerası ekle
+- [x] Takip kamerasında yumuşak hareket ekle
 - [ ] Gövde kamerası ekle
 - [ ] Serbest kamera ekle
 - [ ] EO kamera ekle
@@ -493,6 +493,8 @@ Mevcut doğrulanması gereken teknik borçlar:
 - [ ] Y=90° / -Z ileri yönünde pist hızlanırken oluşan yaklaşık 14° eğilmeyi Ground Controller ve zemin temasıyla gider
 - [ ] Propeller itki eğrisini gerçek araç verileriyle kalibre et; mevcut 1.000 N yalnızca prototip değeridir
 - [ ] Drag modeli eklendikten sonra nihai yer/uçuş hızını doğrula
+- [ ] Takip kamerasına arazi/geometri çarpışması ve görüş engeli yönetimi ekle
+- [ ] Takip kamerası mesafe, yükseklik ve yumuşatma değerlerini uçuş fiziği tamamlandıktan sonra final kullanıcı testiyle kalibre et
 
 ---
 

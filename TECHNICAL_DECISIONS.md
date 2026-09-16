@@ -696,6 +696,28 @@ Kontrollü -Z yön testi üç saniyede yaklaşık 14,8 m ileri hareket ve 15,9 m
 
 ---
 
+## TD-026 — Temel Takip Kamerası
+
+**Durum:** Kabul edildi ve uygulandı
+
+**Tarih:** 2026-09-16
+
+### Karar
+
+`AircraftFollowCamera`, kamera davranışını uçuş fiziğinden bağımsız bir `CameraSystem` bileşeninde tutar. Bileşen sahnedeki `Main Camera` üzerinde yaşar ve aktif `AircraftRoot` transformunu açık serialized referansla takip eder. Özel modelin ileri yönü yerel -Z olduğundan kamera ofseti yerel `(0, 3, 9)` seçilmiştir; böylece kamera gerçek arka tarafta 9 m geride ve 3 m yukarıda konumlanır. Bakış noktası yerel `(0, 0.8, -0.5)` konumudur.
+
+Kamera oyun başlangıcında hedef pozuna doğrudan yerleşir. Sonraki karelerde konumu 0,15 saniyelik `SmoothDamp`, yönü saniyeden bağımsız üstel yumuşatma ile `LateUpdate` içinde güncellenir. Bakış rotasyonu dünya yukarı yönünü kullanır; uçak roll hareketi kamera ufkunu doğrudan döndürmez. Temel takip için ek paket bağımlılığı eklenmemiştir. `CustomUAVIntegrationTool`, sahneye yeniden uçak yerleştirirken mevcut kamera hedefini de yeni aktif instance'a bağlar.
+
+### Doğrulama ve sınırlar
+
+- Play Mode başlangıcında kamera ile hesaplanan hedef konum arasındaki hata 0,00002 m altında, bakış doğrultusu nokta çarpımı 1,0 olarak ölçüldü.
+- Kontrollü 5 m hedef hareketinden sonra kamera hedef ofsetine yakınsadı ve bakış doğrultusunu korudu.
+- 1280×720 Game View kontrolünde uçak kadrajın alt merkezinde, pist görüşü açık şekilde görüntülendi.
+- Console hata ve uyarı sayısı sıfırdı.
+- Geometri çarpışması, görüş engeli çözümü, kamera modları ve kullanıcı tercihli kalibrasyon bu temel bileşenin kapsamı dışındadır.
+
+---
+
 ## Karar Bekleyen Konular
 
 - [ ] Yakıt sistemi veya batarya sistemi
@@ -721,3 +743,4 @@ Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene
 | 2026-09-15 | TD-023 | Throttle state/ramp Engine'e taşındı; sabit zaman adımı ve input ayrımı doğrulandı |
 | 2026-09-15 | TD-024 | RPM/itki prototipi ve tekerlek temas materyali uygulandı; kısa pist hızlanması doğrulandı |
 | 2026-09-16 | TD-025 | Özel UAV ileri ekseni -Z olarak düzeltildi; sahne yönü Y=90° kaydedildi |
+| 2026-09-16 | TD-026 | Temel yumuşak takip kamerası aktif uçağa bağlandı ve Play Mode'da doğrulandı |

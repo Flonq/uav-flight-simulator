@@ -11593,6 +11593,7 @@ GameObject:
   - component: {fileID: 330585545}
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
+  - component: {fileID: 330585548}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -11667,8 +11668,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.07489777, y: 0.38142383, z: -0.031023672, w: 0.92083865}
-  m_LocalPosition: {x: 49.4, y: 3.53, z: 69.3}
+  m_LocalRotation: {x: 0.08028372, y: -0.7025344, z: 0.08028372, w: 0.7025344}
+  m_LocalPosition: {x: 66.340004, y: 3, z: 78.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11718,6 +11719,23 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &330585548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6ea7e3ec9cb36942adcb7416d582577, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MertKaan.UAVSimulator.CameraSystem.AircraftFollowCamera
+  _target: {fileID: 2045742865}
+  _localOffset: {x: 0, y: 3, z: 9}
+  _lookAtLocalOffset: {x: 0, y: 0.8, z: -0.5}
+  _positionSmoothTime: 0.15
+  _rotationSharpness: 10
 --- !u!1001 &332299627
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -65379,6 +65397,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d19b41be333f816489e6f28830b86200, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MertKaan.UAVSimulator.InputSystem.AircraftInputReader
+--- !u!4 &2045742865 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4714858000967673353, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
+  m_PrefabInstance: {fileID: 682847201}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2049225855
 PrefabInstance:
   m_ObjectHideFlags: 0

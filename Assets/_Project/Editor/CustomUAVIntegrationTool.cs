@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using MertKaan.UAVSimulator.Aircraft;
+using MertKaan.UAVSimulator.CameraSystem;
 using MertKaan.UAVSimulator.InputSystem;
 using MertKaan.UAVSimulator.UI.Debugging;
 using UnityEditor;
@@ -367,6 +368,20 @@ namespace MertKaan.UAVSimulator.Editor
                     inputReference.objectReferenceValue = newInput;
                     serializedPanel.ApplyModifiedProperties();
                     PrefabUtility.RecordPrefabInstancePropertyModifications(panel);
+                }
+            }
+
+            foreach (AircraftFollowCamera followCamera in scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<AircraftFollowCamera>(true)))
+            {
+                SerializedObject serializedCamera = new SerializedObject(followCamera);
+                SerializedProperty targetReference = serializedCamera.FindProperty("_target");
+                if (targetReference.objectReferenceValue == oldAircraft.transform)
+                {
+                    Undo.RecordObject(followCamera, "Rebind Aircraft Follow Camera");
+                    targetReference.objectReferenceValue = customAircraft.transform;
+                    serializedCamera.ApplyModifiedProperties();
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(followCamera);
                 }
             }
 
