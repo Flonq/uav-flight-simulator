@@ -28,7 +28,7 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 
 **Son güncelleme:** 16 Eylül 2026
 
-**Mevcut aşama:** Takip kamerası, RPM tabanlı pervane animasyonu ve motor açma/kapatma komutu tamamlandı; sıradaki adım temel aerodinamik uçuş fiziğidir
+**Mevcut aşama:** Temel lift, drag ve hıza bağlı kontrol torkları tamamlandı; sıradaki adım yönlü yer hareketi ve fren prototipidir
 
 | Sistem | Durum |
 |---|---|
@@ -39,7 +39,7 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 | Özel Blender İHA modeli | Unity importu, URP materyali ve prefab entegrasyonu tamamlandı |
 | Görsel kontrol yüzeyi animasyonları | Tamamlandı ve Play Mode'da doğrulandı |
 | Motor, RPM ve itki | Sabit fizik adımında çalışan prototip; görsel burun yönü ve pervane animasyonuyla eşleştirildi |
-| Aerodinamik uçuş fiziği | Başlanmadı |
+| Aerodinamik uçuş fiziği | Temel lift, drag ve pitch/roll/yaw torkları sabit fizik adımında çalışıyor |
 | Kamera ve EO sistemi | Temel takip kamerası tamamlandı; diğer modlar planlandı |
 | Telemetri ve görev sistemi | Planlandı |
 | Yer kontrol istasyonu UI | Planlandı |
@@ -293,8 +293,8 @@ docs/images/
 - [x] Throttle komutu ile motor durumunun ayrılması ve sabit zaman adımında gaz rampası
 - [x] Motor durumu, RPM geçişi ve ileri yön itki prototipi
 - [x] `Rotor_Pivot` görsel dönüşünün motor RPM verisine bağlanması
-- [ ] Motor ve throttle sisteminin geliştirilmesi
-- [ ] Temel uçuş fiziğinin geliştirilmesi
+- [x] Motor ve throttle sisteminin geliştirilmesi
+- [~] Temel uçuş fiziğinin geliştirilmesi — temel kuvvetler ve kontrol torkları tamamlandı; stall ve hız güvenliği planlandı
 - [ ] Kalkış ve iniş sisteminin geliştirilmesi
 - [~] Kamera sisteminin geliştirilmesi — temel yumuşak takip kamerası tamamlandı
 - [ ] Telemetri arayüzünün geliştirilmesi
@@ -322,8 +322,8 @@ Mevcut doğrulanmış eksikler:
 - Son sistem doğrulamaları bitince eski Meshy yedeği ve iki inactive uçak instance'ının temizlenmesi
 - Motor/propeller verilerine dayalı itki kalibrasyonu ve hıza bağlı propeller verimi
 - Tekerlek prototipinde sıfır temas sürtünmesi yerine yönlü yer tutuşu ve fren uygulaması
-- Drag modeli ve nihai hız doğrulaması — mevcut prototipte itkiyle hızlanmayı sınırlayan aerodinamik sistem yoktur
-- Lift, drag, stall ve aerodinamik kontrol kuvvetleri
+- Sabit katsayılı temel lift/drag modelinin açı-of-attack, stall ve maksimum güvenli hız davranışıyla geliştirilmesi
+- Prototip drag katsayısıyla nihai yer/uçuş hızının ve kontrol torklarının kullanıcı uçuş testinde kalibre edilmesi
 - Tam yer hareketi, kalkış ve iniş sistemi
 - Yer kontrol istasyonu arayüzü
 - Waypoint görevi

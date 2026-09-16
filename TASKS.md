@@ -186,20 +186,20 @@ Bütün kullanıcı komutları fizik sisteminden bağımsız şekilde okunabilme
 
 # FAZ 6 — Temel Uçuş Fiziği
 
-- [ ] `AircraftPhysics` scriptini oluştur
-- [ ] Hava hızını hesapla
-- [ ] Lift kuvvetini hesapla
-- [ ] Drag kuvvetini hesapla
-- [ ] Pitch torkunu uygula
-- [ ] Roll torkunu uygula
-- [ ] Yaw torkunu uygula
-- [ ] Hıza bağlı kontrol etkinliği ekle
-- [ ] Düşük hız kontrol sınırı ekle
+- [x] `AircraftPhysics` scriptini oluştur
+- [x] Hava hızını hesapla
+- [x] Lift kuvvetini hesapla
+- [x] Drag kuvvetini hesapla
+- [x] Pitch torkunu uygula
+- [x] Roll torkunu uygula
+- [x] Yaw torkunu uygula
+- [x] Hıza bağlı kontrol etkinliği ekle
+- [x] Düşük hız kontrol sınırı ekle
 - [ ] Basitleştirilmiş stall davranışı ekle
 - [ ] Maksimum güvenli hız davranışı ekle
-- [ ] Fizik ayarlarını Inspector üzerinden düzenlenebilir yap
+- [x] Fizik ayarlarını Inspector üzerinden düzenlenebilir yap
 - [ ] Debug kuvvet çizimleri ekle
-- [ ] Sabit FPS bağımsızlığını test et
+- [x] Sabit fizik adımı bağımsızlığını kontrollü 10/20/40 ms adımlarda test et
 - [ ] 30, 60 ve 120 FPS testleri yap
 
 ### Çıkış kriteri
@@ -495,7 +495,8 @@ Mevcut doğrulanması gereken teknik borçlar:
 - [ ] Üç tekerlekteki sıfır temas sürtünmesini yönlü yer tutuşu, yuvarlanma direnci ve frenlerle tamamla (`AircraftGroundController`)
 - [ ] Y=90° / -Z ileri yönünde pist hızlanırken oluşan yaklaşık 14° eğilmeyi Ground Controller ve zemin temasıyla gider
 - [ ] Propeller itki eğrisini gerçek araç verileriyle kalibre et; mevcut 1.000 N yalnızca prototip değeridir
-- [ ] Drag modeli eklendikten sonra nihai yer/uçuş hızını doğrula
+- [ ] Mevcut prototip drag modeliyle nihai yer/uçuş hızını doğrula ve maksimum güvenli hız davranışını belirle
+- [ ] Sabit lift katsayısını açı-of-attack/stall modeliyle geliştir; mevcut değer yalnızca temel kuvvet prototipidir
 - [ ] Takip kamerasına arazi/geometri çarpışması ve görüş engeli yönetimi ekle
 - [ ] Takip kamerası mesafe, yükseklik ve yumuşatma değerlerini uçuş fiziği tamamlandıktan sonra final kullanıcı testiyle kalibre et
 - [ ] Yüksek RPM için pervane blur/disc görselleştirmesini değerlendir; mevcut çözüm dönüş hızını görsel örnekleme için ölçekler
@@ -506,6 +507,6 @@ Mevcut doğrulanması gereken teknik borçlar:
 
 Bu bölüm her çalışma oturumunun sonunda güncellenmelidir.
 
-1. `AircraftPhysics` içinde temel lift, drag ve kontrol torklarını geliştir.
-2. `AircraftGroundController` ile yönlü yer tutuşu, yuvarlanma direnci ve fren prototipini geliştir.
-3. Aerodinamik ve yer hareketi birlikte çalıştıktan sonra kalkış test senaryosunu oluştur.
+1. `AircraftGroundController` ile yönlü yer tutuşu, yuvarlanma direnci ve fren prototipini geliştir.
+2. Aerodinamik ve yer hareketi birlikte çalıştıktan sonra kalkış test senaryosunu oluştur.
+3. Sabit lift katsayısını açı-of-attack, stall ve maksimum güvenli hız davranışıyla geliştir.

@@ -122,6 +122,7 @@ GameObject:
   - component: {fileID: 2128975544336416412}
   - component: {fileID: 6575156145410406327}
   - component: {fileID: 1664212185993197094}
+  - component: {fileID: 192771565415276579}
   m_Layer: 0
   m_Name: PF_CustomUAVAircraftPrototype
   m_TagString: Untagged
@@ -254,6 +255,29 @@ MonoBehaviour:
   _rotorPivot: {fileID: 6858921676923100457}
   _reverseRotation: 0
   _visualRpmScale: 0.1
+--- !u!114 &192771565415276579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855187489322148508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5499fef260c13f14bad42d259a7bacbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MertKaan.UAVSimulator.Aircraft.AircraftPhysics
+  _inputReader: {fileID: 1184735321776206417}
+  _rigidbody: {fileID: 8385554076756208212}
+  _airDensity: 1.225
+  _wingArea: 10
+  _liftCoefficient: 1
+  _dragCoefficient: 0.08
+  _minimumControlSpeed: 5
+  _fullControlSpeed: 15
+  _maxPitchTorque: 250
+  _maxRollTorque: 500
+  _maxYawTorque: 300
 --- !u!1 &2780235931759866103
 GameObject:
   m_ObjectHideFlags: 0

@@ -239,6 +239,12 @@ namespace MertKaan.UAVSimulator.Editor
             serializedEngine.FindProperty("_rigidbody").objectReferenceValue = aircraftRoot.GetComponent<Rigidbody>();
             serializedEngine.ApplyModifiedPropertiesWithoutUndo();
 
+            AircraftPhysics physics = aircraftRoot.AddComponent<AircraftPhysics>();
+            SerializedObject serializedPhysics = new SerializedObject(physics);
+            serializedPhysics.FindProperty("_inputReader").objectReferenceValue = input;
+            serializedPhysics.FindProperty("_rigidbody").objectReferenceValue = aircraftRoot.GetComponent<Rigidbody>();
+            serializedPhysics.ApplyModifiedPropertiesWithoutUndo();
+
             AircraftControlSurfaceAnimator animator = aircraftRoot.AddComponent<AircraftControlSurfaceAnimator>();
             SerializedObject serialized = new SerializedObject(animator);
             serialized.FindProperty("_inputReader").objectReferenceValue = input;
@@ -265,16 +271,18 @@ namespace MertKaan.UAVSimulator.Editor
         {
             AircraftInputReader input = aircraftRoot.GetComponent<AircraftInputReader>();
             AircraftEngine engine = aircraftRoot.GetComponent<AircraftEngine>();
+            AircraftPhysics physics = aircraftRoot.GetComponent<AircraftPhysics>();
             AircraftControlSurfaceAnimator animator = aircraftRoot.GetComponent<AircraftControlSurfaceAnimator>();
             AircraftPropellerAnimator propellerAnimator = aircraftRoot.GetComponent<AircraftPropellerAnimator>();
-            if (input == null || engine == null || animator == null || propellerAnimator == null ||
+            if (input == null || engine == null || physics == null || animator == null || propellerAnimator == null ||
                 aircraftRoot.GetComponentsInChildren<AircraftInputReader>(true).Length != 1 ||
                 aircraftRoot.GetComponentsInChildren<AircraftEngine>(true).Length != 1 ||
+                aircraftRoot.GetComponentsInChildren<AircraftPhysics>(true).Length != 1 ||
                 aircraftRoot.GetComponentsInChildren<AircraftControlSurfaceAnimator>(true).Length != 1 ||
                 aircraftRoot.GetComponentsInChildren<AircraftPropellerAnimator>(true).Length != 1)
             {
                 throw new InvalidOperationException(
-                    "Custom aircraft prefab requires one root Input Reader, Engine, Control Surface Animator and Propeller Animator.");
+                    "Custom aircraft prefab requires one root Input Reader, Engine, Aircraft Physics, Control Surface Animator and Propeller Animator.");
             }
 
             SerializedObject serializedEngine = new SerializedObject(engine);
@@ -282,6 +290,14 @@ namespace MertKaan.UAVSimulator.Editor
                 serializedEngine.FindProperty("_rigidbody").objectReferenceValue != aircraftRoot.GetComponent<Rigidbody>())
             {
                 throw new InvalidOperationException("Engine must reference its prefab's root Input Reader and Rigidbody.");
+            }
+
+            SerializedObject serializedPhysics = new SerializedObject(physics);
+            if (serializedPhysics.FindProperty("_inputReader").objectReferenceValue != input ||
+                serializedPhysics.FindProperty("_rigidbody").objectReferenceValue != aircraftRoot.GetComponent<Rigidbody>())
+            {
+                throw new InvalidOperationException(
+                    "Aircraft Physics must reference its prefab's root Input Reader and Rigidbody.");
             }
 
             SerializedObject serialized = new SerializedObject(animator);

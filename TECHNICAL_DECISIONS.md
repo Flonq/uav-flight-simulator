@@ -791,6 +791,29 @@ Model ölçeği, eksenleri, hareketli yüzeyleri, pervane pivotu, materyalleri, 
 
 ---
 
+## TD-030 — Temel Aerodinamik Kuvvet ve Kontrol Prototipi
+
+**Durum:** Kabul edildi ve uygulandı
+
+**Tarih:** 2026-09-16
+
+### Karar
+
+`AircraftPhysics`, özel UAV prefabının kökünde `AircraftInputReader` ve tek `Rigidbody` ile birlikte yaşar. Bileşen sabit fizik adımında root yerel `-Z` ileri eksenini kullanarak hava hızını hesaplar; lift, drag ve pitch/roll/yaw torklarını aynı Rigidbody'ye `ForceMode.Force` ile uygular. Throttle, RPM, propulsion, görsel yüzey sapması ve yer hareketi bu bileşenin sorumluluğunda değildir.
+
+Lift yalnızca pozitif ileri hızdan üretilen dinamik basınca göre uçak yerel yukarı yönünde uygulanır. Drag toplam hızın ters yönündedir. Kontrol torkları 5 m/s altında sıfırdır, 5–15 m/s arasında doğrusal artar ve 15 m/s üzerinde tam etkinliğe ulaşır. Varsayılan prototip değerleri 1,225 kg/m³ hava yoğunluğu, 10 m² kanat alanı, 1,0 lift katsayısı, 0,08 drag katsayısı ve pitch/roll/yaw için sırasıyla 250/500/300 N·m maksimum torktur. Değerler Inspector üzerinden düzenlenebilir ve gerçek uçak verisi olarak sunulmaz.
+
+### Doğrulama ve sınırlar
+
+- Sıfır hız, ileri/geri hız, lift/drag yönü, düşük/tam kontrol etkinliği, pitch/roll/yaw torkları ve devre dışı input davranışı izole Unity fizik sahnesinde doğrulandı.
+- Bir saniyelik aerodinamik entegrasyon 10, 20 ve 40 ms fizik adımlarında yaklaşık 0,1 m/s azami hız farkı üretti.
+- FlightTest pistinde üç saniyelik kontrollü tam gaz testinde yaklaşık 14,8 m ileri hareket, 16,6 m/s hız, 1.452 N lift ve 131 N drag ölçüldü. Uçak yaklaşık 0,49 m yükselirken mevcut zemin/tekerlek sistemiyle yaklaşık 15,4° tepe açı değişimi oluştu.
+- Unity Console hata/uyarı vermedi; Play Mode sonrasında `FlightTest` temiz ve kaydedilmiş kaldı.
+- Mevcut model sabit lift katsayılı ilk prototiptir. Açı-of-attack, stall, indüklenmiş drag, rüzgâr, irtifa yoğunluğu ve maksimum güvenli hız davranışı sonraki aerodinamik kalibrasyon kapsamındadır.
+- Pistte yönlü tutuş, yuvarlanma direnci ve fren davranışı `AircraftGroundController` kapsamındadır.
+
+---
+
 ## Karar Bekleyen Konular
 
 - [ ] Yakıt sistemi veya batarya sistemi
@@ -820,3 +843,4 @@ Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene
 | 2026-09-16 | TD-027 | Pervane görsel dönüşü motor RPM verisine bağlandı ve prefab üzerinde doğrulandı |
 | 2026-09-16 | TD-028 | Motor toggle inputu ve kademeli RPM/pervane kapanışı uygulandı |
 | 2026-09-16 | TD-029 | Geçici model inceleme sahnesi kaldırıldı; doğrulama akışı FlightTest'te birleştirildi |
+| 2026-09-16 | TD-030 | Temel lift, drag ve hıza bağlı pitch/roll/yaw torkları sabit fizik adımında uygulandı |

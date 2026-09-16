@@ -275,7 +275,7 @@ Proje aşağıdaki koşullar sağlandığında başarılı kabul edilecektir:
 
 **Son güncelleme:** 2026-09-16
 
-**Durum:** Özel İHA modeli, input, kontrol yüzeyi animasyonları, motor/RPM/propulsion prototipi, motor toggle komutu, temel takip kamerası ve RPM tabanlı pervane animasyonu doğrulandı; sıradaki aşama temel aerodinamik uçuş fiziğidir.
+**Durum:** Özel İHA modeli, input, motor/RPM/propulsion, takip kamerası, pervane animasyonu ve temel aerodinamik kuvvetler doğrulandı; sıradaki aşama yönlü yer hareketi ve fren prototipidir.
 
 Doğrulanmış mevcut durum:
 
@@ -296,7 +296,8 @@ Doğrulanmış mevcut durum:
 - `AircraftFollowCamera`, aktif uçağı modelin gerçek arka tarafı olan yerel +Z yönünden 9 m geride ve 3 m yukarıda takip eder. Konum ve bakış yumuşatması `LateUpdate` yolundadır; sahne başlangıcında hedefe sıçramadan yerleşir.
 - `AircraftPropellerAnimator`, `AircraftEngine.Rpm` çıktısını tüketerek `Rotor_Pivot` nesnesini yerel Y ekseninde döndürür. Görsel hız ölçeği yüksek RPM'de kare örnekleme kaynaklı alias etkisini azaltır; motor simülasyon değerini değiştirmez.
 - `ToggleEngine` komutu klavyede `I`, gamepad'de batı yüz düğmesine bağlıdır. Input Reader yalnızca isteği yayınlar; motor durumu Engine tarafından değiştirilir. Motor kapandığında thrust anında kesilir, RPM ve pervane yaklaşık 1 saniyede rölantiden duruşa iner.
-- Aerodinamik drag/lift, gerçek propeller kalibrasyonu ve sonraki oyun sistemleri henüz uygulanmadı.
+- `AircraftPhysics`, root Rigidbody üzerinde hava hızını, sabit katsayılı lift/drag kuvvetlerini ve ileri hıza göre etkinleşen pitch/roll/yaw torklarını sabit fizik adımında uygular. Model ileri ekseni root yerel `-Z` olarak korunur.
+- Açı-of-attack, stall, maksimum güvenli hız, gerçek aerodinamik/propeller kalibrasyonu ve sonraki oyun sistemleri henüz uygulanmadı.
 
 Sıradaki kontrollü akış:
 
@@ -307,7 +308,8 @@ Sıradaki kontrollü akış:
 5. Tamamlandı (2026-09-16): `Rotor_Pivot` görsel dönüşü motor RPM verisine bağlandı.
 6. Tamamlandı (2026-09-16): Motor açma/kapatma komutu ve kademeli pervane duruşu uygulandı.
 7. Tamamlandı (2026-09-16): Geçici model inceleme sahnesi kaldırıldı; doğrulama akışı `FlightTest` ve üretim prefabında birleştirildi.
-8. Aerodinamik lift, drag ve kontrol torkları ayrı `AircraftPhysics` bileşeninde geliştirilecek.
+8. Tamamlandı (2026-09-16): Temel aerodinamik lift, drag ve hıza bağlı kontrol torkları ayrı `AircraftPhysics` bileşeninde uygulandı.
+9. Yönlü yer tutuşu, yuvarlanma direnci ve frenler ayrı `AircraftGroundController` bileşeninde geliştirilecek.
 
 ---
 
