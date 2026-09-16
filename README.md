@@ -28,7 +28,7 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 
 **Son güncelleme:** 16 Eylül 2026
 
-**Mevcut aşama:** Takip kamerası, RPM tabanlı pervane animasyonu ve motor açma/kapatma komutu tamamlandı; sıradaki adım `AssetReview` final smoke testidir
+**Mevcut aşama:** Takip kamerası, RPM tabanlı pervane animasyonu ve motor açma/kapatma komutu tamamlandı; sıradaki adım temel aerodinamik uçuş fiziğidir
 
 | Sistem | Durum |
 |---|---|
@@ -314,15 +314,13 @@ Ayrıntılı görev listesi için [`TASKS.md`](TASKS.md) dosyasına bakılabilir
 
 2026-09-16: Modelin burun yönü `-Z` olarak düzeltildi ve FlightTest uçak rotasyonu `Y = 90°` kaydedildi. Kontrollü test uçağın görsel burun yönünde ilerlediğini doğruladı. Bu pist yönünde görülen eğilme, Ground Controller aşamasında zemin/tekerlek temasıyla birlikte giderilecektir.
 
-Play Mode'da gaz komutu için Game View'a odaklanın. `AircraftRoot > AircraftEngine` bileşen menüsündeki `Start Engine` / `Stop Engine` motor durumunu değiştirir. Motor kapatma itkiyi keser; fren işlevi sağlamaz. Kısa testten sonra Play Mode'dan çıkın.
+Play Mode'da giriş komutları için Game View'a odaklanın. `I` tuşu motoru açıp kapatır; `AircraftRoot > AircraftEngine` bileşen menüsündeki `Start Engine` / `Stop Engine` seçenekleri tanısal kullanım içindir. Motor kapatma itkiyi keser; fren işlevi sağlamaz. Kısa testten sonra Play Mode'dan çıkın.
 
 Mevcut doğrulanmış eksikler:
 
 - Gerçek kütle, ağırlık merkezi ve inertia değerlerinin fiziksel verilerle kalibre edilmesi
-- `AssetReview` sahnesinde final model smoke testinin kaydedilmesi
 - Son sistem doğrulamaları bitince eski Meshy yedeği ve iki inactive uçak instance'ının temizlenmesi
 - Motor/propeller verilerine dayalı itki kalibrasyonu ve hıza bağlı propeller verimi
-- RPM verisine bağlı pervane görsel dönüşü
 - Tekerlek prototipinde sıfır temas sürtünmesi yerine yönlü yer tutuşu ve fren uygulaması
 - Drag modeli ve nihai hız doğrulaması — mevcut prototipte itkiyle hızlanmayı sınırlayan aerodinamik sistem yoktur
 - Lift, drag, stall ve aerodinamik kontrol kuvvetleri

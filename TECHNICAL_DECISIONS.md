@@ -620,7 +620,7 @@ FlightTest added-component override'ları prefab üzerine uygulandı. Entegrasyo
 - Kontrollü sanal gamepad testi: pitch=-1, roll=1, yaw=1; aileronlar -20/+20°, ruddervatorlar -5/-25°. Bu test Input System güncellemesini ve bileşen metotlarını kontrollü çağırır; fiziksel klavye/gamepad ile kullanıcı testi değildir.
 - Yeni prototip runtime bağlantı kurucusu geçici preview sahnesinde, mevcut prefab doğrulayıcısı asset üzerinde başarıyla çalıştı.
 - Rigidbody ve 10 collider'ın serialized blokları HEAD ile birebir aynı.
-- AssetReview final smoke testi ve staging menüsünün tam sahne geçişi bu görevde çalıştırılmadı.
+- Geçici model inceleme sahnesindeki ek smoke test bu görevde çalıştırılmadı; sahne daha sonra TD-029 ile kaldırıldı.
 
 ---
 
@@ -770,6 +770,27 @@ Input Debug paneli `Engine Toggle [I]`, motor durumu ve RPM satırlarını birli
 
 ---
 
+## TD-029 — Geçici Model İnceleme Sahnesinin Kaldırılması
+
+**Durum:** Kabul edildi ve uygulandı
+
+**Tarih:** 2026-09-16
+
+### Karar
+
+Model importu ve ilk görsel inceleme için kullanılan `AssetReview` sahnesi kaldırıldı. Sahne build listesinde bulunmuyordu ve kod, prefab veya runtime akışında referansı yoktu. Özel UAV artık üretim prefabı `PF_CustomUAVAircraftPrototype` ve ana geliştirme sahnesi `FlightTest` üzerinde doğrulandığından ayrı inceleme sahnesi yinelenen bakım yükü oluşturuyordu.
+
+Model ölçeği, eksenleri, hareketli yüzeyleri, pervane pivotu, materyalleri, Rigidbody ve collider doğrulamaları bundan sonra üretim prefabı ile `FlightTest` üzerinde yürütülür. Silinen sahnenin önceki sürümleri Git geçmişinden geri alınabilir.
+
+### Doğrulama
+
+- Build listesinde yalnızca etkin `FlightTest` sahnesi bulunuyor.
+- Silinen sahneye kod veya runtime referansı bulunmadığı doğrulandı.
+- Sahne ve `.meta` dosyası Unity Asset Database üzerinden birlikte kaldırıldı.
+- `FlightTest` yeniden açıldı; aktif, temiz ve kaydedilmiş durumda.
+
+---
+
 ## Karar Bekleyen Konular
 
 - [ ] Yakıt sistemi veya batarya sistemi
@@ -798,3 +819,4 @@ Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene
 | 2026-09-16 | TD-026 | Temel yumuşak takip kamerası aktif uçağa bağlandı ve Play Mode'da doğrulandı |
 | 2026-09-16 | TD-027 | Pervane görsel dönüşü motor RPM verisine bağlandı ve prefab üzerinde doğrulandı |
 | 2026-09-16 | TD-028 | Motor toggle inputu ve kademeli RPM/pervane kapanışı uygulandı |
+| 2026-09-16 | TD-029 | Geçici model inceleme sahnesi kaldırıldı; doğrulama akışı FlightTest'te birleştirildi |

@@ -275,13 +275,13 @@ Proje aşağıdaki koşullar sağlandığında başarılı kabul edilecektir:
 
 **Son güncelleme:** 2026-09-16
 
-**Durum:** Özel İHA modeli, input, kontrol yüzeyi animasyonları, motor/RPM/propulsion prototipi, motor toggle komutu, temel takip kamerası ve RPM tabanlı pervane animasyonu doğrulandı; sıradaki aşama `AssetReview` final smoke testidir.
+**Durum:** Özel İHA modeli, input, kontrol yüzeyi animasyonları, motor/RPM/propulsion prototipi, motor toggle komutu, temel takip kamerası ve RPM tabanlı pervane animasyonu doğrulandı; sıradaki aşama temel aerodinamik uçuş fiziğidir.
 
 Doğrulanmış mevcut durum:
 
 - Unity 6000.3.20f1 / Unity 6.3 LTS projesi oluşturuldu.
 - URP, Windows 64-bit, Linear color space ve uGUI + TextMeshPro kararları kesinleşti.
-- `FlightTest` ve `AssetReview` sahneleri mevcut.
+- `FlightTest`, geliştirme ve doğrulama için kullanılan tek üretim sahnesidir.
 - Military Base Pack tabanlı test havaalanı yerel olarak çalışıyor ve üçüncü taraf asset dosyaları Git dışında tutuluyor.
 - `AircraftRoot > VisualPivot` ayrımı, tek kök Rigidbody ve elle ayarlanmış 10 primitive collider doğrulandı.
 - Unity Input System, klavye ve DualSense girdileri ile pasif input debug paneli tamamlandı; panel aktif uçak input okuyucusuna bağlandı.
@@ -306,7 +306,7 @@ Sıradaki kontrollü akış:
 4. Tamamlandı (2026-09-16): Temel takip kamerası aktif uçağın arkasına/yukarısına bağlandı ve Play Mode'da doğrulandı.
 5. Tamamlandı (2026-09-16): `Rotor_Pivot` görsel dönüşü motor RPM verisine bağlandı.
 6. Tamamlandı (2026-09-16): Motor açma/kapatma komutu ve kademeli pervane duruşu uygulandı.
-7. `AssetReview` sahnesinde final model Play Mode smoke testi tamamlanacak.
+7. Tamamlandı (2026-09-16): Geçici model inceleme sahnesi kaldırıldı; doğrulama akışı `FlightTest` ve üretim prefabında birleştirildi.
 8. Aerodinamik lift, drag ve kontrol torkları ayrı `AircraftPhysics` bileşeninde geliştirilecek.
 
 ---

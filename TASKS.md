@@ -47,7 +47,7 @@ Projenin teknik temeli ve ilk sürüm kapsamı açıkça tanımlanmış olmalıd
 - [x] Önerilen alt klasör yapısını oluştur
 - [x] İlk test sahnesini oluştur
 - [x] Sahneyi `FlightTest` adıyla kaydet
-- [x] `AssetReview` sahnesini oluştur
+- [x] Geçici model inceleme sahnesini entegrasyon tamamlandıktan sonra kaldır
 - [x] Asset Serialization ayarını Force Text yap
 - [x] Proje/Git güvenlik yedeklerini al
 - [x] Git deposunu başlat
@@ -124,7 +124,6 @@ Proje hatasız açılmalı, boş test sahnesi çalışmalı ve GitHub üzerinde 
 - [x] Mevcut geçici görseli yalnızca yeni model doğrulandıktan sonra devre dışı bırak
 - [~] Collider ve Center of Mass değerlerini yeni model boyutlarına göre yeniden değerlendir — 10 collider ve otomatik COM ile kararlı; gerçek kütle/CG verisi bekleniyor
 - [x] Mevcut uçak prefabını güvenli biçimde güncelle — Input Reader ve Animator prefab kökünde; elle ayarlanmış fizik yapısı korundu (2026-09-15)
-- [ ] `AssetReview` sahnesinde final model Play Mode smoke testi yap
 - [x] `FlightTest` sahnesinde final model Play Mode smoke testi yap
 - [x] Aileron ve ruddervatorları input komutlarıyla görsel olarak hareket ettir
 
@@ -507,6 +506,6 @@ Mevcut doğrulanması gereken teknik borçlar:
 
 Bu bölüm her çalışma oturumunun sonunda güncellenmelidir.
 
-1. `AssetReview` sahnesinde final model Play Mode smoke testini tamamla.
-2. `AircraftPhysics` içinde temel lift, drag ve kontrol torklarını geliştir.
-3. `AircraftGroundController` ile yönlü yer tutuşu, yuvarlanma direnci ve fren prototipini geliştir.
+1. `AircraftPhysics` içinde temel lift, drag ve kontrol torklarını geliştir.
+2. `AircraftGroundController` ile yönlü yer tutuşu, yuvarlanma direnci ve fren prototipini geliştir.
+3. Aerodinamik ve yer hareketi birlikte çalıştıktan sonra kalkış test senaryosunu oluştur.
