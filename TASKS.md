@@ -494,6 +494,7 @@ Mevcut doğrulanması gereken teknik borçlar:
 - [x] `AircraftControlSurfaceAnimator` ve `AircraftInputReader` sahipliğini uçak prefabında kesinleştir (TD-022)
 - [x] Üç tekerlekteki sıfır temas sürtünmesini yönlü yer tutuşu, yuvarlanma direnci ve frenlerle tamamla (`AircraftGroundController`)
 - [x] Y=90° / -Z ileri yönünde pist hızlanırken oluşan yaklaşık 14° eğilmeyi Ground Controller ve zemin temasıyla gider
+- [x] 13 m/s rotasyon komutlu kontrollü kalkış senaryosunu oluştur ve FlightTest pistinde yaklaşık 17,2 m/s yerden kesilme referansını doğrula
 - [ ] Propeller itki eğrisini gerçek araç verileriyle kalibre et; mevcut 1.000 N yalnızca prototip değeridir
 - [ ] Mevcut prototip drag modeliyle nihai yer/uçuş hızını doğrula ve maksimum güvenli hız davranışını belirle
 - [ ] Sabit lift katsayısını açı-of-attack/stall modeliyle geliştir; mevcut değer yalnızca temel kuvvet prototipidir
@@ -507,6 +508,6 @@ Mevcut doğrulanması gereken teknik borçlar:
 
 Bu bölüm her çalışma oturumunun sonunda güncellenmelidir.
 
-1. Aerodinamik ve yer hareketi birlikte çalışırken kalkış hızını belirle ve kontrollü kalkış test senaryosunu oluştur.
-2. Sabit lift katsayısını açı-of-attack, stall ve maksimum güvenli hız davranışıyla geliştir.
-3. Pist dışı davranışı ve gelişmiş tekerlek/süspansiyon ihtiyacını değerlendir.
+1. Sabit lift katsayısını açı-of-attack, stall ve maksimum güvenli hız davranışıyla geliştir; kontrollü kalkış referanslarını yeniden kalibre et.
+2. Pist dışı davranışı ve gelişmiş tekerlek/süspansiyon ihtiyacını değerlendir.
+3. İniş yaklaşımı, teker temas geçişi ve fren kabul senaryosunu tasarla.

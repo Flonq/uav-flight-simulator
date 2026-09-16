@@ -28,7 +28,7 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 
 **Son güncelleme:** 16 Eylül 2026
 
-**Mevcut aşama:** Yönlü yer hareketi, pist stabilizasyonu ve fren prototipi tamamlandı; sıradaki adım kontrollü kalkış test senaryosudur
+**Mevcut aşama:** Kontrollü kalkış referansı ve pist test akışı doğrulandı; sıradaki adım açı-of-attack, stall ve maksimum güvenli hız modelidir
 
 | Sistem | Durum |
 |---|---|
@@ -41,6 +41,7 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 | Motor, RPM ve itki | Sabit fizik adımında çalışan prototip; görsel burun yönü ve pervane animasyonuyla eşleştirildi |
 | Aerodinamik uçuş fiziği | Temel lift, drag ve pitch/roll/yaw torkları sabit fizik adımında çalışıyor |
 | Yer hareketi ve fren | Üç teker temas kontrolü, yanal tutuş, yuvarlanma direnci, düşük hızlı yönlendirme ve fren tamamlandı |
+| Kontrollü kalkış | 13 m/s rotasyon komutu ve yaklaşık 17,2 m/s yerden kesilme referansı FlightTest pistinde doğrulandı |
 | Kamera ve EO sistemi | Temel takip kamerası tamamlandı; diğer modlar planlandı |
 | Telemetri ve görev sistemi | Planlandı |
 | Yer kontrol istasyonu UI | Planlandı |
@@ -215,6 +216,15 @@ Mevcut doğrulanmış klavye/fare kontrolleri:
 
 DualSense, genel `<Gamepad>` bindingleri üzerinden test edilmiştir. Joystick/HOTAS MVP sonrasına ertelenmiştir.
 
+### Kontrollü kalkış prototipi
+
+1. Game View'a odaklanın ve gerekirse `I` ile motoru çalıştırın.
+2. `Left Shift` tuşunu basılı tutarak tam gaz hızlanın.
+3. Debug panelde `Forward Airspeed` 13 m/s değerine ulaştığında `S` tuşunu basılı tutarak burun yukarı komutu verin.
+4. Roll ve yaw komutlarını nötr tutun. Burun tekeri yaklaşık 15,6 m/s'de ayrılır; mevcut prototip yaklaşık 17,2 m/s ve 19 m pist mesafesinde yerden kesilir.
+
+Bu değerler gerçek araç performans verisi değildir. Mevcut sabit lift katsayısı komut verilmeden de yaklaşık 17,1 m/s'de yerden kesilmeye izin verir; açı-of-attack ve stall modeli tamamlandığında kalkış referansları yeniden kalibre edilecektir.
+
 ---
 
 ## Kurulum
@@ -297,7 +307,7 @@ docs/images/
 - [x] Motor ve throttle sisteminin geliştirilmesi
 - [~] Temel uçuş fiziğinin geliştirilmesi — temel kuvvetler ve kontrol torkları tamamlandı; stall ve hız güvenliği planlandı
 - [x] Temel yer hareketi, pist stabilizasyonu ve fren prototipi
-- [ ] Kalkış ve iniş sisteminin geliştirilmesi
+- [~] Kalkış ve iniş sisteminin geliştirilmesi — kontrollü kalkış referansı doğrulandı; iniş ve nihai kalibrasyon planlandı
 - [~] Kamera sisteminin geliştirilmesi — temel yumuşak takip kamerası tamamlandı
 - [ ] Telemetri arayüzünün geliştirilmesi
 - [ ] Waypoint ve görev sisteminin geliştirilmesi
@@ -312,9 +322,11 @@ Ayrıntılı görev listesi için [`TASKS.md`](TASKS.md) dosyasına bakılabilir
 
 ## Bilinen Eksikler
 
-2026-09-15: Input Reader, Engine ve kontrol yüzeyi Animator'ı uçak prefabının kökündedir. Debug panel gaz komutunu, throttle, motor durumunu, RPM ve itkiyi gösterir. Motor prototipi 1.200 rölanti / 6.000 maksimum RPM, 3.000 RPM/s geçiş ve 1.000 N maksimum itki kullanır. Bu değerler gerçek araç verileri değildir.
+2026-09-15: Input Reader, Engine ve kontrol yüzeyi Animator'ı uçak prefabının kökündedir. Debug panel gaz komutunu, throttle, motor durumunu, RPM, itki, ileri hava hızı ve teker temas durumunu gösterir. Motor prototipi 1.200 rölanti / 6.000 maksimum RPM, 3.000 RPM/s geçiş ve 1.000 N maksimum itki kullanır. Bu değerler gerçek araç verileri değildir.
 
 2026-09-16: Modelin burun yönü `-Z` olarak düzeltildi. `AircraftGroundController`, üç mevcut tekerlek collider'ından yer temasını okur; yanal tutuş, yuvarlanma direnci, düşük hızlı yaw yönlendirmesi, pist stabilizasyonu ve fren uygular. Kontrollü FlightTest koşusunda önceki yaklaşık 15° yön değişimi ölçülmedi.
+
+2026-09-16: Kontrollü kalkış senaryosunda 13 m/s'de `S` rotasyon komutu verildi. Burun tekeri yaklaşık 15,6 m/s'de, tüm tekerler yaklaşık 17,2 m/s ve 18,9 m pist mesafesinde yerden ayrıldı. Sabit lift katsayısı nedeniyle komutsuz yerden kesilme davranışı açı-of-attack/stall görevi için açık teknik sınırdır.
 
 Play Mode'da giriş komutları için Game View'a odaklanın. `I` tuşu motoru açıp kapatır, `Space` yerde fren uygular. `AircraftRoot > AircraftEngine` bileşen menüsündeki `Start Engine` / `Stop Engine` seçenekleri tanısal kullanım içindir. Motor kapatma itkiyi keser ancak otomatik fren uygulamaz. Kısa testten sonra Play Mode'dan çıkın.
 
@@ -325,7 +337,8 @@ Mevcut doğrulanmış eksikler:
 - Motor/propeller verilerine dayalı itki kalibrasyonu ve hıza bağlı propeller verimi
 - Sabit katsayılı temel lift/drag modelinin açı-of-attack, stall ve maksimum güvenli hız davranışıyla geliştirilmesi
 - Prototip drag katsayısıyla nihai yer/uçuş hızının ve kontrol torklarının kullanıcı uçuş testinde kalibre edilmesi
-- Kalkış hızı, pist dışı davranış, iniş ve gelişmiş tekerlek/süspansiyon sistemi
+- Nihai kalkış hızlarının açı-of-attack/stall modeli ve gerçek araç verileriyle yeniden kalibre edilmesi
+- Pist dışı davranış, iniş ve gelişmiş tekerlek/süspansiyon sistemi
 - Yer kontrol istasyonu arayüzü
 - Waypoint görevi
 - EO kamera hedefleme sistemi

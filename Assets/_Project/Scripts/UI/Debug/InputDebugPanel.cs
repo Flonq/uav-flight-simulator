@@ -18,6 +18,8 @@ namespace MertKaan.UAVSimulator.UI.Debugging
         private TMP_Text _debugText;
 
         private AircraftEngine _engine;
+        private AircraftPhysics _aircraftPhysics;
+        private AircraftGroundController _groundController;
         private AircraftInputActions _bindingActions;
         private string _pitchBinding;
         private string _rollBinding;
@@ -43,6 +45,8 @@ namespace MertKaan.UAVSimulator.UI.Debugging
             }
 
             _engine = _inputReader.GetComponent<AircraftEngine>();
+            _aircraftPhysics = _inputReader.GetComponent<AircraftPhysics>();
+            _groundController = _inputReader.GetComponent<AircraftGroundController>();
 
             if (_debugText == null)
             {
@@ -98,10 +102,29 @@ namespace MertKaan.UAVSimulator.UI.Debugging
                 $"Engine: {(_engine != null ? (!_engine.isActiveAndEnabled ? "Disabled" : (_engine.IsRunning ? "Running" : "Stopped")) : "N/A")}\n" +
                 $"RPM: {(_engine != null ? _engine.Rpm.ToString("F0") : "N/A")}\n" +
                 $"Thrust: {(_engine != null ? _engine.ThrustNewtons.ToString("F0") : "N/A")} N\n" +
+                $"Forward Airspeed: {(_aircraftPhysics != null ? _aircraftPhysics.ForwardAirspeed.ToString("F1") : "N/A")} m/s\n" +
+                $"Ground: {GetGroundStatus()}\n" +
                 $"Brake [{_brakeBinding}]: {_inputReader.BrakePressed}\n" +
                 $"Camera [{_cameraBinding}]: {_inputReader.SwitchCameraPressed}\n" +
                 $"Zoom [{_zoomBinding}]: {_inputReader.EOZoom:F2}\n" +
                 $"Pause [{_pauseBinding}]: {_inputReader.PausePressed}";
+        }
+
+        private string GetGroundStatus()
+        {
+            if (_groundController == null)
+            {
+                return "N/A";
+            }
+
+            if (!_groundController.isActiveAndEnabled)
+            {
+                return "Disabled";
+            }
+
+            return _groundController.IsGrounded
+                ? $"Grounded ({_groundController.GroundedWheelCount}/3 wheels)"
+                : "Airborne";
         }
 
         private void CacheDesktopBindingLabels()

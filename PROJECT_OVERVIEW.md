@@ -275,7 +275,7 @@ Proje aşağıdaki koşullar sağlandığında başarılı kabul edilecektir:
 
 **Son güncelleme:** 2026-09-16
 
-**Durum:** Özel İHA modeli, input, motor/RPM/propulsion, takip kamerası, temel aerodinamik kuvvetler ve yer hareketi/fren prototipi doğrulandı; sıradaki aşama kontrollü kalkış test senaryosudur.
+**Durum:** Özel İHA modeli, input, motor/RPM/propulsion, takip kamerası, temel aerodinamik kuvvetler, yer hareketi/fren ve kontrollü kalkış referansı doğrulandı; sıradaki aşama açı-of-attack, stall ve maksimum güvenli hız modelidir.
 
 Doğrulanmış mevcut durum:
 
@@ -297,7 +297,9 @@ Doğrulanmış mevcut durum:
 - `AircraftPropellerAnimator`, `AircraftEngine.Rpm` çıktısını tüketerek `Rotor_Pivot` nesnesini yerel Y ekseninde döndürür. Görsel hız ölçeği yüksek RPM'de kare örnekleme kaynaklı alias etkisini azaltır; motor simülasyon değerini değiştirmez.
 - `ToggleEngine` komutu klavyede `I`, gamepad'de batı yüz düğmesine bağlıdır. Input Reader yalnızca isteği yayınlar; motor durumu Engine tarafından değiştirilir. Motor kapandığında thrust anında kesilir, RPM ve pervane yaklaşık 1 saniyede rölantiden duruşa iner.
 - `AircraftPhysics`, root Rigidbody üzerinde hava hızını, sabit katsayılı lift/drag kuvvetlerini ve ileri hıza göre etkinleşen pitch/roll/yaw torklarını sabit fizik adımında uygular. Model ileri ekseni root yerel `-Z` olarak korunur.
-- Açı-of-attack, stall, maksimum güvenli hız, belirlenmiş kalkış hızı, gerçek aerodinamik/propeller kalibrasyonu ve sonraki oyun sistemleri henüz uygulanmadı.
+- Kontrollü kalkış senaryosunda tam gaz hızlanma sırasında 13 m/s'de burun yukarı komutu verildi. Burun tekeri yaklaşık 15,59 m/s'de; tüm tekerler yaklaşık 17,18 m/s, 3,54 saniye ve 18,94 m pist mesafesinde yerden ayrıldı. Roll sapması ölçülmedi ve pist orta hattı sapması 0,002 m altında kaldı.
+- Input Debug paneli kontrollü kalkış testi için ileri hava hızını ve üç teker temas durumunu gösterir.
+- Açı-of-attack, stall, maksimum güvenli hız, gerçek araç kalkış kalibrasyonu, gerçek aerodinamik/propeller kalibrasyonu ve sonraki oyun sistemleri henüz uygulanmadı. Sabit lift katsayısı komutsuz koşuda da yaklaşık 17,12 m/s'de yerden kesilmeye yol açar.
 
 Sıradaki kontrollü akış:
 
@@ -310,7 +312,8 @@ Sıradaki kontrollü akış:
 7. Tamamlandı (2026-09-16): Geçici model inceleme sahnesi kaldırıldı; doğrulama akışı `FlightTest` ve üretim prefabında birleştirildi.
 8. Tamamlandı (2026-09-16): Temel aerodinamik lift, drag ve hıza bağlı kontrol torkları ayrı `AircraftPhysics` bileşeninde uygulandı.
 9. Tamamlandı (2026-09-16): Yönlü yer tutuşu, yuvarlanma direnci, düşük hızlı yönlendirme, pist stabilizasyonu ve fren ayrı `AircraftGroundController` bileşeninde uygulandı.
-10. Aerodinamik ve yer hareketi birlikte çalışırken kalkış hızı ve kontrollü kalkış test senaryosu belirlenecek.
+10. Tamamlandı (2026-09-16): Aerodinamik ve yer hareketi birlikte çalışırken 13 m/s rotasyon komutlu kontrollü kalkış senaryosu ve yaklaşık 17,2 m/s prototip yerden kesilme referansı doğrulandı.
+11. Sabit lift katsayısı açı-of-attack, stall ve maksimum güvenli hız davranışıyla geliştirilecek; kalkış referansları yeni modelle yeniden kalibre edilecek.
 
 ---
 

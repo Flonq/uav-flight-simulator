@@ -842,6 +842,31 @@ Tekerleklerin sıfır sürtünmeli fizik materyali korunmuştur. Yönlü tutuş 
 
 ---
 
+## TD-032 — Kontrollü kalkış referansı ve kabul senaryosu
+
+**Durum:** Kabul edildi — 2026-09-16
+
+### Karar
+
+Mevcut prototip için kontrollü kalkış test akışı; motor çalışırken tam gaz hızlanma, 13 m/s ileri hava hızında pozitif pitch (`S`) komutu ve nötr roll/yaw girdileri olarak tanımlanmıştır. Yerden kesilme kabulü, üç teker probunun en az beş ardışık sabit fizik adımında temassız kalması ve dikey hızın pozitif olmasıdır.
+
+`InputDebugPanel`, bu akışın kullanıcı tarafından tekrarlanabilmesi için `AircraftPhysics.ForwardAirspeed` değerini ve `AircraftGroundController` teker temas durumunu gösterir. Panel referansları aktif uçaktaki Input Reader üzerinden çalışma zamanında çözümlenir; uçak prefabına veya sahneye yeni fizik bileşeni eklenmez.
+
+### Doğrulama
+
+- İzole yerel fizik sahnesinde ve açık `FlightTest` pistinde aynı kontrollü senaryo çalıştırıldı.
+- Rotasyon komutu yaklaşık 3,00 saniye ve 10,49 m pist mesafesinde verildi.
+- Burun tekeri yaklaşık 3,32 saniye ve 15,59 m/s ileri hava hızında yerden ayrıldı.
+- Tüm tekerler yaklaşık 3,54 saniye, 17,18 m/s ileri hava hızı ve 18,94 m pist mesafesinde teması bıraktı.
+- Ölçüm anında dikey hız yaklaşık 2,71 m/s, tepe pitch yaklaşık 11°, mutlak roll sapması 0° ve pist orta hattı sapması 0,002 m altında kaldı.
+- `Left Shift` ve `S` Input System bindingleri sanal klavye üzerinden doğrulandı. Unity Console hata veya uyarı vermedi; sahne Play Mode sonrasında temiz kaldı.
+
+### Sınırlar
+
+13 m/s rotasyon ve yaklaşık 17,2 m/s yerden kesilme değerleri gerçek araç performansı değil, mevcut 100 kg / 10 m² / sabit `C_L = 1` prototipinin test referanslarıdır. Pitch komutu verilmeyen karşılaştırma koşusunda uçak yaklaşık 17,12 m/s ve 18,15 m pist mesafesinde kendiliğinden yerden kesilmiştir. Bu sonuç sabit lift katsayısının açı-of-attack bağımsız olmasından kaynaklanır; sonraki görev açı-of-attack, stall ve maksimum güvenli hız modelini uygulayacak ve kalkış referanslarını yeniden kalibre edecektir.
+
+---
+
 ## Karar Bekleyen Konular
 
 - [ ] Yakıt sistemi veya batarya sistemi
@@ -873,3 +898,4 @@ Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene
 | 2026-09-16 | TD-029 | Geçici model inceleme sahnesi kaldırıldı; doğrulama akışı FlightTest'te birleştirildi |
 | 2026-09-16 | TD-030 | Temel lift, drag ve hıza bağlı pitch/roll/yaw torkları sabit fizik adımında uygulandı |
 | 2026-09-16 | TD-031 | Üç teker temasına dayalı yönlü yer tutuşu, pist stabilizasyonu, yönlendirme ve fren prototipi uygulandı |
+| 2026-09-16 | TD-032 | 13 m/s rotasyon komutlu kontrollü kalkış senaryosu ve yaklaşık 17,2 m/s yerden kesilme referansı doğrulandı |
