@@ -171,6 +171,7 @@ Bütün kullanıcı komutları fizik sisteminden bağımsız şekilde okunabilme
 - [x] İleri yön kuvvetini uygula — modelin burun yönü olan root Rigidbody -Z; FixedUpdate / ForceMode.Force
 - [x] Motor açık ve kapalı durumu ekle — API ve Play Mode bileşen menüsü
 - [x] Motor devri değerini üret — rölanti/maksimum RPM ve geçiş hızı
+- [x] `Rotor_Pivot` görsel dönüşünü `AircraftEngine.Rpm` verisine bağla
 - [x] Motor sesi için temel parametre üret — Rpm ve NormalizedRpm; ses bağlantısı ayrı fazda
 - [x] Inspector ayarlarını grupla
 - [x] Pist üzerinde hızlanmayı test et — kontrollü üç saniyelik gaz rampası (2026-09-15)
@@ -496,6 +497,7 @@ Mevcut doğrulanması gereken teknik borçlar:
 - [ ] Drag modeli eklendikten sonra nihai yer/uçuş hızını doğrula
 - [ ] Takip kamerasına arazi/geometri çarpışması ve görüş engeli yönetimi ekle
 - [ ] Takip kamerası mesafe, yükseklik ve yumuşatma değerlerini uçuş fiziği tamamlandıktan sonra final kullanıcı testiyle kalibre et
+- [ ] Yüksek RPM için pervane blur/disc görselleştirmesini değerlendir; mevcut çözüm dönüş hızını görsel örnekleme için ölçekler
 
 ---
 
@@ -503,6 +505,6 @@ Mevcut doğrulanması gereken teknik borçlar:
 
 Bu bölüm her çalışma oturumunun sonunda güncellenmelidir.
 
-1. `Rotor_Pivot` görselini motor RPM verisine bağla.
-2. `AssetReview` sahnesinde final model Play Mode smoke testini tamamla.
-3. `AircraftPhysics` içinde temel lift, drag ve kontrol torklarını geliştir.
+1. `AssetReview` sahnesinde final model Play Mode smoke testini tamamla.
+2. `AircraftPhysics` içinde temel lift, drag ve kontrol torklarını geliştir.
+3. `AircraftGroundController` ile yönlü yer tutuşu, yuvarlanma direnci ve fren prototipini geliştir.

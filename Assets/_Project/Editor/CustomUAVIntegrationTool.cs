@@ -238,6 +238,7 @@ namespace MertKaan.UAVSimulator.Editor
             serializedEngine.FindProperty("_inputReader").objectReferenceValue = input;
             serializedEngine.FindProperty("_rigidbody").objectReferenceValue = aircraftRoot.GetComponent<Rigidbody>();
             serializedEngine.ApplyModifiedPropertiesWithoutUndo();
+
             AircraftControlSurfaceAnimator animator = aircraftRoot.AddComponent<AircraftControlSurfaceAnimator>();
             SerializedObject serialized = new SerializedObject(animator);
             serialized.FindProperty("_inputReader").objectReferenceValue = input;
@@ -249,6 +250,14 @@ namespace MertKaan.UAVSimulator.Editor
                     FindDescendant(aircraftRoot.transform.Find("VisualPivot"), names[i]);
             }
             serialized.ApplyModifiedPropertiesWithoutUndo();
+
+            AircraftPropellerAnimator propellerAnimator = aircraftRoot.AddComponent<AircraftPropellerAnimator>();
+            SerializedObject serializedPropeller = new SerializedObject(propellerAnimator);
+            serializedPropeller.FindProperty("_engine").objectReferenceValue = engine;
+            serializedPropeller.FindProperty("_rotorPivot").objectReferenceValue =
+                FindDescendant(aircraftRoot.transform.Find("VisualPivot"), "Rotor_Pivot");
+            serializedPropeller.ApplyModifiedPropertiesWithoutUndo();
+
             ValidateRuntimeComponents(aircraftRoot);
         }
 
@@ -257,12 +266,15 @@ namespace MertKaan.UAVSimulator.Editor
             AircraftInputReader input = aircraftRoot.GetComponent<AircraftInputReader>();
             AircraftEngine engine = aircraftRoot.GetComponent<AircraftEngine>();
             AircraftControlSurfaceAnimator animator = aircraftRoot.GetComponent<AircraftControlSurfaceAnimator>();
-            if (input == null || engine == null || animator == null ||
+            AircraftPropellerAnimator propellerAnimator = aircraftRoot.GetComponent<AircraftPropellerAnimator>();
+            if (input == null || engine == null || animator == null || propellerAnimator == null ||
                 aircraftRoot.GetComponentsInChildren<AircraftInputReader>(true).Length != 1 ||
                 aircraftRoot.GetComponentsInChildren<AircraftEngine>(true).Length != 1 ||
-                aircraftRoot.GetComponentsInChildren<AircraftControlSurfaceAnimator>(true).Length != 1)
+                aircraftRoot.GetComponentsInChildren<AircraftControlSurfaceAnimator>(true).Length != 1 ||
+                aircraftRoot.GetComponentsInChildren<AircraftPropellerAnimator>(true).Length != 1)
             {
-                throw new InvalidOperationException("Custom aircraft prefab requires one root Input Reader, Engine and Animator.");
+                throw new InvalidOperationException(
+                    "Custom aircraft prefab requires one root Input Reader, Engine, Control Surface Animator and Propeller Animator.");
             }
 
             SerializedObject serializedEngine = new SerializedObject(engine);
@@ -287,6 +299,17 @@ namespace MertKaan.UAVSimulator.Editor
                 {
                     throw new InvalidOperationException($"Animator has an invalid prefab reference: {fields[i]}");
                 }
+            }
+
+            SerializedObject serializedPropeller = new SerializedObject(propellerAnimator);
+            Transform rotorPivot = serializedPropeller.FindProperty("_rotorPivot").objectReferenceValue as Transform;
+            if (serializedPropeller.FindProperty("_engine").objectReferenceValue != engine ||
+                rotorPivot == null ||
+                visualPivot == null ||
+                !rotorPivot.IsChildOf(visualPivot) ||
+                rotorPivot.name != "Rotor_Pivot")
+            {
+                throw new InvalidOperationException("Propeller Animator must reference the root Engine and Rotor_Pivot.");
             }
         }
 

@@ -121,6 +121,7 @@ GameObject:
   - component: {fileID: 1184735321776206417}
   - component: {fileID: 2128975544336416412}
   - component: {fileID: 6575156145410406327}
+  - component: {fileID: 1664212185993197094}
   m_Layer: 0
   m_Name: PF_CustomUAVAircraftPrototype
   m_TagString: Untagged
@@ -236,6 +237,22 @@ MonoBehaviour:
   _maxRpm: 6000
   _rpmChangeRate: 3000
   _maxThrustNewtons: 1000
+--- !u!114 &1664212185993197094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855187489322148508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 471bc316819f514459e8a3de05342a2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MertKaan.UAVSimulator.Aircraft.AircraftPropellerAnimator
+  _engine: {fileID: 6575156145410406327}
+  _rotorPivot: {fileID: 6858921676923100457}
+  _reverseRotation: 0
+  _visualRpmScale: 0.1
 --- !u!1 &2780235931759866103
 GameObject:
   m_ObjectHideFlags: 0
@@ -734,6 +751,11 @@ Transform:
 --- !u!4 &2906030969991562212 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 131089476177530147, guid: 7d3d5fa6d60e3c84d9ac721d960ffedf, type: 3}
+  m_PrefabInstance: {fileID: 2992064614931041991}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6858921676923100457 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8550710643899061230, guid: 7d3d5fa6d60e3c84d9ac721d960ffedf, type: 3}
   m_PrefabInstance: {fileID: 2992064614931041991}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &7207714713807710465 stripped

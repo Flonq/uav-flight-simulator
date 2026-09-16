@@ -28,7 +28,7 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 
 **Son güncelleme:** 16 Eylül 2026
 
-**Mevcut aşama:** İleri yön düzeltmesi ve temel takip kamerası tamamlandı; sıradaki adım pervane görselini RPM verisine bağlamak
+**Mevcut aşama:** Temel takip kamerası ve RPM tabanlı pervane animasyonu tamamlandı; sıradaki adım `AssetReview` final smoke testidir
 
 | Sistem | Durum |
 |---|---|
@@ -38,7 +38,7 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 | Input System — klavye ve gamepad | Tamamlandı; aktif uçak/debug bağlantısı doğrulandı |
 | Özel Blender İHA modeli | Unity importu, URP materyali ve prefab entegrasyonu tamamlandı |
 | Görsel kontrol yüzeyi animasyonları | Tamamlandı ve Play Mode'da doğrulandı |
-| Motor, RPM ve itki | Sabit fizik adımında çalışan prototip; görsel burun yönüyle eşleştirildi |
+| Motor, RPM ve itki | Sabit fizik adımında çalışan prototip; görsel burun yönü ve pervane animasyonuyla eşleştirildi |
 | Aerodinamik uçuş fiziği | Başlanmadı |
 | Kamera ve EO sistemi | Temel takip kamerası tamamlandı; diğer modlar planlandı |
 | Telemetri ve görev sistemi | Planlandı |
@@ -291,6 +291,7 @@ docs/images/
 - [x] Görsel kontrol yüzeyi animasyonlarının uygulanması
 - [x] Throttle komutu ile motor durumunun ayrılması ve sabit zaman adımında gaz rampası
 - [x] Motor durumu, RPM geçişi ve ileri yön itki prototipi
+- [x] `Rotor_Pivot` görsel dönüşünün motor RPM verisine bağlanması
 - [ ] Motor ve throttle sisteminin geliştirilmesi
 - [ ] Temel uçuş fiziğinin geliştirilmesi
 - [ ] Kalkış ve iniş sisteminin geliştirilmesi

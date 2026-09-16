@@ -719,6 +719,30 @@ Kamera oyun başlangıcında hedef pozuna doğrudan yerleşir. Sonraki karelerde
 
 ---
 
+## TD-027 — RPM Tabanlı Pervane Görsel Animasyonu
+
+**Durum:** Kabul edildi ve uygulandı
+
+**Tarih:** 2026-09-16
+
+### Karar
+
+`AircraftPropellerAnimator`, uçak prefabının kökünde ayrı bir görsel tüketici olarak yaşar. Bileşen motor durumunu veya RPM üretimini sahiplenmez; yalnızca aynı kökteki `AircraftEngine.Rpm` çıktısını okur ve model altındaki `Rotor_Pivot` nesnesine yerel Y ekseni rotasyonu uygular. Böylece kontrol yüzeyi animasyonu, motor simülasyonu ve pervane görselleştirmesi birbirinden ayrılır.
+
+RPM, dakikadaki devirden saniyedeki dereceye `RPM × 6` ile dönüştürülür. Görsel dönüş varsayılan olarak 0,1 ölçeğiyle uygulanır. Bu ölçek motorun RPM veya thrust hesabını değiştirmez; 1.200–6.000 RPM aralığının yaygın ekran yenileme hızlarında sabit ya da ters dönüyormuş gibi görünmesine yol açan zamansal alias etkisini azaltır. Fiziksel yüksek devir görünümü için blur/disc çözümü sonraki görsel iyileştirme kapsamındadır.
+
+Bileşen devre dışı kaldığında rotor başlangıç yerel rotasyonuna döner. Motor devri sıfıra indiğinde pervane son açısında durur. Prefab doğrulaması tek kök `AircraftPropellerAnimator`, aynı kök Engine ve model altındaki doğru `Rotor_Pivot` referanslarını zorunlu tutar.
+
+### Doğrulama
+
+- 20 ms kare adımında 1.200 RPM için 14,4°, 6.000 RPM için 72° görsel dönüş ölçüldü; sonuçlar formülle eşleşti.
+- Motorun 20 fizik adımında 0'dan yaklaşık 1.200 RPM'ye çıkışı rotor açısına kademeli olarak yansıdı.
+- Motor durdurulup RPM sıfıra indikten sonra rotor açısı ek karede değişmedi.
+- `PF_CustomUAVAircraftPrototype` ve bağlı `FlightTest` instance'ında tek bileşen ile Engine/Rotor referansları doğrulandı.
+- Console hata ve uyarı sayısı sıfırdı.
+
+---
+
 ## Karar Bekleyen Konular
 
 - [ ] Yakıt sistemi veya batarya sistemi
@@ -745,3 +769,4 @@ Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene
 | 2026-09-15 | TD-024 | RPM/itki prototipi ve tekerlek temas materyali uygulandı; kısa pist hızlanması doğrulandı |
 | 2026-09-16 | TD-025 | Özel UAV ileri ekseni -Z olarak düzeltildi; sahne yönü Y=90° kaydedildi |
 | 2026-09-16 | TD-026 | Temel yumuşak takip kamerası aktif uçağa bağlandı ve Play Mode'da doğrulandı |
+| 2026-09-16 | TD-027 | Pervane görsel dönüşü motor RPM verisine bağlandı ve prefab üzerinde doğrulandı |
