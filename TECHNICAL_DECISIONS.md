@@ -907,22 +907,23 @@ Bu model kontrollü bir prototip aerodinamiğidir; maksimum güvenli hız, gerç
 
 ### Karar
 
-`AircraftFollowCamera`, chase frame hesabında özel UAV modelinin fiziksel ileri yönü olan `-target.forward` vektörünü kullanır. Heading, bu vektörün dünya yatay düzlemindeki izdüşümünden takip edilir; izdüşüm dikey veya dikeye yakın olduğunda son geçerli heading korunur. Kamera konum ofseti hedefin roll değerinden ayrıştırılır ve ufuk için `Vector3.up` kullanılır. Pitch etkisi, serialized `_maxPitchFollowAngle` alanıyla varsayılan ±20 dereceye sınırlandırılır. Mevcut `(0, 3, 9)` takip ofseti ve `(0, 0.8, -0.5)` bakış ofseti korunur.
+`AircraftFollowCamera`, chase frame hesabında özel UAV modelinin fiziksel ileri yönü olan `-target.forward` vektörünü kullanır. Kamera konum ofseti hedefin roll değerinden ayrıştırılır; fiziksel ileri vektörün dünya yukarı yönüne izdüşümü küçüldüğünde son geçerli sağ eksen korunur ve sağ eksenin işareti süreklilik için düzeltilir. Böylece frame, sert pitch loop boyunca tam fiziksel pitch'i izlerken dikey tekillik çevresinde yön sıçraması üretmez. Normal uçuşta frame yukarı ekseni dünya yukarı yönüyle hizalıdır; dikey geçişte yukarı ekseni cache'lenmiş sağ eksen ile fiziksel ileri yönden sürekli olarak yeniden oluşturulur. Mevcut `(0, 3, 9)` takip ofseti ve `(0, 0.8, -0.5)` bakış ofseti korunur.
 
 Hedefin kareler arasındaki dünya konumu farkı, chase ofseti SmoothDamp ile yumuşatılmadan önce kameraya feed-forward olarak uygulanır. Böylece SmoothDamp yalnızca heading/pitch kaynaklı bağıl chase ofseti değişimini yumuşatır; sabit yüksek hızlı doğrusal hareket kamera mesafesini büyütmez. `OnEnable`, `SetTarget` ve `SnapToTarget` yolları heading cache'ini, önceki hedef konumunu ve konum hızını birlikte sıfırlar veya yeniden başlatır.
 
 ### Doğrulama
 
-- `AircraftFollowCameraTests` içindeki beş EditMode testi ve önceki iki inertia testi birlikte 7/7 geçti.
-- Play Mode'da ±60 derece roll ile aynı heading için chase konumu farkı 0,000001 m ölçüldü; kamera yukarı vektörünün dünya yukarı nokta çarpımı 0,974218 kaldı.
-- ±45 derece uçak pitch'i, kamera konumunda sırasıyla -0,078182 m ve 6,078182 m dikey chase ofseti üretti; bu değerler ±20 derece pitch-follow sınırıyla uyumludur.
-- 70 m/s eşdeğer doğrusal harekette 120 kare boyunca hedef-kamera mesafesi 9,486834 m başlangıçtan en fazla 9,486836 m'ye çıktı.
-- Kamera-hedef bakış doğrultusu nokta çarpımı 0,995568, hedefin yerel +Z arka tarafındaki kamera konumu 8,999996 m olarak ölçüldü.
+- `AircraftFollowCameraTests` içindeki yedi kamera regresyon testi ve iki inertia testi birlikte 9/9 geçti. Testler roll bağımsız konumu, tam pitch sweep'i, dikey geçiş sürekliliğini, heading cache'ini, feed-forward'ı, yerel +Z arka konumunu ve hedef/snap geçmişinin sıfırlanmasını doğrular.
+- FlightTest Play Mode ölçümünde ±60 derece roll ile aynı heading için chase konumu farkı 0,000001 m, kamera yukarı vektörünün dünya yukarı nokta çarpımı en az 0,974218 ölçüldü.
+- Kontrollü 0–360 derece pitch sweep'inde kamera ofsetinin hedefin arka yarı uzayındaki en düşük nokta çarpımı 0,948683, en büyük kareler arası konum adımı 0,165580 m ve hedef-kamera mesafesi sapması 0,000003 m oldu.
+- Aynı sweep'te hedef viewport konumu `x=0,5`, `y=0,418193` ve minimum derinlik 9,444783 m ölçüldü; hedef kameranın önünde kaldı.
+- 70 m/s eşdeğer doğrusal harekette 120 kare boyunca feed-forward ofset hatası en fazla 0,000025 m oldu.
+- Farklı yaw yönünde kamera hedefin arka yarı uzayında kaldı; yerel +Z kamera derinliği 9,000001 m ölçüldü.
 - Play Mode sonrasında FlightTest kayıt dışı ve temiz kaldı; Unity Console hata veya uyarı vermedi.
 
 ### Sınırlar
 
-Kamera çarpışması, görüş engeli yönetimi, CameraModeController, gövde/serbest/EO kamera modları ve görsel kullanıcı kadraj kalibrasyonu bu kararın kapsamı dışındadır. Kullanıcı tarafından yüksek hızlı manuel uçuş sırasında görsel doğrulama ayrıca yapılmalıdır.
+Kamera çarpışması, görüş engeli yönetimi, CameraModeController, gövde/serbest/EO kamera modları ve görsel kullanıcı kadraj kalibrasyonu bu kararın kapsamı dışındadır. Kullanıcı tarafından yüksek hızlı tam loop sırasında görsel doğrulama ayrıca yapılmalıdır.
 
 ---
 
@@ -959,4 +960,4 @@ Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene
 | 2026-09-16 | TD-031 | Üç teker temasına dayalı yönlü yer tutuşu, pist stabilizasyonu, yönlendirme ve fren prototipi uygulandı |
 | 2026-09-16 | TD-032 | 13 m/s rotasyon komutlu kontrollü kalkış senaryosu ve yaklaşık 17,2 m/s yerden kesilme referansı doğrulandı |
 | 2026-09-17 | TD-033 | Toplam hava hızı, signed AoA, stall drag, artık kontrol otoritesi ve açısal hız geri beslemeli uçuş fiziği uygulandı ve FlightTest'te doğrulandı |
-| 2026-09-17 | TD-034 | Yüksek hızlı takip kamerası için roll bağımsız chase frame, pitch limiti, heading cache ve konum feed-forward uygulandı |
+| 2026-09-17 | TD-034 | Yüksek hızlı takip kamerası için tam pitch izleyen roll bağımsız chase frame, dikey geçiş sürekliliği, heading/right cache ve konum feed-forward uygulandı |

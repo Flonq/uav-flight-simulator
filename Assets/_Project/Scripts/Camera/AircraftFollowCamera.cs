@@ -13,10 +13,6 @@ namespace MertKaan.UAVSimulator.CameraSystem
         [SerializeField] private Vector3 _localOffset = new Vector3(0f, 3f, 9f);
         [SerializeField] private Vector3 _lookAtLocalOffset = new Vector3(0f, 0.8f, -0.5f);
 
-        [Header("Chase Frame")]
-        [Range(0f, 90f)]
-        [SerializeField] private float _maxPitchFollowAngle = 20f;
-
         [Header("Smoothing")]
         [Min(0f)]
         [SerializeField] private float _positionSmoothTime = 0.15f;
@@ -28,12 +24,16 @@ namespace MertKaan.UAVSimulator.CameraSystem
 
         private Vector3 _positionVelocity;
         private Vector3 _lastHeadingForward;
+        private Vector3 _lastRight;
         private Vector3 _previousTargetPosition;
         private bool _hasCachedHeading;
+        private bool _hasCachedRight;
         private bool _hasPreviousTargetPosition;
 
         private struct ChaseFrame
         {
+            public Vector3 right;
+            public Vector3 up;
             public Vector3 chaseOffset;
             public Vector3 lookAtPosition;
         }
@@ -88,7 +88,7 @@ namespace MertKaan.UAVSimulator.CameraSystem
             }
 
             _previousTargetPosition = _target.position;
-            RotateTowardsTarget(chaseFrame.lookAtPosition);
+            RotateTowardsTarget(chaseFrame);
         }
 
         public void SetTarget(Transform target, bool snapImmediately = true)
@@ -120,7 +120,7 @@ namespace MertKaan.UAVSimulator.CameraSystem
 
             ChaseFrame chaseFrame = BuildChaseFrame();
             transform.position = _target.position + chaseFrame.chaseOffset;
-            RotateTowardsTarget(chaseFrame.lookAtPosition, true);
+            RotateTowardsTarget(chaseFrame, true);
             _previousTargetPosition = _target.position;
             _hasPreviousTargetPosition = true;
         }
@@ -129,8 +129,10 @@ namespace MertKaan.UAVSimulator.CameraSystem
         {
             _positionVelocity = Vector3.zero;
             _lastHeadingForward = Vector3.zero;
+            _lastRight = Vector3.zero;
             _previousTargetPosition = Vector3.zero;
             _hasCachedHeading = false;
+            _hasCachedRight = false;
             _hasPreviousTargetPosition = false;
         }
 
@@ -151,48 +153,67 @@ namespace MertKaan.UAVSimulator.CameraSystem
                 _hasCachedHeading = true;
             }
 
-            Vector3 headingForward = _lastHeadingForward;
-            Vector3 headingRight = Vector3.Cross(headingForward, Vector3.up);
-            if (headingRight.sqrMagnitude <= DirectionEpsilonSqr)
+            Vector3 rightCandidate = Vector3.Cross(physicalForward, Vector3.up);
+            if (rightCandidate.sqrMagnitude > HeadingEpsilonSqr)
             {
-                headingRight = Vector3.right;
+                rightCandidate.Normalize();
+                if (_hasCachedRight && Vector3.Dot(rightCandidate, _lastRight) < 0f)
+                {
+                    rightCandidate = -rightCandidate;
+                }
+
+                _lastRight = rightCandidate;
+                _hasCachedRight = true;
+            }
+            else if (!_hasCachedRight)
+            {
+                _lastRight = Vector3.Cross(_lastHeadingForward, Vector3.up);
+                if (_lastRight.sqrMagnitude <= DirectionEpsilonSqr)
+                {
+                    _lastRight = Vector3.right;
+                }
+                else
+                {
+                    _lastRight.Normalize();
+                }
+
+                _hasCachedRight = true;
+            }
+
+            Vector3 frameUp = Vector3.Cross(_lastRight, physicalForward);
+            if (frameUp.sqrMagnitude <= DirectionEpsilonSqr)
+            {
+                frameUp = Vector3.up;
             }
             else
             {
-                headingRight.Normalize();
+                frameUp.Normalize();
             }
-
-            float pitchAngle = Mathf.Atan2(
-                Vector3.Dot(physicalForward, Vector3.up),
-                Mathf.Sqrt(horizontalMagnitudeSqr)) * Mathf.Rad2Deg;
-            float pitchFollowAngle = Mathf.Clamp(
-                pitchAngle,
-                -_maxPitchFollowAngle,
-                _maxPitchFollowAngle);
-            Vector3 pitchFollowForward = Quaternion.AngleAxis(pitchFollowAngle, headingRight) * headingForward;
 
             return new ChaseFrame
             {
+                right = _lastRight,
+                up = frameUp,
                 chaseOffset =
-                    headingRight * _localOffset.x +
-                    Vector3.up * _localOffset.y -
-                    pitchFollowForward * _localOffset.z,
+                    _lastRight * _localOffset.x +
+                    frameUp * _localOffset.y -
+                    physicalForward * _localOffset.z,
                 lookAtPosition = _target.position +
-                    headingRight * _lookAtLocalOffset.x +
-                    Vector3.up * _lookAtLocalOffset.y -
-                    pitchFollowForward * _lookAtLocalOffset.z
+                    _lastRight * _lookAtLocalOffset.x +
+                    frameUp * _lookAtLocalOffset.y -
+                    physicalForward * _lookAtLocalOffset.z
             };
         }
 
-        private void RotateTowardsTarget(Vector3 lookAtPosition, bool snapImmediately = false)
+        private void RotateTowardsTarget(ChaseFrame chaseFrame, bool snapImmediately = false)
         {
-            Vector3 lookDirection = lookAtPosition - transform.position;
+            Vector3 lookDirection = chaseFrame.lookAtPosition - transform.position;
             if (lookDirection.sqrMagnitude <= DirectionEpsilonSqr)
             {
                 return;
             }
 
-            Quaternion desiredRotation = CalculateLookRotation(lookDirection);
+            Quaternion desiredRotation = CalculateLookRotation(lookDirection, chaseFrame.up, chaseFrame.right);
             if (snapImmediately || _rotationSharpness <= 0f)
             {
                 transform.rotation = desiredRotation;
@@ -203,18 +224,12 @@ namespace MertKaan.UAVSimulator.CameraSystem
             transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, interpolation);
         }
 
-        private Quaternion CalculateLookRotation(Vector3 lookDirection)
+        private Quaternion CalculateLookRotation(Vector3 lookDirection, Vector3 frameUp, Vector3 frameRight)
         {
-            Vector3 normalizedLookDirection = lookDirection.normalized;
-            Vector3 up = Vector3.up;
-
-            if (Mathf.Abs(Vector3.Dot(normalizedLookDirection, up)) > 0.9999f)
+            Vector3 up = frameUp;
+            if (Mathf.Abs(Vector3.Dot(lookDirection.normalized, up)) > 0.9999f)
             {
-                Vector3 fallbackUp = Vector3.Cross(_lastHeadingForward, Vector3.up);
-                if (fallbackUp.sqrMagnitude > DirectionEpsilonSqr)
-                {
-                    up = fallbackUp.normalized;
-                }
+                up = frameRight;
             }
 
             return Quaternion.LookRotation(lookDirection, up);
