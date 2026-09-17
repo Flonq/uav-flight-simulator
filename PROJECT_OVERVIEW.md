@@ -273,9 +273,9 @@ Proje aşağıdaki koşullar sağlandığında başarılı kabul edilecektir:
 
 ## 13. Mevcut Durum
 
-**Son güncelleme:** 2026-09-16
+**Son güncelleme:** 2026-09-17
 
-**Durum:** Özel İHA modeli, input, motor/RPM/propulsion, takip kamerası, temel aerodinamik kuvvetler, yer hareketi/fren ve kontrollü kalkış referansı doğrulandı; sıradaki aşama açı-of-attack, stall ve maksimum güvenli hız modelidir.
+**Durum:** Özel İHA modeli, input, motor/RPM/propulsion, takip kamerası, yer hareketi/fren ve açı-of-attack tabanlı uçuş fiziği doğrulandı; sıradaki aşama maksimum güvenli hız ve aerodinamik kalibrasyondur.
 
 Doğrulanmış mevcut durum:
 
@@ -296,10 +296,11 @@ Doğrulanmış mevcut durum:
 - `AircraftFollowCamera`, aktif uçağı modelin gerçek arka tarafı olan yerel +Z yönünden 9 m geride ve 3 m yukarıda takip eder. Konum ve bakış yumuşatması `LateUpdate` yolundadır; sahne başlangıcında hedefe sıçramadan yerleşir.
 - `AircraftPropellerAnimator`, `AircraftEngine.Rpm` çıktısını tüketerek `Rotor_Pivot` nesnesini yerel Y ekseninde döndürür. Görsel hız ölçeği yüksek RPM'de kare örnekleme kaynaklı alias etkisini azaltır; motor simülasyon değerini değiştirmez.
 - `ToggleEngine` komutu klavyede `I`, gamepad'de batı yüz düğmesine bağlıdır. Input Reader yalnızca isteği yayınlar; motor durumu Engine tarafından değiştirilir. Motor kapandığında thrust anında kesilir, RPM ve pervane yaklaşık 1 saniyede rölantiden duruşa iner.
-- `AircraftPhysics`, root Rigidbody üzerinde hava hızını, sabit katsayılı lift/drag kuvvetlerini ve ileri hıza göre etkinleşen pitch/roll/yaw torklarını sabit fizik adımında uygular. Model ileri ekseni root yerel `-Z` olarak korunur.
+- `AircraftPhysics`, root Rigidbody üzerinde toplam hava hızını, signed angle of attack değerini, AoA eğrisinden üretilen lift katsayısını, parasite/induced/stall drag'i ve açısal hız geri beslemeli pitch/roll/yaw kontrolünü sabit fizik adımında uygular. Model ileri ekseni root yerel `-Z` olarak korunur.
 - Kontrollü kalkış senaryosunda tam gaz hızlanma sırasında 13 m/s'de burun yukarı komutu verildi. Burun tekeri yaklaşık 15,59 m/s'de; tüm tekerler yaklaşık 17,18 m/s, 3,54 saniye ve 18,94 m pist mesafesinde yerden ayrıldı. Roll sapması ölçülmedi ve pist orta hattı sapması 0,002 m altında kaldı.
-- Input Debug paneli kontrollü kalkış testi için ileri hava hızını ve üç teker temas durumunu gösterir.
-- Açı-of-attack, stall, maksimum güvenli hız, gerçek araç kalkış kalibrasyonu, gerçek aerodinamik/propeller kalibrasyonu ve sonraki oyun sistemleri henüz uygulanmadı. Sabit lift katsayısı komutsuz koşuda da yaklaşık 17,12 m/s'de yerden kesilmeye yol açar.
+- Input Debug paneli toplam hava hızı, ileri hava hızı, dikey hız, angle of attack, uçuş durumu ve üç teker temas durumunu gösterir.
+- Stall ve post-stall durumları, ileri hız izdüşümü azaldığında artık kontrol otoritesi ve açısal hız sönümlemesi FlightTest'te doğrulandı.
+- Maksimum güvenli hız, gerçek kütle/ağırlık merkezi/inertia, propeller verimi, rüzgâr/irtifa yoğunluğu ve gerçek araç kalkış kalibrasyonu henüz sonlandırılmadı.
 
 Sıradaki kontrollü akış:
 
@@ -313,7 +314,8 @@ Sıradaki kontrollü akış:
 8. Tamamlandı (2026-09-16): Temel aerodinamik lift, drag ve hıza bağlı kontrol torkları ayrı `AircraftPhysics` bileşeninde uygulandı.
 9. Tamamlandı (2026-09-16): Yönlü yer tutuşu, yuvarlanma direnci, düşük hızlı yönlendirme, pist stabilizasyonu ve fren ayrı `AircraftGroundController` bileşeninde uygulandı.
 10. Tamamlandı (2026-09-16): Aerodinamik ve yer hareketi birlikte çalışırken 13 m/s rotasyon komutlu kontrollü kalkış senaryosu ve yaklaşık 17,2 m/s prototip yerden kesilme referansı doğrulandı.
-11. Sabit lift katsayısı açı-of-attack, stall ve maksimum güvenli hız davranışıyla geliştirilecek; kalkış referansları yeni modelle yeniden kalibre edilecek.
+11. Tamamlandı (2026-09-17): Toplam hava hızı ve signed angle of attack tabanlı lift, stall sonrası drag, artık kontrol otoritesi ve rate feedback uygulandı; nötr pitch, kontrollü kalkış ve sönümlenen pitch senaryoları doğrulandı.
+12. Maksimum güvenli hız davranışı ve aerodinamik katsayılar sonlandırılacak; kalkış referansları gerçek araç verileriyle yeniden kalibre edilecek.
 
 ---
 

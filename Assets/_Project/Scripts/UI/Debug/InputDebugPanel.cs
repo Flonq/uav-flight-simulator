@@ -102,7 +102,11 @@ namespace MertKaan.UAVSimulator.UI.Debugging
                 $"Engine: {(_engine != null ? (!_engine.isActiveAndEnabled ? "Disabled" : (_engine.IsRunning ? "Running" : "Stopped")) : "N/A")}\n" +
                 $"RPM: {(_engine != null ? _engine.Rpm.ToString("F0") : "N/A")}\n" +
                 $"Thrust: {(_engine != null ? _engine.ThrustNewtons.ToString("F0") : "N/A")} N\n" +
+                $"Airspeed: {(_aircraftPhysics != null ? _aircraftPhysics.Airspeed.ToString("F1") : "N/A")} m/s\n" +
                 $"Forward Airspeed: {(_aircraftPhysics != null ? _aircraftPhysics.ForwardAirspeed.ToString("F1") : "N/A")} m/s\n" +
+                $"Vertical Speed: {(_aircraftPhysics != null ? _aircraftPhysics.VerticalSpeed.ToString("F1") : "N/A")} m/s\n" +
+                $"Angle of Attack: {(_aircraftPhysics != null ? _aircraftPhysics.AngleOfAttack.ToString("F1") : "N/A")}°\n" +
+                $"Flight State: {(_aircraftPhysics != null ? _aircraftPhysics.FlightState.ToString() : "N/A")}\n" +
                 $"Ground: {GetGroundStatus()}\n" +
                 $"Brake [{_brakeBinding}]: {_inputReader.BrakePressed}\n" +
                 $"Camera [{_cameraBinding}]: {_inputReader.SwitchCameraPressed}\n" +

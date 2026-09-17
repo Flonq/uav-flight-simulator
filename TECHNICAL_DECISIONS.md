@@ -867,6 +867,38 @@ Mevcut prototip için kontrollü kalkış test akışı; motor çalışırken ta
 
 ---
 
+## TD-033 — Toplam hava hızı, açı-of-attack ve açısal hız geri beslemeli uçuş fiziği
+
+**Durum:** Kabul edildi ve uygulandı
+
+**Tarih:** 2026-09-17
+
+### Karar
+
+AircraftPhysics, uçuş modelini yalnızca pozitif ileri hız izdüşümüne ve sabit kaldırma katsayısına bağlamaz. Hava-ilişkili toplam hız, imzalı angle of attack ve root yerel -Z ileri ekseni birlikte kullanılır. Dinamik basınç toplam hava hızından hesaplanır; kaldırma yönü hava akımına dik ve kanat açıklığı ekseniyle uyumlu seçilir. Kaldırma katsayısı düşük açıdan stall sonrasına uzanan ayarlanabilir bir AnimationCurve üzerinden üretilir.
+
+Parazit drag, induced drag ve stall sonrası artan drag birlikte uygulanır. Stall ve post-stall durumları angle of attack eşikleriyle sınıflandırılır. İleri hız izdüşümü 90 derece civarında azalsa bile toplam hava hızına dayalı sınırlı artık kontrol otoritesi korunur; kontrol etkinliği aniden sıfırlanmaz.
+
+Pitch, roll ve yaw komutları açık çevrim sınırsız tork yerine hedef local angular velocity, mevcut local angular velocity geri beslemesi, eksen bazlı damping ve maksimum açısal ivme sınırlarıyla işlenir. Mevcut klavye/gamepad işaretleri korunur. Tek Rigidbody, mevcut 10 primitive collider ve AircraftRoot > VisualPivot mimarisi değiştirilmez.
+
+InputDebugPanel; toplam hava hızı, ileri hava hızı, dikey hız, angle of attack ve uçuş durumunu gösterir. Bu görevde kamera, prefab geometrisi, collider düzeni ve sahne ayarları değiştirilmemiştir.
+
+### Doğrulama
+
+- C# yeniden derlemesi başarılıdır; final Unity Console durumunda 0 hata, 0 uyarı ve 0 log vardır.
+- İzole doğrulamada sıfır hızda aerodinamik çıktılar sıfırlanmış, toplam hız/drag yönü, düşük AoA kaldırması, stall sonrası kaldırma kaybı ve artan drag doğrulanmıştır.
+- 10/20/40 ms fizik adımıyla bir saniyelik entegrasyonda son hızlar sırasıyla yaklaşık 19,13 / 19,13 / 19,14 m/s ölçülmüş ve sonuçlar birbirine yakın kalmıştır.
+- FlightTest kontrollü senaryosunda nötr pitch ile azami pitch değişimi 0,0098 derece, azami yükseklik değişimi 0,0024 m ölçülmüştür.
+- Kontrollü kalkışta rotasyon hızı 13,17 m/s, liftoff hızı 21,46 m/s, azami pitch 10,66 derece ve tepe pitch rate 0,135 rad/s ölçülmüştür.
+- Pitch bırakıldıktan sonra açısal hız yaklaşık 0,00009 rad/s seviyesine sönümlenmiştir.
+- İleri hız izdüşümü sıfıra yaklaştığında kontrol etkinliği 0,25 artık otoriteyi korumuştur.
+
+### Sınırlar
+
+Bu model kontrollü bir prototip aerodinamiğidir; maksimum güvenli hız, gerçek araç verileriyle kütle/ağırlık merkezi/inertia kalibrasyonu, propeller verimi, rüzgâr ve irtifa yoğunluğu sonraki kalibrasyon kapsamındadır. Önceki TD-032'deki sabit lift katsayılı kalkış sayıları tarihsel referans olarak korunur; yeni modelin kabul ölçümü değildir.
+
+---
+
 ## Karar Bekleyen Konular
 
 - [ ] Yakıt sistemi veya batarya sistemi
@@ -899,3 +931,4 @@ Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene
 | 2026-09-16 | TD-030 | Temel lift, drag ve hıza bağlı pitch/roll/yaw torkları sabit fizik adımında uygulandı |
 | 2026-09-16 | TD-031 | Üç teker temasına dayalı yönlü yer tutuşu, pist stabilizasyonu, yönlendirme ve fren prototipi uygulandı |
 | 2026-09-16 | TD-032 | 13 m/s rotasyon komutlu kontrollü kalkış senaryosu ve yaklaşık 17,2 m/s yerden kesilme referansı doğrulandı |
+| 2026-09-17 | TD-033 | Toplam hava hızı, signed AoA, stall drag, artık kontrol otoritesi ve açısal hız geri beslemeli uçuş fiziği uygulandı ve FlightTest'te doğrulandı |

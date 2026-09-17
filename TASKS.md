@@ -195,7 +195,9 @@ Bütün kullanıcı komutları fizik sisteminden bağımsız şekilde okunabilme
 - [x] Yaw torkunu uygula
 - [x] Hıza bağlı kontrol etkinliği ekle
 - [x] Düşük hız kontrol sınırı ekle
-- [ ] Basitleştirilmiş stall davranışı ekle
+- [x] Signed angle of attack ve toplam hava hızına dayalı basitleştirilmiş stall davranışı ekle
+- [x] Stall sonrası drag artışı ve ileri hız izdüşümünden bağımsız artık kontrol otoritesi ekle
+- [x] Açısal hız hedefi, rate feedback, eksen damping'i ve açısal ivme sınırlarını ekle
 - [ ] Maksimum güvenli hız davranışı ekle
 - [x] Fizik ayarlarını Inspector üzerinden düzenlenebilir yap
 - [ ] Debug kuvvet çizimleri ekle
@@ -495,9 +497,10 @@ Mevcut doğrulanması gereken teknik borçlar:
 - [x] Üç tekerlekteki sıfır temas sürtünmesini yönlü yer tutuşu, yuvarlanma direnci ve frenlerle tamamla (`AircraftGroundController`)
 - [x] Y=90° / -Z ileri yönünde pist hızlanırken oluşan yaklaşık 14° eğilmeyi Ground Controller ve zemin temasıyla gider
 - [x] 13 m/s rotasyon komutlu kontrollü kalkış senaryosunu oluştur ve FlightTest pistinde yaklaşık 17,2 m/s yerden kesilme referansını doğrula
+- [x] Toplam hava hızı, dikey hız, signed angle of attack ve uçuş durumunu debug paneline ekle
 - [ ] Propeller itki eğrisini gerçek araç verileriyle kalibre et; mevcut 1.000 N yalnızca prototip değeridir
 - [ ] Mevcut prototip drag modeliyle nihai yer/uçuş hızını doğrula ve maksimum güvenli hız davranışını belirle
-- [ ] Sabit lift katsayısını açı-of-attack/stall modeliyle geliştir; mevcut değer yalnızca temel kuvvet prototipidir
+- [x] Sabit lift katsayısını açı-of-attack/stall modeliyle geliştir; maksimum güvenli hız ve gerçek araç kalibrasyonu açık kapsamdır
 - [ ] Takip kamerasına arazi/geometri çarpışması ve görüş engeli yönetimi ekle
 - [ ] Takip kamerası mesafe, yükseklik ve yumuşatma değerlerini uçuş fiziği tamamlandıktan sonra final kullanıcı testiyle kalibre et
 - [ ] Yüksek RPM için pervane blur/disc görselleştirmesini değerlendir; mevcut çözüm dönüş hızını görsel örnekleme için ölçekler
@@ -508,6 +511,6 @@ Mevcut doğrulanması gereken teknik borçlar:
 
 Bu bölüm her çalışma oturumunun sonunda güncellenmelidir.
 
-1. Sabit lift katsayısını açı-of-attack, stall ve maksimum güvenli hız davranışıyla geliştir; kontrollü kalkış referanslarını yeniden kalibre et.
+1. Maksimum güvenli hız davranışını ve drag/lift katsayılarını sonlandır; kontrollü kalkış referanslarını yeniden kalibre et.
 2. Pist dışı davranışı ve gelişmiş tekerlek/süspansiyon ihtiyacını değerlendir.
 3. İniş yaklaşımı, teker temas geçişi ve fren kabul senaryosunu tasarla.
