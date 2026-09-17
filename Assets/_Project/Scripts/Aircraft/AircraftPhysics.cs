@@ -72,6 +72,31 @@ namespace MertKaan.UAVSimulator.Aircraft
         [SerializeField, Min(0.1f)]
         private float _postStallAngleDegrees = 30f;
 
+        [Header("Lateral Aerodynamics")]
+        [Tooltip("Dimensionless side-force coefficient. Positive local +X air-relative velocity produces force toward local -X.")]
+        [SerializeField, Range(0f, 1f)]
+        private float _sideForceCoefficient = 0.2f;
+
+        [Tooltip("Dimensionless fraction of the side-force moment used for directional stability. Positive sideslip produces a local -Y restoring moment.")]
+        [SerializeField, Range(0f, 0.1f)]
+        private float _directionalStabilityCoefficient = 0.0015f;
+
+        [Tooltip("Reference length in metres for the directional-stability moment arm.")]
+        [SerializeField, Min(0.1f)]
+        private float _directionalStabilityReferenceLength = 4f;
+
+        [Tooltip("Dimensionless yaw-rate damping fraction based on the lateral aerodynamic moment scale.")]
+        [SerializeField, Range(0f, 0.1f)]
+        private float _yawRateDampingCoefficient = 0.02f;
+
+        [Tooltip("Maximum absolute sideslip angle used by the directional-stability coefficient, in degrees.")]
+        [SerializeField, Range(5f, 89f)]
+        private float _maximumAerodynamicSideslipAngle = 45f;
+
+        [Tooltip("Maximum absolute directional-stability yaw moment, in N m.")]
+        [SerializeField, Min(0f)]
+        private float _maximumAerodynamicYawMoment = 12f;
+
         [Header("Control Authority")]
         [SerializeField, Min(0f)]
         private float _minimumControlSpeed = 5f;
@@ -124,6 +149,8 @@ namespace MertKaan.UAVSimulator.Aircraft
 
         public float Airspeed { get; private set; }
         public float ForwardAirspeed { get; private set; }
+        public float LateralAirspeed { get; private set; }
+        public float SideslipAngle { get; private set; }
         public float VerticalSpeed { get; private set; }
         public float SignedAngleOfAttack { get; private set; }
         public float AngleOfAttack => SignedAngleOfAttack;
@@ -137,6 +164,14 @@ namespace MertKaan.UAVSimulator.Aircraft
         public Vector3 DragForce { get; private set; }
         public Vector3 ControlTorque { get; private set; }
         public AircraftFlightState FlightState { get; private set; }
+
+        internal struct LateralAerodynamicState
+        {
+            public float SignedLateralAirspeed;
+            public float SideslipAngle;
+            public Vector3 SideForce;
+            public float YawMoment;
+        }
 
         private void Reset()
         {
@@ -157,6 +192,25 @@ namespace MertKaan.UAVSimulator.Aircraft
             _postStallAngleDegrees = Mathf.Max(
                 _stallAngleDegrees + 0.1f,
                 _postStallAngleDegrees);
+            _sideForceCoefficient = Mathf.Clamp01(_sideForceCoefficient);
+            _directionalStabilityCoefficient = Mathf.Clamp(
+                _directionalStabilityCoefficient,
+                0f,
+                0.1f);
+            _directionalStabilityReferenceLength = Mathf.Max(
+                0.1f,
+                _directionalStabilityReferenceLength);
+            _yawRateDampingCoefficient = Mathf.Clamp(
+                _yawRateDampingCoefficient,
+                0f,
+                0.1f);
+            _maximumAerodynamicSideslipAngle = Mathf.Clamp(
+                _maximumAerodynamicSideslipAngle,
+                5f,
+                89f);
+            _maximumAerodynamicYawMoment = Mathf.Max(
+                0f,
+                _maximumAerodynamicYawMoment);
             _minimumControlSpeed = Mathf.Max(0f, _minimumControlSpeed);
             _fullControlSpeed = Mathf.Max(_minimumControlSpeed + 0.1f, _fullControlSpeed);
             _minimumResidualControlAuthority = Mathf.Clamp01(_minimumResidualControlAuthority);
@@ -212,9 +266,16 @@ namespace MertKaan.UAVSimulator.Aircraft
                 return;
             }
 
-            _rigidbody.AddForce(LiftForce + DragForce, ForceMode.Force);
-            _rigidbody.AddTorque(ControlTorque, ForceMode.Force);
+            _rigidbody.AddForce(
+                LiftForce + DragForce + SideForce,
+                ForceMode.Force);
+            _rigidbody.AddTorque(
+                ControlTorque + DirectionalStabilityTorque,
+                ForceMode.Force);
         }
+
+        private Vector3 SideForce { get; set; }
+        private Vector3 DirectionalStabilityTorque { get; set; }
 
         private void CalculateAirData(
             Vector3 aircraftForward,
@@ -224,6 +285,8 @@ namespace MertKaan.UAVSimulator.Aircraft
             if (Airspeed <= _minimumAerodynamicSpeed)
             {
                 ForwardAirspeed = 0f;
+                LateralAirspeed = 0f;
+                SideslipAngle = 0f;
                 SignedAngleOfAttack = 0f;
                 DynamicPressure = 0f;
                 LiftCoefficient = 0f;
@@ -233,18 +296,22 @@ namespace MertKaan.UAVSimulator.Aircraft
                 LiftForce = Vector3.zero;
                 DragForce = Vector3.zero;
                 ControlTorque = Vector3.zero;
+                SideForce = Vector3.zero;
+                DirectionalStabilityTorque = Vector3.zero;
                 return;
             }
 
             Vector3 localAirVelocity = transform.InverseTransformDirection(AirRelativeVelocity);
             float signedForwardSpeed = -localAirVelocity.z;
             ForwardAirspeed = Mathf.Max(0f, signedForwardSpeed);
-            SignedAngleOfAttack = Mathf.Atan2(
-                -localAirVelocity.y,
-                Mathf.Max(Mathf.Abs(signedForwardSpeed), 0.01f)) * Mathf.Rad2Deg;
+            LateralAirspeed = localAirVelocity.x;
+            SideslipAngle = CalculateSideslipAngle(LateralAirspeed, Airspeed);
+            SignedAngleOfAttack = signedForwardSpeed > 0f
+                ? Mathf.Atan2(-localAirVelocity.y, Mathf.Max(signedForwardSpeed, 0.01f)) * Mathf.Rad2Deg
+                : 0f;
 
             DynamicPressure = 0.5f * _airDensity * Airspeed * Airspeed;
-            LiftCoefficient = _liftCoefficientByAngleOfAttack == null
+            LiftCoefficient = signedForwardSpeed <= 0f || _liftCoefficientByAngleOfAttack == null
                 ? 0f
                 : _liftCoefficientByAngleOfAttack.Evaluate(SignedAngleOfAttack);
             StallFactor = Mathf.InverseLerp(
@@ -255,24 +322,69 @@ namespace MertKaan.UAVSimulator.Aircraft
                 _inducedDragFactor * LiftCoefficient * LiftCoefficient +
                 _stallDragCoefficient * StallFactor * StallFactor;
 
-            Vector3 airDirection = AirRelativeVelocity / Airspeed;
-            Vector3 projectedWingSpan = Vector3.ProjectOnPlane(aircraftRight, airDirection);
-            if (projectedWingSpan.sqrMagnitude <= Mathf.Epsilon)
+            Vector3 longitudinalAirVelocity =
+                aircraftForward * signedForwardSpeed +
+                aircraftUp * localAirVelocity.y;
+            float longitudinalAirspeed = longitudinalAirVelocity.magnitude;
+            Vector3 longitudinalAirDirection = longitudinalAirspeed > Mathf.Epsilon
+                ? longitudinalAirVelocity / longitudinalAirspeed
+                : Vector3.zero;
+
+            Vector3 liftAirVelocity =
+                aircraftForward * ForwardAirspeed +
+                aircraftUp * localAirVelocity.y;
+            float liftAirspeed = liftAirVelocity.magnitude;
+            Vector3 liftDirection = Vector3.zero;
+            if (signedForwardSpeed > 0f && liftAirspeed > Mathf.Epsilon)
             {
-                projectedWingSpan = Vector3.ProjectOnPlane(aircraftUp, airDirection);
+                Vector3 liftAirDirection = liftAirVelocity / liftAirspeed;
+                Vector3 projectedWingSpan = Vector3.ProjectOnPlane(
+                    aircraftRight,
+                    liftAirDirection);
+                if (projectedWingSpan.sqrMagnitude <= Mathf.Epsilon)
+                {
+                    projectedWingSpan = Vector3.ProjectOnPlane(
+                        aircraftUp,
+                        liftAirDirection);
+                }
+
+                if (projectedWingSpan.sqrMagnitude > Mathf.Epsilon)
+                {
+                    liftDirection = Vector3.Cross(
+                        projectedWingSpan.normalized,
+                        liftAirDirection).normalized;
+                }
             }
 
-            Vector3 liftDirection = Vector3.Cross(
-                projectedWingSpan.normalized,
-                airDirection).normalized;
-            LiftForce = liftDirection * (DynamicPressure * _wingArea * LiftCoefficient);
-            DragForce = -airDirection * (DynamicPressure * _wingArea * DragCoefficient);
+            float liftDynamicPressure = 0.5f * _airDensity * liftAirspeed * liftAirspeed;
+            LiftForce = liftDirection * (liftDynamicPressure * _wingArea * LiftCoefficient);
+            DragForce = longitudinalAirDirection * (
+                -0.5f * _airDensity * longitudinalAirspeed * longitudinalAirspeed *
+                _wingArea * DragCoefficient);
+
+            LateralAerodynamicState lateralState = CalculateLateralAerodynamics(
+                aircraftRight,
+                _airDensity,
+                _wingArea,
+                Airspeed,
+                LateralAirspeed,
+                transform.InverseTransformDirection(_rigidbody.angularVelocity).y,
+                _sideForceCoefficient,
+                _directionalStabilityCoefficient,
+                _directionalStabilityReferenceLength,
+                _yawRateDampingCoefficient,
+                _maximumAerodynamicSideslipAngle,
+                _maximumAerodynamicYawMoment,
+                _minimumAerodynamicSpeed);
+            SideForce = lateralState.SideForce;
+            DirectionalStabilityTorque = aircraftUp * lateralState.YawMoment;
 
             float speedAuthority = Mathf.InverseLerp(
                 _minimumControlSpeed,
                 _fullControlSpeed,
                 Airspeed);
-            float forwardAlignment = Mathf.Abs(Vector3.Dot(airDirection, aircraftForward));
+            float forwardAlignment = Mathf.Clamp01(
+                ForwardAirspeed / Mathf.Max(Airspeed, _minimumAerodynamicSpeed));
             ControlEffectiveness = speedAuthority * Mathf.Lerp(
                 _minimumResidualControlAuthority,
                 1f,
@@ -316,6 +428,121 @@ namespace MertKaan.UAVSimulator.Aircraft
                     _maxRollAngularAcceleration));
 
             return AngularAccelerationToWorldTorque(localAngularAcceleration);
+        }
+
+        internal static float CalculateSideslipAngle(
+            float signedLateralAirspeed,
+            float airspeed)
+        {
+            if (!IsFinite(signedLateralAirspeed) ||
+                !IsFinite(airspeed) ||
+                airspeed <= 0f)
+            {
+                return 0f;
+            }
+
+            return Mathf.Asin(Mathf.Clamp(
+                signedLateralAirspeed / airspeed,
+                -1f,
+                1f)) * Mathf.Rad2Deg;
+        }
+
+        internal static LateralAerodynamicState CalculateLateralAerodynamics(
+            Vector3 aircraftRight,
+            float airDensity,
+            float wingArea,
+            float airspeed,
+            float signedLateralAirspeed,
+            float localYawRate,
+            float sideForceCoefficient,
+            float directionalStabilityCoefficient,
+            float directionalStabilityReferenceLength,
+            float yawRateDampingCoefficient,
+            float maximumAerodynamicSideslipAngle,
+            float maximumAerodynamicYawMoment,
+            float minimumAerodynamicSpeed)
+        {
+            LateralAerodynamicState state = new LateralAerodynamicState
+            {
+                SignedLateralAirspeed = signedLateralAirspeed,
+                SideslipAngle = CalculateSideslipAngle(
+                    signedLateralAirspeed,
+                    airspeed),
+                SideForce = Vector3.zero,
+                YawMoment = 0f
+            };
+
+            if (!IsFinite(airDensity) ||
+                !IsFinite(wingArea) ||
+                !IsFinite(airspeed) ||
+                !IsFinite(signedLateralAirspeed) ||
+                !IsFinite(localYawRate) ||
+                airDensity <= 0f ||
+                wingArea <= 0f ||
+                airspeed <= Mathf.Max(minimumAerodynamicSpeed, 0f) ||
+                aircraftRight.sqrMagnitude <= Mathf.Epsilon)
+            {
+                state.SignedLateralAirspeed = 0f;
+                state.SideslipAngle = 0f;
+                return state;
+            }
+
+            float safeSideForceCoefficient = Mathf.Clamp01(sideForceCoefficient);
+            float safeDirectionalStabilityCoefficient = Mathf.Clamp(
+                directionalStabilityCoefficient,
+                0f,
+                0.1f);
+            float safeReferenceLength = Mathf.Max(
+                directionalStabilityReferenceLength,
+                0.1f);
+            float safeYawRateDampingCoefficient = Mathf.Clamp(
+                yawRateDampingCoefficient,
+                0f,
+                0.1f);
+            float safeMaximumSideslipAngle = Mathf.Clamp(
+                maximumAerodynamicSideslipAngle,
+                5f,
+                89f);
+            float safeMaximumYawMoment = Mathf.Max(
+                maximumAerodynamicYawMoment,
+                0f);
+
+            Vector3 right = aircraftRight.normalized;
+            float lateralVelocityRatio = Mathf.Clamp(
+                signedLateralAirspeed / airspeed,
+                -1f,
+                1f);
+            float dynamicPressure = 0.5f * airDensity * airspeed * airspeed;
+            float sideForceScalar =
+                -dynamicPressure * wingArea * safeSideForceCoefficient * lateralVelocityRatio;
+            state.SideForce = right * sideForceScalar;
+
+            float betaRadians = state.SideslipAngle * Mathf.Deg2Rad;
+            float betaLimitRadians = safeMaximumSideslipAngle * Mathf.Deg2Rad;
+            float betaFactor = Mathf.Clamp(
+                betaRadians / betaLimitRadians,
+                -1f,
+                1f);
+            float yawRateFactor = Mathf.Clamp(
+                localYawRate * safeReferenceLength / airspeed,
+                -1f,
+                1f);
+            float restoringYawMoment =
+                -dynamicPressure * wingArea * safeSideForceCoefficient *
+                safeReferenceLength * safeDirectionalStabilityCoefficient * betaFactor;
+            float yawRateDampingMoment =
+                -dynamicPressure * wingArea * safeSideForceCoefficient *
+                safeReferenceLength * safeYawRateDampingCoefficient * yawRateFactor;
+            state.YawMoment = Mathf.Clamp(
+                restoringYawMoment + yawRateDampingMoment,
+                -safeMaximumYawMoment,
+                safeMaximumYawMoment);
+            return state;
+        }
+
+        private static bool IsFinite(float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value);
         }
 
         private static float CalculateAxisAcceleration(
@@ -387,6 +614,8 @@ namespace MertKaan.UAVSimulator.Aircraft
         {
             Airspeed = 0f;
             ForwardAirspeed = 0f;
+            LateralAirspeed = 0f;
+            SideslipAngle = 0f;
             VerticalSpeed = 0f;
             SignedAngleOfAttack = 0f;
             DynamicPressure = 0f;
@@ -398,6 +627,8 @@ namespace MertKaan.UAVSimulator.Aircraft
             LiftForce = Vector3.zero;
             DragForce = Vector3.zero;
             ControlTorque = Vector3.zero;
+            SideForce = Vector3.zero;
+            DirectionalStabilityTorque = Vector3.zero;
             FlightState = AircraftFlightState.LowSpeed;
         }
     }

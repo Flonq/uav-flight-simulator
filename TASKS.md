@@ -198,6 +198,10 @@ Bütün kullanıcı komutları fizik sisteminden bağımsız şekilde okunabilme
 - [x] Signed angle of attack ve toplam hava hızına dayalı basitleştirilmiş stall davranışı ekle
 - [x] Stall sonrası drag artışı ve ileri hız izdüşümünden bağımsız artık kontrol otoritesi ekle
 - [x] Açısal hız hedefi, rate feedback, eksen damping'i ve açısal ivme sınırlarını ekle
+- [x] Gövde eksenli signed lateral airspeed ve sideslip açısını hesapla (2026-09-17)
+- [x] Sideslip'e karşı yanal side-force ve yönelme kararlılığı uygula (2026-09-17)
+- [x] Lift/longitudinal drag akışını yanal hızdan ayır ve geri akış kontrol otoritesini sınırla (2026-09-17)
+- [x] Sideslip decay ve 10/20/40 ms sabit adım regresyonlarını ekle (2026-09-17)
 - [ ] Maksimum güvenli hız davranışı ekle
 - [x] Fizik ayarlarını Inspector üzerinden düzenlenebilir yap
 - [ ] Debug kuvvet çizimleri ekle
@@ -206,7 +210,7 @@ Bütün kullanıcı komutları fizik sisteminden bağımsız şekilde okunabilme
 
 ### Çıkış kriteri
 
-İHA havalanabilmeli ve pitch, roll, yaw eksenlerinde kararlı biçimde kontrol edilebilmelidir.
+İHA havalanabilmeli, pitch/roll/yaw komutlarıyla kontrol edilebilmeli ve yüksek yanal hız veya sideslip nötr girdilerde kararlı biçimde toparlanabilmelidir.
 
 ---
 

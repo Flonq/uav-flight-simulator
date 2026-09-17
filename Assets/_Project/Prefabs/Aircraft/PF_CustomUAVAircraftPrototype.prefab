@@ -269,16 +269,143 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MertKaan.UAVSimulator.Aircraft.AircraftPhysics
   _inputReader: {fileID: 1184735321776206417}
+  _groundController: {fileID: 0}
   _rigidbody: {fileID: 8385554076756208212}
+  _windVelocity: {x: 0, y: 0, z: 0}
   _airDensity: 1.225
   _wingArea: 10
-  _liftCoefficient: 1
-  _dragCoefficient: 0.08
+  _minimumAerodynamicSpeed: 0.5
+  _liftCoefficientByAngleOfAttack:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -25
+      value: -0.2
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: -15
+      value: -0.55
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: -8
+      value: -0.35
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0
+      value: 0.25
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 6
+      value: 0.8
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 12
+      value: 1.1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 15
+      value: 1.15
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 20
+      value: 0.75
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 28
+      value: 0.25
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 40
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 90
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _parasiteDragCoefficient: 0.035
+  _inducedDragFactor: 0.045
+  _stallDragCoefficient: 0.35
+  _stallAngleDegrees: 14
+  _postStallAngleDegrees: 30
+  _sideForceCoefficient: 0.2
+  _directionalStabilityCoefficient: 0.0015
+  _directionalStabilityReferenceLength: 4
+  _yawRateDampingCoefficient: 0.02
+  _maximumAerodynamicSideslipAngle: 45
+  _maximumAerodynamicYawMoment: 12
   _minimumControlSpeed: 5
   _fullControlSpeed: 15
-  _maxPitchTorque: 250
-  _maxRollTorque: 500
-  _maxYawTorque: 300
+  _minimumResidualControlAuthority: 0.25
+  _maxPitchRate: 0.7
+  _maxRollRate: 1.1
+  _maxYawRate: 0.55
+  _pitchRateResponse: 5
+  _rollRateResponse: 5
+  _yawRateResponse: 4
+  _pitchRateDamping: 2
+  _rollRateDamping: 2
+  _yawRateDamping: 1.75
+  _maxPitchAngularAcceleration: 4
+  _maxRollAngularAcceleration: 6
+  _maxYawAngularAcceleration: 3
 --- !u!114 &2889738314437523748
 MonoBehaviour:
   m_ObjectHideFlags: 0

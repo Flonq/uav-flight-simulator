@@ -881,7 +881,7 @@ Parazit drag, induced drag ve stall sonrası artan drag birlikte uygulanır. Sta
 
 Pitch, roll ve yaw komutları açık çevrim sınırsız tork yerine hedef local angular velocity, mevcut local angular velocity geri beslemesi, eksen bazlı damping ve maksimum açısal ivme sınırlarıyla işlenir. Mevcut klavye/gamepad işaretleri korunur. Tek Rigidbody, mevcut 10 primitive collider ve AircraftRoot > VisualPivot mimarisi değiştirilmez.
 
-InputDebugPanel; toplam hava hızı, ileri hava hızı, dikey hız, angle of attack ve uçuş durumunu gösterir. Bu görevde kamera, prefab geometrisi, collider düzeni ve sahne ayarları değiştirilmemiştir.
+InputDebugPanel; toplam hava hızı, ileri hava hızı, yanal hava hızı, sideslip açısı, dikey hız, angle of attack ve uçuş durumunu gösterir. Bu görevde kamera, prefab geometrisi, collider düzeni ve sahne ayarları değiştirilmemiştir.
 
 ### Doğrulama
 
@@ -927,6 +927,35 @@ Kamera çarpışması, görüş engeli yönetimi, CameraModeController, gövde/s
 
 ---
 
+## TD-035 — Gövde eksenli yanal aerodinamik ve sideslip toparlanması
+
+**Durum:** Kabul edildi ve uygulandı
+
+**Tarih:** 2026-09-17
+
+### Karar
+
+`AircraftPhysics`, hava-ilişkili hızı root gövde eksenlerine ayırır. Özel UAV için fiziksel ileri eksen root yerel `-Z`, sağ eksen `+X` ve yukarı eksen `+Y` olarak korunur. Yanal hava hızı, yerel `+X` bileşenidir; pozitif değer hız vektörünün uçağın sağına doğru olduğunu belirtir. Sideslip açısı `beta`, `asin(clamp(lateralAirspeed / airspeed, -1, 1))` ile derece cinsinden hesaplanır ve pozitif beta sağa doğru yanal akış/velocity konvansiyonunu kullanır.
+
+Yanal hızın ters yönünde, toplam dinamik basınç ve wing area ile ölçeklenen sınırlı bir side-force uygulanır. Pozitif yanal hızda kuvvet root yerel `-X` yönündedir; böylece side-force ile yanal velocity dot ürünü hiçbir zaman pozitif olmaz. Sideslip, dikey kuyruğun weathercock etkisini temsil eden yerel `-Y` yaw momenti üretir; negatif sideslip'te işaret tersine döner. Yerel pozitif yaw rate için ayrıca `-Y` yönünde sınırlı rate damping uygulanır. Yaw momenti büyük beta ve hızlarda açık bir üst sınırla korunur.
+
+Lift ve longitudinal drag, toplam hava hızından türetilen gövde eksenli akıştan ayrılır. Yanal bileşen lift üretmez; lift için pozitif ileri ve dikey akış, drag için imzalı longitudinal akış kullanılır. Geriye doğru akışta angle of attack ve lift sıfırlanır, longitudinal drag akışı yavaşlatmaya devam eder ve kontrol otoritesi yalnızca artık seviyeye iner; böylece `Abs` tabanlı istemsiz tam kontrol oluşmaz. Rüzgâr desteği, toplam airspeed telemetrisi, mevcut AoA/stall/post-stall eğrileri ve `ForceMode.Force` fixed-timestep kuvvet/tork yolu korunur. Rigidbody velocity doğrudan yazılmaz ve genel linear damping kullanılmaz.
+
+Prefab sahibi `PF_CustomUAVAircraftPrototype` üzerindeki yeni varsayılanlar şöyledir: side-force coefficient `0,2`, directional-stability coefficient `0,0015`, reference length `4 m`, yaw-rate damping coefficient `0,02`, maximum aerodynamic sideslip `45°` ve maximum aerodynamic yaw moment `12 N m`.
+
+### Doğrulama
+
+- Yedi kamera, iki inertia ve on bir yanal aerodinamik/geri-akış testi birlikte `20/20` geçti.
+- Kontrollü FlightTest Rigidbody ölçümünde başlangıç beta `36,027°`, 4 saniye sonunda `5,681°`, 6 saniye sonunda `2,797°` oldu. `10/20/40 ms` adımlarda sonuçlar sırasıyla `5,796° / 5,681° / 5,608°` ölçüldü.
+- Simetrik `Yaw +1` ve `Yaw -1` komutları yaklaşık `38,8°` heading değişimi üretti. Komut bırakıldıktan 4 saniye sonra beta mutlak değeri yaklaşık `8,18°`, 8 saniye sonra `2,93°` seviyesine indi.
+- C# derlemesi başarılı, final Unity Console hata ve uyarı sayısı sıfır, `FlightTest` sahnesi kayıt dışı ve prefab instance'ında override bulunmuyor.
+
+### Sınırlar
+
+Bu karar yüksek sideslip toparlanmasını ve yönelme kararlılığını prototip düzeyinde ele alır. Overspeed koruması, rüzgâr/irtifa yoğunluk modeli, gerçek araç katsayı kalibrasyonu, ağırlık merkezi ve coordinated-turn/otopilot davranışı kapsam dışındadır. Görsel manuel uçuş kabulü ayrıca kullanıcı tarafından yapılmalıdır.
+
+---
+
 ## Karar Bekleyen Konular
 
 - [ ] Yakıt sistemi veya batarya sistemi
@@ -961,3 +990,4 @@ Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene
 | 2026-09-16 | TD-032 | 13 m/s rotasyon komutlu kontrollü kalkış senaryosu ve yaklaşık 17,2 m/s yerden kesilme referansı doğrulandı |
 | 2026-09-17 | TD-033 | Toplam hava hızı, signed AoA, stall drag, artık kontrol otoritesi ve açısal hız geri beslemeli uçuş fiziği uygulandı ve FlightTest'te doğrulandı |
 | 2026-09-17 | TD-034 | Yüksek hızlı takip kamerası için tam pitch izleyen roll bağımsız chase frame, dikey geçiş sürekliliği, heading/right cache ve konum feed-forward uygulandı |
+| 2026-09-17 | TD-035 | Gövde eksenli yanal hava hızı ve sideslip telemetrisi, side-force, directional stability, yanal akıştan ayrılmış lift/drag ve geri-akış kontrol sınırı uygulandı |

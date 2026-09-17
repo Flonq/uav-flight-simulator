@@ -104,6 +104,8 @@ namespace MertKaan.UAVSimulator.UI.Debugging
                 $"Thrust: {(_engine != null ? _engine.ThrustNewtons.ToString("F0") : "N/A")} N\n" +
                 $"Airspeed: {(_aircraftPhysics != null ? _aircraftPhysics.Airspeed.ToString("F1") : "N/A")} m/s\n" +
                 $"Forward Airspeed: {(_aircraftPhysics != null ? _aircraftPhysics.ForwardAirspeed.ToString("F1") : "N/A")} m/s\n" +
+                $"Lateral Airspeed: {(_aircraftPhysics != null ? _aircraftPhysics.LateralAirspeed.ToString("F1") : "N/A")} m/s\n" +
+                $"Sideslip Angle: {(_aircraftPhysics != null ? _aircraftPhysics.SideslipAngle.ToString("F1") : "N/A")}°\n" +
                 $"Vertical Speed: {(_aircraftPhysics != null ? _aircraftPhysics.VerticalSpeed.ToString("F1") : "N/A")} m/s\n" +
                 $"Angle of Attack: {(_aircraftPhysics != null ? _aircraftPhysics.AngleOfAttack.ToString("F1") : "N/A")}°\n" +
                 $"Flight State: {(_aircraftPhysics != null ? _aircraftPhysics.FlightState.ToString() : "N/A")}\n" +
