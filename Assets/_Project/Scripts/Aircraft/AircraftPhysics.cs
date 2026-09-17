@@ -331,18 +331,32 @@ namespace MertKaan.UAVSimulator.Aircraft
 
         private Vector3 AngularAccelerationToWorldTorque(Vector3 localAngularAcceleration)
         {
-            if (_rigidbody.inertiaTensor.sqrMagnitude <= Mathf.Epsilon)
+            return ConvertLocalAngularAccelerationToWorldTorque(
+                localAngularAcceleration,
+                _rigidbody.inertiaTensor,
+                _rigidbody.inertiaTensorRotation,
+                _rigidbody.rotation);
+        }
+
+        internal static Vector3 ConvertLocalAngularAccelerationToWorldTorque(
+            Vector3 localAngularAcceleration,
+            Vector3 inertiaTensor,
+            Quaternion inertiaTensorRotation,
+            Quaternion bodyRotation)
+        {
+            if (inertiaTensor.sqrMagnitude <= Mathf.Epsilon)
             {
                 return Vector3.zero;
             }
 
-            Quaternion inertiaRotation = _rigidbody.inertiaTensorRotation;
-            Vector3 inertiaSpaceAcceleration = inertiaRotation * localAngularAcceleration;
+            // inertiaTensorRotation maps principal inertia axes into Rigidbody-local space.
+            Vector3 inertiaSpaceAcceleration =
+                Quaternion.Inverse(inertiaTensorRotation) * localAngularAcceleration;
             Vector3 inertiaSpaceTorque = Vector3.Scale(
-                _rigidbody.inertiaTensor,
+                inertiaTensor,
                 inertiaSpaceAcceleration);
-            Vector3 localTorque = Quaternion.Inverse(inertiaRotation) * inertiaSpaceTorque;
-            return _rigidbody.rotation * localTorque;
+            Vector3 localTorque = inertiaTensorRotation * inertiaSpaceTorque;
+            return bodyRotation * localTorque;
         }
 
         private void UpdateFlightState()
