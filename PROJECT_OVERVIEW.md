@@ -293,7 +293,7 @@ Doğrulanmış mevcut durum:
 - `AircraftEngine`, throttle state/ramp, motor durumu, RPM geçişi ve modelin burun yönü olan root Rigidbody -Z ekseninde itki kuvvetini sabit fizik adımlarında uygular.
 - Üç primitive tekerlek sıfır sürtünmeli prototip materyalini korur. `AircraftGroundController`, bu colliderları yer probu olarak kullanır ve Rigidbody üzerinde yönlü tutuş, yuvarlanma direnci, fren, düşük hızlı yaw yönlendirmesi ve pist stabilizasyonu uygular.
 - Ground Controller öncesinde -Z pist koşusunda yaklaşık 15° tepe açı değişimi görülüyordu. Güncel kontrollü FlightTest koşusu üç saniyede yaklaşık 12,35 m ilerleme ve 14,14 m/s hız üretirken tepe açı değişimi 0° ve yanal hız yaklaşık 0,00006 m/s ölçüldü.
-- `AircraftFollowCamera`, aktif uçağı modelin gerçek arka tarafı olan yerel +Z yönünden 9 m geride ve 3 m yukarıda takip eder. Konum ve bakış yumuşatması `LateUpdate` yolundadır; sahne başlangıcında hedefe sıçramadan yerleşir.
+- `AircraftFollowCamera`, aktif uçağı modelin gerçek arka tarafı olan yerel +Z yönünden 9 m geride ve 3 m yukarıda takip eder. Roll bağımsız chase frame, dünya ufku, ±20° pitch-follow sınırı, son geçerli heading cache'i ve yüksek hızlı doğrusal hareket için konum feed-forward kullanır; sahne başlangıcında hedefe sıçramadan yerleşir.
 - `AircraftPropellerAnimator`, `AircraftEngine.Rpm` çıktısını tüketerek `Rotor_Pivot` nesnesini yerel Y ekseninde döndürür. Görsel hız ölçeği yüksek RPM'de kare örnekleme kaynaklı alias etkisini azaltır; motor simülasyon değerini değiştirmez.
 - `ToggleEngine` komutu klavyede `I`, gamepad'de batı yüz düğmesine bağlıdır. Input Reader yalnızca isteği yayınlar; motor durumu Engine tarafından değiştirilir. Motor kapandığında thrust anında kesilir, RPM ve pervane yaklaşık 1 saniyede rölantiden duruşa iner.
 - `AircraftPhysics`, root Rigidbody üzerinde toplam hava hızını, signed angle of attack değerini, AoA eğrisinden üretilen lift katsayısını, parasite/induced/stall drag'i ve açısal hız geri beslemeli pitch/roll/yaw kontrolünü sabit fizik adımında uygular. Model ileri ekseni root yerel `-Z` olarak korunur.
@@ -307,7 +307,7 @@ Sıradaki kontrollü akış:
 1. Tamamlandı (2026-09-15): `AircraftInputReader` ve `AircraftControlSurfaceAnimator` uçak prefabına taşındı; debug panel sahnede aktif instance'a bağlı kaldı (TD-022).
 2. Tamamlandı (2026-09-15): Throttle state/ramp sahipliği `AircraftEngine` bileşenine taşındı; Input Reader yalnızca komut sağlar.
 3. Tamamlandı (2026-09-15): Motor RPM, prototip thrust ve propulsion kuvveti fixed-timestep yolunda uygulandı; kısa pist testi doğrulandı.
-4. Tamamlandı (2026-09-16): Temel takip kamerası aktif uçağın arkasına/yukarısına bağlandı ve Play Mode'da doğrulandı.
+4. Tamamlandı (2026-09-17): Takip kamerası roll bağımsız chase frame, sınırlı pitch takibi, heading cache'i ve yüksek hızlı konum feed-forward ile stabilize edildi; Play Mode ölçümleri doğrulandı.
 5. Tamamlandı (2026-09-16): `Rotor_Pivot` görsel dönüşü motor RPM verisine bağlandı.
 6. Tamamlandı (2026-09-16): Motor açma/kapatma komutu ve kademeli pervane duruşu uygulandı.
 7. Tamamlandı (2026-09-16): Geçici model inceleme sahnesi kaldırıldı; doğrulama akışı `FlightTest` ve üretim prefabında birleştirildi.
