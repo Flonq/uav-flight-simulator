@@ -956,6 +956,34 @@ Bu karar yüksek sideslip toparlanmasını ve yönelme kararlılığını protot
 
 ---
 
+## TD-036 — Prototip hız zarfı ve doğal maksimum hız
+
+**Durum:** Kabul edildi ve uygulandı
+
+**Tarih:** 2026-09-17
+
+### Karar
+
+`AircraftPhysics`, toplam hava-ilişkili hıza göre `Normal`, `Caution` ve `Overspeed` durumlarını üretir. Prototip eşikleri prefab sahibi üzerinde `75 m/s` caution, `85 m/s` overspeed giriş ve `80 m/s` overspeed recovery olarak serialize edilir. Overspeed durumu recovery eşiğine inilene kadar korunur; böylece giriş eşiği çevresindeki küçük hız değişimleri durum titreşimi oluşturmaz.
+
+Bu uçuş zarfı yalnızca durum ve telemetri üretir. Rigidbody velocity veya Transform doğrudan değiştirilmez, hız kesilmez ve eşik üzerinde ek bir drag duvarı uygulanmaz. `AircraftEngine` propulsion sahibi, `AircraftPhysics` ise hava hızı, aerodinamik kuvvetler ve hız zarfı sahibi olarak kalır. `InputDebugPanel`, etkin hız durumunu ve overspeed giriş eşiğini gösterir.
+
+Mevcut `1.000 N` maksimum itki ile AoA `0°` drag dengesi yaklaşık `65,71 m/s` değerindedir ve hedeflenen `65–75 m/s` prototip seviye hız bandına zaten girmektedir. Bu nedenle lift/drag katsayıları veya motor itkisi bu görevde değiştirilmemiştir.
+
+### Doğrulama
+
+- Kamera, inertia, yanal aerodinamik ve hız zarfı testleri birlikte `30/30` geçti.
+- Analitik fixed-timestep entegrasyonunda 40 saniye sonundaki hızlar `10/20/40 ms` adımlar için sırasıyla `65,708624 / 65,708642 / 65,708677 m/s` oldu.
+- Gerçek `FlightTest/AircraftRoot` bileşenleriyle, 60 m/s başlangıç hızından yürütülen 40 saniyelik kontrollü kuvvet entegrasyonunda toplam hava hızı `10/20/30/40 s` anlarında `65,909 / 66,261 / 66,281 / 66,282 m/s` ölçüldü. Final ileri hava hızı `66,178 m/s`, dikey hız `3,703 m/s`, AoA `-3,203°`, drag `943,607 N`, lift `1.035,339 N` ve thrust `1.000 N` oldu; hız durumu `Normal` kaldı.
+- Toplam `87,464 m/s` hava hızına sahip kontrollü dalış vektörü `Overspeed` üretti. Hız `82 m/s` iken durum korundu, `79,9 m/s` değerinde `Caution` ve `74,9 m/s` değerinde `Normal` oldu.
+- Prefab instance'ında bu üç alan için override bulunmuyor; `FlightTest` Play Mode sonrasında temiz ve kayıtlı kaldı.
+
+### Sınırlar
+
+Eşikler gerçek araca ait Vne/işletme limitleri değildir. Yapısal hasar, aeroelastik etkiler, motor veya pervane veriminin hıza göre değişimi, irtifa yoğunluğu, uyarı sesi ve görsel ikaz sistemi bu kapsamda bulunmaz. Nihai eşikler gerçek araç verileri sağlandığında yeniden kalibre edilmelidir. Görsel kullanıcı uçuş kabulü ayrıca yapılmalıdır.
+
+---
+
 ## Karar Bekleyen Konular
 
 - [ ] Yakıt sistemi veya batarya sistemi
@@ -991,3 +1019,4 @@ Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene
 | 2026-09-17 | TD-033 | Toplam hava hızı, signed AoA, stall drag, artık kontrol otoritesi ve açısal hız geri beslemeli uçuş fiziği uygulandı ve FlightTest'te doğrulandı |
 | 2026-09-17 | TD-034 | Yüksek hızlı takip kamerası için tam pitch izleyen roll bağımsız chase frame, dikey geçiş sürekliliği, heading/right cache ve konum feed-forward uygulandı |
 | 2026-09-17 | TD-035 | Gövde eksenli yanal hava hızı ve sideslip telemetrisi, side-force, directional stability, yanal akıştan ayrılmış lift/drag ve geri-akış kontrol sınırı uygulandı |
+| 2026-09-17 | TD-036 | Doğal thrust/drag dengesi korundu; total airspeed tabanlı caution/overspeed/recovery zarfı ve hysteresis telemetrisi uygulandı |

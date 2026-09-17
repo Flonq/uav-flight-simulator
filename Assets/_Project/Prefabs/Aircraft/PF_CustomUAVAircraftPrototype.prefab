@@ -406,6 +406,9 @@ MonoBehaviour:
   _maxPitchAngularAcceleration: 4
   _maxRollAngularAcceleration: 6
   _maxYawAngularAcceleration: 3
+  _cautionSpeed: 75
+  _overspeedEntrySpeed: 85
+  _overspeedRecoverySpeed: 80
 --- !u!114 &2889738314437523748
 MonoBehaviour:
   m_ObjectHideFlags: 0

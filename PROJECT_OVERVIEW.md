@@ -275,7 +275,7 @@ Proje aşağıdaki koşullar sağlandığında başarılı kabul edilecektir:
 
 **Son güncelleme:** 2026-09-17
 
-**Durum:** Özel İHA modeli, input, motor/RPM/propulsion, takip kamerası, yer hareketi/fren, açı-of-attack tabanlı uçuş fiziği ve gövde eksenli yanal aerodinamik doğrulandı; sıradaki aşama maksimum güvenli hız ve aerodinamik kalibrasyondur.
+**Durum:** Özel İHA modeli, input, motor/RPM/propulsion, takip kamerası, yer hareketi/fren, açı-of-attack tabanlı uçuş fiziği, yanal aerodinamik ve prototip hız zarfı doğrulandı; sıradaki aşama kullanıcı hız zarfı kabulü ve iniş/yer davranışı planlamasıdır.
 
 Doğrulanmış mevcut durum:
 
@@ -297,10 +297,11 @@ Doğrulanmış mevcut durum:
 - `AircraftPropellerAnimator`, `AircraftEngine.Rpm` çıktısını tüketerek `Rotor_Pivot` nesnesini yerel Y ekseninde döndürür. Görsel hız ölçeği yüksek RPM'de kare örnekleme kaynaklı alias etkisini azaltır; motor simülasyon değerini değiştirmez.
 - `ToggleEngine` komutu klavyede `I`, gamepad'de batı yüz düğmesine bağlıdır. Input Reader yalnızca isteği yayınlar; motor durumu Engine tarafından değiştirilir. Motor kapandığında thrust anında kesilir, RPM ve pervane yaklaşık 1 saniyede rölantiden duruşa iner.
 - `AircraftPhysics`, root Rigidbody üzerinde toplam ve gövde eksenli hava hızını, signed angle of attack ve sideslip değerlerini, AoA eğrisinden üretilen lift katsayısını, parasite/induced/stall drag'i, yanal side-force'u, directional-stability yaw momentini ve açısal hız geri beslemeli pitch/roll/yaw kontrolünü sabit fizik adımında uygular. Yanal akış lift ve longitudinal drag hesabından ayrılır; model ileri ekseni root yerel `-Z` olarak korunur.
+- Mevcut 1.000 N maksimum itki ve prototip drag modeli doğal olarak yaklaşık 65,71 m/s longitudinal denge üretir. Velocity kesilmeden total airspeed üzerinden `75 m/s` caution, `85 m/s` overspeed ve `80 m/s` recovery eşikleri uygulanır.
 - Kontrollü kalkış senaryosunda tam gaz hızlanma sırasında 13 m/s'de burun yukarı komutu verildi. Burun tekeri yaklaşık 15,59 m/s'de; tüm tekerler yaklaşık 17,18 m/s, 3,54 saniye ve 18,94 m pist mesafesinde yerden ayrıldı. Roll sapması ölçülmedi ve pist orta hattı sapması 0,002 m altında kaldı.
-- Input Debug paneli toplam hava hızı, ileri ve yanal hava hızı, sideslip açısı, dikey hız, angle of attack, uçuş durumu ve üç teker temas durumunu gösterir.
+- Input Debug paneli toplam hava hızı, ileri ve yanal hava hızı, sideslip açısı, dikey hız, angle of attack, uçuş durumu, hız zarfı durumu/overspeed eşiği ve üç teker temas durumunu gösterir.
 - Stall ve post-stall durumları, ileri hız izdüşümü azaldığında artık kontrol otoritesi ve açısal hız sönümlemesi FlightTest'te doğrulandı.
-- Maksimum güvenli hız, gerçek kütle/ağırlık merkezi/inertia, propeller verimi, rüzgâr/irtifa yoğunluğu ve gerçek araç kalkış kalibrasyonu henüz sonlandırılmadı.
+- Prototip hız zarfı tamamlandı; eşiklerin gerçek Vne/işletme limitleriyle kalibrasyonu, gerçek kütle/ağırlık merkezi/inertia, propeller verimi, rüzgâr/irtifa yoğunluğu ve gerçek araç kalkış kalibrasyonu henüz sonlandırılmadı.
 
 Sıradaki kontrollü akış:
 
@@ -316,7 +317,8 @@ Sıradaki kontrollü akış:
 10. Tamamlandı (2026-09-16): Aerodinamik ve yer hareketi birlikte çalışırken 13 m/s rotasyon komutlu kontrollü kalkış senaryosu ve yaklaşık 17,2 m/s prototip yerden kesilme referansı doğrulandı.
 11. Tamamlandı (2026-09-17): Toplam hava hızı ve signed angle of attack tabanlı lift, stall sonrası drag, artık kontrol otoritesi ve rate feedback uygulandı; nötr pitch, kontrollü kalkış ve sönümlenen pitch senaryoları doğrulandı.
 12. Tamamlandı (2026-09-17): Gövde eksenli yanal hava hızı/sideslip telemetrisi, side-force, directional stability, yanal akıştan ayrılmış lift/longitudinal drag ve geri-akış kontrol sınırı uygulandı; 20/20 EditMode testi ve kontrollü FlightTest ölçümleri doğrulandı.
-13. Maksimum güvenli hız davranışı ve aerodinamik katsayılar sonlandırılacak; kalkış referansları gerçek araç verileriyle yeniden kalibre edilecek.
+13. Tamamlandı (2026-09-17): Doğal thrust/drag dengesi yaklaşık 65,71 m/s olarak doğrulandı; total airspeed tabanlı 75/85/80 m/s caution/overspeed/recovery zarfı ve hysteresis debug telemetrisi uygulandı.
+14. Prototip hız zarfı kullanıcı uçuş testiyle kabul edilecek; gerçek araç verisi sağlandığında Vne ve aerodinamik katsayılar yeniden kalibre edilecek.
 
 ---
 

@@ -12,6 +12,13 @@ namespace MertKaan.UAVSimulator.Aircraft
         PostStall
     }
 
+    public enum AircraftSpeedState
+    {
+        Normal,
+        Caution,
+        Overspeed
+    }
+
     [DisallowMultipleComponent]
     [RequireComponent(typeof(AircraftInputReader))]
     [RequireComponent(typeof(Rigidbody))]
@@ -147,6 +154,19 @@ namespace MertKaan.UAVSimulator.Aircraft
         [SerializeField, Min(0f)]
         private float _maxYawAngularAcceleration = 3f;
 
+        [Header("Prototype Speed Envelope")]
+        [Tooltip("Total air-relative speed at which the prototype caution band begins, in m/s.")]
+        [SerializeField, Min(0.1f)]
+        private float _cautionSpeed = 75f;
+
+        [Tooltip("Total air-relative speed at which the prototype overspeed state begins, in m/s. This is a state threshold, not a velocity cap.")]
+        [SerializeField, Min(0.1f)]
+        private float _overspeedEntrySpeed = 85f;
+
+        [Tooltip("Total air-relative speed at or below which overspeed clears, in m/s. Keep below the overspeed entry threshold to provide hysteresis.")]
+        [SerializeField, Min(0.1f)]
+        private float _overspeedRecoverySpeed = 80f;
+
         public float Airspeed { get; private set; }
         public float ForwardAirspeed { get; private set; }
         public float LateralAirspeed { get; private set; }
@@ -164,6 +184,10 @@ namespace MertKaan.UAVSimulator.Aircraft
         public Vector3 DragForce { get; private set; }
         public Vector3 ControlTorque { get; private set; }
         public AircraftFlightState FlightState { get; private set; }
+        public AircraftSpeedState SpeedState { get; private set; }
+        public float CautionSpeed => _cautionSpeed;
+        public float OverspeedEntrySpeed => _overspeedEntrySpeed;
+        public float OverspeedRecoverySpeed => _overspeedRecoverySpeed;
 
         internal struct LateralAerodynamicState
         {
@@ -226,6 +250,14 @@ namespace MertKaan.UAVSimulator.Aircraft
             _maxPitchAngularAcceleration = Mathf.Max(0f, _maxPitchAngularAcceleration);
             _maxRollAngularAcceleration = Mathf.Max(0f, _maxRollAngularAcceleration);
             _maxYawAngularAcceleration = Mathf.Max(0f, _maxYawAngularAcceleration);
+            _cautionSpeed = Mathf.Max(0.1f, _cautionSpeed);
+            _overspeedEntrySpeed = Mathf.Max(
+                _cautionSpeed + 0.1f,
+                _overspeedEntrySpeed);
+            _overspeedRecoverySpeed = Mathf.Clamp(
+                _overspeedRecoverySpeed,
+                _cautionSpeed,
+                _overspeedEntrySpeed - 0.1f);
         }
 
         private void Awake()
@@ -260,6 +292,7 @@ namespace MertKaan.UAVSimulator.Aircraft
 
             CalculateAirData(aircraftForward, aircraftUp, aircraftRight);
             UpdateFlightState();
+            UpdateSpeedState();
 
             if (_rigidbody.isKinematic)
             {
@@ -610,6 +643,59 @@ namespace MertKaan.UAVSimulator.Aircraft
             }
         }
 
+        private void UpdateSpeedState()
+        {
+            SpeedState = EvaluateSpeedState(
+                SpeedState,
+                Airspeed,
+                _cautionSpeed,
+                _overspeedEntrySpeed,
+                _overspeedRecoverySpeed);
+        }
+
+        internal static AircraftSpeedState EvaluateSpeedState(
+            AircraftSpeedState currentState,
+            float airspeed,
+            float cautionSpeed,
+            float overspeedEntrySpeed,
+            float overspeedRecoverySpeed)
+        {
+            if (!IsFinite(airspeed) || airspeed < 0f)
+            {
+                return AircraftSpeedState.Normal;
+            }
+
+            float safeCautionSpeed = Mathf.Max(0.1f, cautionSpeed);
+            float safeOverspeedEntrySpeed = Mathf.Max(
+                safeCautionSpeed + 0.1f,
+                overspeedEntrySpeed);
+            float safeOverspeedRecoverySpeed = Mathf.Clamp(
+                overspeedRecoverySpeed,
+                safeCautionSpeed,
+                safeOverspeedEntrySpeed - 0.1f);
+
+            if (currentState == AircraftSpeedState.Overspeed)
+            {
+                if (airspeed <= safeOverspeedRecoverySpeed)
+                {
+                    return airspeed >= safeCautionSpeed
+                        ? AircraftSpeedState.Caution
+                        : AircraftSpeedState.Normal;
+                }
+
+                return AircraftSpeedState.Overspeed;
+            }
+
+            if (airspeed >= safeOverspeedEntrySpeed)
+            {
+                return AircraftSpeedState.Overspeed;
+            }
+
+            return airspeed >= safeCautionSpeed
+                ? AircraftSpeedState.Caution
+                : AircraftSpeedState.Normal;
+        }
+
         private void OnDisable()
         {
             Airspeed = 0f;
@@ -630,6 +716,7 @@ namespace MertKaan.UAVSimulator.Aircraft
             SideForce = Vector3.zero;
             DirectionalStabilityTorque = Vector3.zero;
             FlightState = AircraftFlightState.LowSpeed;
+            SpeedState = AircraftSpeedState.Normal;
         }
     }
 }

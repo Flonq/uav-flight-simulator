@@ -109,6 +109,8 @@ namespace MertKaan.UAVSimulator.UI.Debugging
                 $"Vertical Speed: {(_aircraftPhysics != null ? _aircraftPhysics.VerticalSpeed.ToString("F1") : "N/A")} m/s\n" +
                 $"Angle of Attack: {(_aircraftPhysics != null ? _aircraftPhysics.AngleOfAttack.ToString("F1") : "N/A")}°\n" +
                 $"Flight State: {(_aircraftPhysics != null ? _aircraftPhysics.FlightState.ToString() : "N/A")}\n" +
+                $"Speed State: {(_aircraftPhysics != null ? _aircraftPhysics.SpeedState.ToString() : "N/A")}\n" +
+                $"Overspeed Threshold: {(_aircraftPhysics != null ? _aircraftPhysics.OverspeedEntrySpeed.ToString("F1") : "N/A")} m/s\n" +
                 $"Ground: {GetGroundStatus()}\n" +
                 $"Brake [{_brakeBinding}]: {_inputReader.BrakePressed}\n" +
                 $"Camera [{_cameraBinding}]: {_inputReader.SwitchCameraPressed}\n" +

@@ -23,6 +23,7 @@ namespace MertKaan.UAVSimulator.Tests
         private GameObject _aircraftObject;
         private Rigidbody _rigidbody;
         private AircraftInputReader _inputReader;
+        private AircraftEngine _engine;
         private AircraftPhysics _aircraftPhysics;
 
         [SetUp]
@@ -32,8 +33,11 @@ namespace MertKaan.UAVSimulator.Tests
             _aircraftObject.SetActive(false);
             _rigidbody = _aircraftObject.AddComponent<Rigidbody>();
             _inputReader = _aircraftObject.AddComponent<AircraftInputReader>();
+            _engine = _aircraftObject.AddComponent<AircraftEngine>();
             _aircraftPhysics = _aircraftObject.AddComponent<AircraftPhysics>();
 
+            SetPrivateField(_engine, "_inputReader", _inputReader);
+            SetPrivateField(_engine, "_rigidbody", _rigidbody);
             SetPrivateField(_aircraftPhysics, "_inputReader", _inputReader);
             SetPrivateField(_aircraftPhysics, "_rigidbody", _rigidbody);
             _rigidbody.useGravity = false;
@@ -171,6 +175,125 @@ namespace MertKaan.UAVSimulator.Tests
         }
 
         [Test]
+        public void NormalAirspeed_ProducesNormalSpeedState()
+        {
+            EvaluateVelocity(Vector3.back * 65f);
+
+            Assert.That(_aircraftPhysics.SpeedState, Is.EqualTo(AircraftSpeedState.Normal));
+        }
+
+        [Test]
+        public void CautionAirspeed_ProducesCautionSpeedState()
+        {
+            EvaluateVelocity(Vector3.back * 75f);
+
+            Assert.That(_aircraftPhysics.SpeedState, Is.EqualTo(AircraftSpeedState.Caution));
+        }
+
+        [Test]
+        public void OverspeedEntry_ProducesOverspeedState()
+        {
+            EvaluateVelocity(Vector3.back * 85f);
+
+            Assert.That(_aircraftPhysics.SpeedState, Is.EqualTo(AircraftSpeedState.Overspeed));
+            Assert.That(_aircraftPhysics.ForwardAirspeed, Is.EqualTo(85f).Within(Tolerance));
+        }
+
+        [Test]
+        public void SpeedStateHysteresis_PreventsThresholdFlicker()
+        {
+            EvaluateVelocity(Vector3.back * 85f);
+            Assert.That(_aircraftPhysics.SpeedState, Is.EqualTo(AircraftSpeedState.Overspeed));
+
+            EvaluateVelocity(Vector3.back * 84f);
+            Assert.That(_aircraftPhysics.SpeedState, Is.EqualTo(AircraftSpeedState.Overspeed));
+
+            EvaluateVelocity(Vector3.back * 80f);
+            Assert.That(_aircraftPhysics.SpeedState, Is.EqualTo(AircraftSpeedState.Caution));
+
+            EvaluateVelocity(Vector3.back * 75f);
+            Assert.That(_aircraftPhysics.SpeedState, Is.EqualTo(AircraftSpeedState.Caution));
+
+            EvaluateVelocity(Vector3.back * 74f);
+            Assert.That(_aircraftPhysics.SpeedState, Is.EqualTo(AircraftSpeedState.Normal));
+        }
+
+        [Test]
+        public void Overspeed_RecoversBelowConfiguredRecoverySpeed()
+        {
+            EvaluateVelocity(Vector3.back * 90f);
+            Assert.That(_aircraftPhysics.SpeedState, Is.EqualTo(AircraftSpeedState.Overspeed));
+
+            EvaluateVelocity(Vector3.back * 79.9f);
+
+            Assert.That(_aircraftPhysics.SpeedState, Is.EqualTo(AircraftSpeedState.Caution));
+        }
+
+        [Test]
+        public void DragForce_GrowsMonotonicallyAndRemainsFinite()
+        {
+            float previousDrag = 0f;
+            for (int speed = 10; speed <= 100; speed += 10)
+            {
+                EvaluateVelocity(Vector3.back * speed);
+                float drag = _aircraftPhysics.DragForce.magnitude;
+
+                Assert.That(IsFinite(drag), Is.True);
+                Assert.That(drag, Is.GreaterThan(previousDrag));
+                previousDrag = drag;
+            }
+        }
+
+        [Test]
+        public void FullThrottleStraightFlight_ApproachesNaturalEquilibrium()
+        {
+            float speed = SimulateFullThrottleSpeed(0.02f, 1000);
+            float laterSpeed = SimulateFullThrottleSpeed(0.02f, 2000);
+
+            Assert.That(speed, Is.GreaterThan(60f));
+            Assert.That(laterSpeed, Is.LessThan(70f));
+            Assert.That(laterSpeed - speed, Is.LessThan(2f));
+        }
+
+        [Test]
+        public void HighAirspeed_IsReportedWithoutHardVelocityCap()
+        {
+            EvaluateVelocity(Vector3.back * 100f);
+
+            Assert.That(_aircraftPhysics.ForwardAirspeed, Is.EqualTo(100f).Within(Tolerance));
+            Assert.That(_aircraftPhysics.Airspeed, Is.EqualTo(100f).Within(Tolerance));
+            Assert.That(_aircraftPhysics.SpeedState, Is.EqualTo(AircraftSpeedState.Overspeed));
+        }
+
+        [Test]
+        public void PureLateralAirspeed_UsesTotalAirRelativeSpeedForEnvelopeState()
+        {
+            EvaluateVelocity(Vector3.right * 90f);
+
+            Assert.That(_aircraftPhysics.ForwardAirspeed, Is.EqualTo(0f).Within(Tolerance));
+            Assert.That(_aircraftPhysics.Airspeed, Is.EqualTo(90f).Within(Tolerance));
+            Assert.That(_aircraftPhysics.SpeedState, Is.EqualTo(AircraftSpeedState.Overspeed));
+        }
+
+        [Test]
+        public void FullThrottleEquilibrium_RemainsConsistentAcrossSupportedTimesteps()
+        {
+            float speedAtTenMilliseconds = SimulateFullThrottleSpeed(0.01f, 4000);
+            float speedAtTwentyMilliseconds = SimulateFullThrottleSpeed(0.02f, 2000);
+            float speedAtFortyMilliseconds = SimulateFullThrottleSpeed(0.04f, 1000);
+            float minimumSpeed = Mathf.Min(
+                speedAtTenMilliseconds,
+                Mathf.Min(speedAtTwentyMilliseconds, speedAtFortyMilliseconds));
+            float maximumSpeed = Mathf.Max(
+                speedAtTenMilliseconds,
+                Mathf.Max(speedAtTwentyMilliseconds, speedAtFortyMilliseconds));
+
+            Assert.That(minimumSpeed, Is.GreaterThan(60f));
+            Assert.That(maximumSpeed, Is.LessThan(70f));
+            Assert.That(maximumSpeed - minimumSpeed, Is.LessThan(0.1f));
+        }
+
+        [Test]
         public void ReverseFlow_DoesNotReceiveFullForwardControlAuthority()
         {
             SetPrivateField(_inputReader, "<Yaw>k__BackingField", 1f);
@@ -273,6 +396,42 @@ namespace MertKaan.UAVSimulator.Tests
             return AircraftPhysics.CalculateSideslipAngle(lateralSpeed, finalAirspeed);
         }
 
+        private float SimulateFullThrottleSpeed(float timestep, int steps)
+        {
+            float originalFixedDeltaTime = Time.fixedDeltaTime;
+            try
+            {
+                Time.fixedDeltaTime = timestep;
+                SetAutoProperty(_inputReader, "ThrottleInput", 1f);
+                SetAutoProperty(_inputReader, "Pitch", 0f);
+                SetAutoProperty(_inputReader, "Roll", 0f);
+                SetAutoProperty(_inputReader, "Yaw", 0f);
+                SetAutoProperty(_engine, "Throttle", 0f);
+                SetAutoProperty(_engine, "Rpm", 0f);
+                SetAutoProperty(_engine, "ThrustNewtons", 0f);
+                SetAutoProperty(_engine, "IsRunning", true);
+
+                float speed = 0f;
+                for (int step = 0; step < steps; step++)
+                {
+                    InvokeFixedUpdate(_engine);
+                    _rigidbody.linearVelocity = Vector3.back * speed;
+                    InvokeFixedUpdate(_aircraftPhysics);
+                    float forwardForce = _engine.ThrustNewtons +
+                        Vector3.Dot(_aircraftPhysics.DragForce, Vector3.back);
+                    speed = Mathf.Max(
+                        0f,
+                        speed + forwardForce / TestMass * timestep);
+                }
+
+                return speed;
+            }
+            finally
+            {
+                Time.fixedDeltaTime = originalFixedDeltaTime;
+            }
+        }
+
         private Vector3 CalculateControlTorqueForYawInput(float yawInput)
         {
             SetPrivateField(_inputReader, "<Yaw>k__BackingField", yawInput);
@@ -285,6 +444,11 @@ namespace MertKaan.UAVSimulator.Tests
 
         private void EvaluateVelocity(Vector3 velocity, Quaternion rotation = default)
         {
+            if (rotation == default)
+            {
+                rotation = Quaternion.identity;
+            }
+
             _aircraftObject.transform.rotation = rotation;
             _rigidbody.linearVelocity = velocity;
             MethodInfo method = typeof(AircraftPhysics).GetMethod(
@@ -301,6 +465,24 @@ namespace MertKaan.UAVSimulator.Tests
                 BindingFlags.Instance | BindingFlags.NonPublic);
             Assert.That(field, Is.Not.Null, $"Missing field: {fieldName}");
             field.SetValue(target, value);
+        }
+
+        private static void SetAutoProperty<T>(object target, string propertyName, T value)
+        {
+            FieldInfo field = target.GetType().GetField(
+                "<" + propertyName + ">k__BackingField",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(field, Is.Not.Null, $"Missing property backing field: {propertyName}");
+            field.SetValue(target, value);
+        }
+
+        private static void InvokeFixedUpdate(object target)
+        {
+            MethodInfo method = target.GetType().GetMethod(
+                "FixedUpdate",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null);
+            method.Invoke(target, null);
         }
 
         private static bool IsFinite(float value)

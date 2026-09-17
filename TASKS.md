@@ -202,7 +202,8 @@ Bütün kullanıcı komutları fizik sisteminden bağımsız şekilde okunabilme
 - [x] Sideslip'e karşı yanal side-force ve yönelme kararlılığı uygula (2026-09-17)
 - [x] Lift/longitudinal drag akışını yanal hızdan ayır ve geri akış kontrol otoritesini sınırla (2026-09-17)
 - [x] Sideslip decay ve 10/20/40 ms sabit adım regresyonlarını ekle (2026-09-17)
-- [ ] Maksimum güvenli hız davranışı ekle
+- [x] Total airspeed tabanlı prototip hız zarfı, overspeed hysteresis ve debug telemetrisi ekle (2026-09-17)
+- [x] Tam gaz doğal thrust/drag dengesini ve 10/20/40 ms hız tutarlılığını doğrula — yaklaşık 65,71 m/s (2026-09-17)
 - [x] Fizik ayarlarını Inspector üzerinden düzenlenebilir yap
 - [ ] Debug kuvvet çizimleri ekle
 - [x] Sabit fizik adımı bağımsızlığını kontrollü 10/20/40 ms adımlarda test et
@@ -503,7 +504,8 @@ Mevcut doğrulanması gereken teknik borçlar:
 - [x] 13 m/s rotasyon komutlu kontrollü kalkış senaryosunu oluştur ve FlightTest pistinde yaklaşık 17,2 m/s yerden kesilme referansını doğrula
 - [x] Toplam hava hızı, dikey hız, signed angle of attack ve uçuş durumunu debug paneline ekle
 - [ ] Propeller itki eğrisini gerçek araç verileriyle kalibre et; mevcut 1.000 N yalnızca prototip değeridir
-- [ ] Mevcut prototip drag modeliyle nihai yer/uçuş hızını doğrula ve maksimum güvenli hız davranışını belirle
+- [x] Mevcut prototip drag modeliyle doğal uçuş hızını doğrula ve prototip hız zarfını belirle — 75 m/s caution, 85 m/s overspeed, 80 m/s recovery
+- [ ] Prototip hız zarfını gerçek araç Vne ve işletme limitleriyle yeniden kalibre et
 - [x] Sabit lift katsayısını açı-of-attack/stall modeliyle geliştir; maksimum güvenli hız ve gerçek araç kalibrasyonu açık kapsamdır
 - [ ] Takip kamerasına arazi/geometri çarpışması ve görüş engeli yönetimi ekle
 - [ ] Takip kamerası mesafe, yükseklik ve yumuşatma değerlerini uçuş fiziği tamamlandıktan sonra final kullanıcı testiyle kalibre et
@@ -515,6 +517,6 @@ Mevcut doğrulanması gereken teknik borçlar:
 
 Bu bölüm her çalışma oturumunun sonunda güncellenmelidir.
 
-1. Maksimum güvenli hız davranışını ve drag/lift katsayılarını sonlandır; kontrollü kalkış referanslarını yeniden kalibre et.
+1. Prototip hız zarfını kullanıcı uçuş testiyle kabul et; gerçek araç verisi sağlanırsa Vne ve aerodinamik katsayıları yeniden kalibre et.
 2. Pist dışı davranışı ve gelişmiş tekerlek/süspansiyon ihtiyacını değerlendir.
 3. İniş yaklaşımı, teker temas geçişi ve fren kabul senaryosunu tasarla.
