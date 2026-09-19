@@ -4,6 +4,14 @@ using UnityEngine.SceneManagement;
 
 namespace MertKaan.UAVSimulator.Aircraft
 {
+    public enum GroundSurfaceType
+    {
+        None,
+        Runway,
+        Terrain,
+        Other
+    }
+
     [DisallowMultipleComponent]
     [RequireComponent(typeof(AircraftInputReader))]
     [RequireComponent(typeof(Rigidbody))]
@@ -26,6 +34,10 @@ namespace MertKaan.UAVSimulator.Aircraft
 
         [SerializeField]
         private SphereCollider _leftMainWheel;
+
+        [Tooltip("Exact scene collider references that represent the usable runway surface.")]
+        [SerializeField]
+        private Collider[] _runwayColliders = new Collider[0];
 
         [Header("Ground Detection")]
         [SerializeField]
@@ -81,6 +93,19 @@ namespace MertKaan.UAVSimulator.Aircraft
         public bool RightMainWheelGrounded { get; private set; }
         public bool LeftMainWheelGrounded { get; private set; }
         public int GroundedWheelCount { get; private set; }
+        public GroundSurfaceType NoseWheelSurface { get; private set; }
+        public GroundSurfaceType RightMainWheelSurface { get; private set; }
+        public GroundSurfaceType LeftMainWheelSurface { get; private set; }
+        public Collider NoseWheelContactCollider { get; private set; }
+        public Collider RightMainWheelContactCollider { get; private set; }
+        public Collider LeftMainWheelContactCollider { get; private set; }
+        public Vector3 NoseWheelContactNormal { get; private set; }
+        public Vector3 RightMainWheelContactNormal { get; private set; }
+        public Vector3 LeftMainWheelContactNormal { get; private set; }
+        public int RunwayContactCount { get; private set; }
+        public int OffRunwayContactCount { get; private set; }
+        public bool AnyWheelOnRunway { get; private set; }
+        public bool AllContactingWheelsOnRunway { get; private set; }
         public bool IsBraking { get; private set; }
         public float ForwardGroundSpeed { get; private set; }
         public float LateralGroundSpeed { get; private set; }
@@ -191,11 +216,50 @@ namespace MertKaan.UAVSimulator.Aircraft
                 _leftMainWheel,
                 out RaycastHit leftHit);
 
+            Collider noseContactCollider;
+            Vector3 noseContactNormal;
+            NoseWheelSurface = GetContactSurface(
+                NoseWheelGrounded,
+                noseHit,
+                out noseContactCollider,
+                out noseContactNormal);
+            NoseWheelContactCollider = noseContactCollider;
+            NoseWheelContactNormal = noseContactNormal;
+
+            Collider rightContactCollider;
+            Vector3 rightContactNormal;
+            RightMainWheelSurface = GetContactSurface(
+                RightMainWheelGrounded,
+                rightHit,
+                out rightContactCollider,
+                out rightContactNormal);
+            RightMainWheelContactCollider = rightContactCollider;
+            RightMainWheelContactNormal = rightContactNormal;
+
+            Collider leftContactCollider;
+            Vector3 leftContactNormal;
+            LeftMainWheelSurface = GetContactSurface(
+                LeftMainWheelGrounded,
+                leftHit,
+                out leftContactCollider,
+                out leftContactNormal);
+            LeftMainWheelContactCollider = leftContactCollider;
+            LeftMainWheelContactNormal = leftContactNormal;
+
             GroundedWheelCount = 0;
             Vector3 normalSum = Vector3.zero;
             AddGroundHit(NoseWheelGrounded, noseHit, ref normalSum);
             AddGroundHit(RightMainWheelGrounded, rightHit, ref normalSum);
             AddGroundHit(LeftMainWheelGrounded, leftHit, ref normalSum);
+
+            GroundSurfaceSummary surfaceSummary = SummarizeSurfaceContacts(
+                NoseWheelSurface,
+                RightMainWheelSurface,
+                LeftMainWheelSurface);
+            RunwayContactCount = surfaceSummary.RunwayContactCount;
+            OffRunwayContactCount = surfaceSummary.OffRunwayContactCount;
+            AnyWheelOnRunway = surfaceSummary.AnyWheelOnRunway;
+            AllContactingWheelsOnRunway = surfaceSummary.AllContactingWheelsOnRunway;
 
             IsGrounded = GroundedWheelCount > 0;
             GroundNormal = IsGrounded ? normalSum.normalized : Vector3.up;
@@ -213,6 +277,122 @@ namespace MertKaan.UAVSimulator.Aircraft
 
             GroundedWheelCount++;
             normalSum += hit.normal;
+        }
+
+        private GroundSurfaceType GetContactSurface(
+            bool grounded,
+            RaycastHit hit,
+            out Collider contactCollider,
+            out Vector3 contactNormal)
+        {
+            if (!grounded)
+            {
+                contactCollider = null;
+                contactNormal = Vector3.zero;
+                return GroundSurfaceType.None;
+            }
+
+            contactCollider = hit.collider;
+            contactNormal = hit.normal;
+            return ClassifySurface(contactCollider, _runwayColliders);
+        }
+
+        public static GroundSurfaceType ClassifySurface(
+            Collider contactCollider,
+            Collider[] runwayColliders)
+        {
+            if (contactCollider == null)
+            {
+                return GroundSurfaceType.None;
+            }
+
+            if (runwayColliders != null)
+            {
+                for (int i = 0; i < runwayColliders.Length; i++)
+                {
+                    if (runwayColliders[i] == contactCollider)
+                    {
+                        return GroundSurfaceType.Runway;
+                    }
+                }
+            }
+
+            return contactCollider is TerrainCollider
+                ? GroundSurfaceType.Terrain
+                : GroundSurfaceType.Other;
+        }
+
+        public readonly struct GroundSurfaceSummary
+        {
+            public GroundSurfaceSummary(
+                int runwayContactCount,
+                int offRunwayContactCount,
+                bool anyWheelOnRunway,
+                bool allContactingWheelsOnRunway)
+            {
+                RunwayContactCount = runwayContactCount;
+                OffRunwayContactCount = offRunwayContactCount;
+                AnyWheelOnRunway = anyWheelOnRunway;
+                AllContactingWheelsOnRunway = allContactingWheelsOnRunway;
+            }
+
+            public int RunwayContactCount { get; }
+            public int OffRunwayContactCount { get; }
+            public bool AnyWheelOnRunway { get; }
+            public bool AllContactingWheelsOnRunway { get; }
+        }
+
+        public static GroundSurfaceSummary SummarizeSurfaceContacts(
+            GroundSurfaceType noseWheelSurface,
+            GroundSurfaceType rightMainWheelSurface,
+            GroundSurfaceType leftMainWheelSurface)
+        {
+            int runwayCount = 0;
+            int offRunwayCount = 0;
+            int contactCount = 0;
+            AccumulateSurfaceContact(
+                noseWheelSurface,
+                ref runwayCount,
+                ref offRunwayCount,
+                ref contactCount);
+            AccumulateSurfaceContact(
+                rightMainWheelSurface,
+                ref runwayCount,
+                ref offRunwayCount,
+                ref contactCount);
+            AccumulateSurfaceContact(
+                leftMainWheelSurface,
+                ref runwayCount,
+                ref offRunwayCount,
+                ref contactCount);
+
+            return new GroundSurfaceSummary(
+                runwayCount,
+                offRunwayCount,
+                runwayCount > 0,
+                contactCount > 0 && runwayCount == contactCount);
+        }
+
+        private static void AccumulateSurfaceContact(
+            GroundSurfaceType surface,
+            ref int runwayCount,
+            ref int offRunwayCount,
+            ref int contactCount)
+        {
+            if (surface == GroundSurfaceType.None)
+            {
+                return;
+            }
+
+            contactCount++;
+            if (surface == GroundSurfaceType.Runway)
+            {
+                runwayCount++;
+            }
+            else
+            {
+                offRunwayCount++;
+            }
         }
 
         private bool TryGetGroundHit(
@@ -389,6 +569,19 @@ namespace MertKaan.UAVSimulator.Aircraft
             RightMainWheelGrounded = false;
             LeftMainWheelGrounded = false;
             GroundedWheelCount = 0;
+            NoseWheelSurface = GroundSurfaceType.None;
+            RightMainWheelSurface = GroundSurfaceType.None;
+            LeftMainWheelSurface = GroundSurfaceType.None;
+            NoseWheelContactCollider = null;
+            RightMainWheelContactCollider = null;
+            LeftMainWheelContactCollider = null;
+            NoseWheelContactNormal = Vector3.zero;
+            RightMainWheelContactNormal = Vector3.zero;
+            LeftMainWheelContactNormal = Vector3.zero;
+            RunwayContactCount = 0;
+            OffRunwayContactCount = 0;
+            AnyWheelOnRunway = false;
+            AllContactingWheelsOnRunway = false;
             GroundNormal = Vector3.up;
             ResetForceDiagnostics();
         }

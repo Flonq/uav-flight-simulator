@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using MertKaan.UAVSimulator.Aircraft;
 using MertKaan.UAVSimulator.InputSystem;
 using TMPro;
@@ -112,6 +113,8 @@ namespace MertKaan.UAVSimulator.UI.Debugging
                 $"Speed State: {(_aircraftPhysics != null ? _aircraftPhysics.SpeedState.ToString() : "N/A")}\n" +
                 $"Overspeed Threshold: {(_aircraftPhysics != null ? _aircraftPhysics.OverspeedEntrySpeed.ToString("F1") : "N/A")} m/s\n" +
                 $"Ground: {GetGroundStatus()}\n" +
+                $"Surface: {GetSurfaceStatus()}\n" +
+                $"Normal: {GetSurfaceNormals()}\n" +
                 $"Brake [{_brakeBinding}]: {_inputReader.BrakePressed}\n" +
                 $"Camera [{_cameraBinding}]: {_inputReader.SwitchCameraPressed}\n" +
                 $"Zoom [{_zoomBinding}]: {_inputReader.EOZoom:F2}\n" +
@@ -133,6 +136,63 @@ namespace MertKaan.UAVSimulator.UI.Debugging
             return _groundController.IsGrounded
                 ? $"Grounded ({_groundController.GroundedWheelCount}/3 wheels)"
                 : "Airborne";
+        }
+
+        private string GetSurfaceStatus()
+        {
+            if (_groundController == null || !_groundController.isActiveAndEnabled)
+            {
+                return "N/A";
+            }
+
+            return $"N:{FormatContact(_groundController.NoseWheelSurface, _groundController.NoseWheelContactCollider)} " +
+                $"R:{FormatContact(_groundController.RightMainWheelSurface, _groundController.RightMainWheelContactCollider)} " +
+                $"L:{FormatContact(_groundController.LeftMainWheelSurface, _groundController.LeftMainWheelContactCollider)} " +
+                $"(R:{_groundController.RunwayContactCount} O:{_groundController.OffRunwayContactCount} " +
+                $"Any:{(_groundController.AnyWheelOnRunway ? "Y" : "N")} " +
+                $"All:{(_groundController.AllContactingWheelsOnRunway ? "Y" : "N")})";
+        }
+
+        private string GetSurfaceNormals()
+        {
+            if (_groundController == null || !_groundController.isActiveAndEnabled)
+            {
+                return "N/A";
+            }
+
+            return $"N:{FormatNormal(_groundController.NoseWheelContactNormal)} " +
+                $"R:{FormatNormal(_groundController.RightMainWheelContactNormal)} " +
+                $"L:{FormatNormal(_groundController.LeftMainWheelContactNormal)}";
+        }
+
+        private static string FormatContact(GroundSurfaceType surface, Collider collider)
+        {
+            return $"{GetSurfaceCode(surface)}/{(collider != null ? collider.name : "-")}";
+        }
+
+        private static string GetSurfaceCode(GroundSurfaceType surface)
+        {
+            switch (surface)
+            {
+                case GroundSurfaceType.Runway:
+                    return "R";
+                case GroundSurfaceType.Terrain:
+                    return "T";
+                case GroundSurfaceType.Other:
+                    return "O";
+                default:
+                    return "-";
+            }
+        }
+
+        private static string FormatNormal(Vector3 normal)
+        {
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                "({0:F1};{1:F1};{2:F1})",
+                normal.x,
+                normal.y,
+                normal.z);
         }
 
         private void CacheDesktopBindingLabels()
