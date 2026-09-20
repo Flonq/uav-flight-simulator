@@ -36,6 +36,7 @@ namespace MertKaan.UAVSimulator.Tests
             _engine = _aircraftObject.AddComponent<AircraftEngine>();
             _aircraftPhysics = _aircraftObject.AddComponent<AircraftPhysics>();
 
+            SetPrivateField(_inputReader, "_inputActions", new AircraftInputActions());
             SetPrivateField(_engine, "_inputReader", _inputReader);
             SetPrivateField(_engine, "_rigidbody", _rigidbody);
             SetPrivateField(_aircraftPhysics, "_inputReader", _inputReader);
