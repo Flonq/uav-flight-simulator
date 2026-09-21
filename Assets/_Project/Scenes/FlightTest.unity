@@ -23838,8 +23838,43 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1855187489322148508, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2045742866}
   m_SourcePrefab: {fileID: 100100000, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
+--- !u!1 &682847202 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1855187489322148508, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
+  m_PrefabInstance: {fileID: 682847201}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &682847203 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 192771565415276579, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
+  m_PrefabInstance: {fileID: 682847201}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682847202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5499fef260c13f14bad42d259a7bacbf, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::MertKaan.UAVSimulator.Aircraft.AircraftPhysics
+--- !u!114 &682847204 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6575156145410406327, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
+  m_PrefabInstance: {fileID: 682847201}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682847202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2ad0503e9a79a64cbfae8c2b314fc81, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::MertKaan.UAVSimulator.Aircraft.AircraftEngine
+--- !u!54 &682847205 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 8385554076756208212, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
+  m_PrefabInstance: {fileID: 682847201}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &683209628
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -64543,7 +64578,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1184735321776206417, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
   m_PrefabInstance: {fileID: 682847201}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 682847202}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d19b41be333f816489e6f28830b86200, type: 3}
@@ -64554,6 +64589,21 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4714858000967673353, guid: 35769d5e1c0d2a148be5833afa136bc6, type: 3}
   m_PrefabInstance: {fileID: 682847201}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2045742866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682847202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba980aeee16743d469b0b84a3ac710e8, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::MertKaan.UAVSimulator.Telemetry.AircraftTelemetry
+  _rigidbody: {fileID: 682847205}
+  _aircraftPhysics: {fileID: 682847203}
+  _aircraftEngine: {fileID: 682847204}
 --- !u!1001 &2049225855
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -258,20 +258,20 @@ Kullanıcı uçuş ve görev sırasında farklı kamera modlarını sorunsuz kul
 
 # FAZ 9 — Telemetri Sistemi
 
-- [ ] `AircraftTelemetry` scriptini oluştur
-- [ ] Ground speed hesapla
-- [ ] Air speed hesapla
-- [ ] İrtifa hesapla
-- [ ] Dikey hız hesapla
-- [ ] Heading hesapla
-- [ ] Pitch açısını hesapla
-- [ ] Roll açısını hesapla
-- [ ] Yaw açısını hesapla
-- [ ] Throttle yüzdesini hesapla
-- [ ] Motor durumunu hesapla
+- [x] `AircraftTelemetry` scriptini oluştur
+- [x] Ground speed hesapla
+- [x] Air speed hesapla
+- [x] İrtifa hesapla
+- [x] Dikey hız hesapla
+- [x] Heading hesapla
+- [x] Pitch açısını hesapla
+- [x] Roll açısını hesapla
+- [x] Yaw açısını hesapla
+- [x] Throttle yüzdesini hesapla
+- [x] Motor durumunu hesapla
 - [ ] Waypoint mesafesini hesapla
 - [ ] Telemetri verilerini event veya arayüz üzerinden yayınla
-- [ ] Telemetri değerlerinin doğruluğunu test et
+- [x] Telemetri değerlerinin doğruluğunu test et
 
 ### Çıkış kriteri
 
