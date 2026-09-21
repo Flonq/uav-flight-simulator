@@ -1,3 +1,4 @@
+using System;
 using MertKaan.UAVSimulator.Aircraft;
 using UnityEngine;
 
@@ -81,6 +82,18 @@ namespace MertKaan.UAVSimulator.Telemetry
         /// <summary>Whether the engine currently reports itself as running.</summary>
         public bool EngineRunning { get; private set; }
 
+        /// <summary>
+        /// The latest immutable sample captured by this component. It is updated
+        /// before SnapshotUpdated is raised for a successful physics step.
+        /// </summary>
+        public AircraftTelemetrySnapshot CurrentSnapshot { get; private set; }
+
+        /// <summary>
+        /// Raised exactly once after each successful FixedUpdate sample. The event
+        /// is not raised when any required source reference is missing or invalid.
+        /// </summary>
+        public event Action<AircraftTelemetrySnapshot> SnapshotUpdated;
+
         private void Reset()
         {
             ResolveReferences();
@@ -90,12 +103,7 @@ namespace MertKaan.UAVSimulator.Telemetry
         {
             ResolveReferences();
 
-            if (_rigidbody == null ||
-                _aircraftPhysics == null ||
-                _aircraftEngine == null ||
-                _rigidbody.gameObject != gameObject ||
-                _aircraftPhysics.gameObject != gameObject ||
-                _aircraftEngine.gameObject != gameObject)
+            if (!HasValidReferences())
             {
                 Debug.LogError(
                     $"{nameof(AircraftTelemetry)} requires the active aircraft root Rigidbody, " +
@@ -110,7 +118,12 @@ namespace MertKaan.UAVSimulator.Telemetry
 
         private void FixedUpdate()
         {
-            RefreshTelemetry();
+            if (!RefreshTelemetry())
+            {
+                return;
+            }
+
+            SnapshotUpdated?.Invoke(CurrentSnapshot);
         }
 
         private void ResolveReferences()
@@ -131,11 +144,11 @@ namespace MertKaan.UAVSimulator.Telemetry
             }
         }
 
-        private void RefreshTelemetry()
+        private bool RefreshTelemetry()
         {
-            if (_rigidbody == null || _aircraftPhysics == null || _aircraftEngine == null)
+            if (!HasValidReferences())
             {
-                return;
+                return false;
             }
 
             Vector3 velocity = _rigidbody.linearVelocity;
@@ -155,6 +168,30 @@ namespace MertKaan.UAVSimulator.Telemetry
 
             ThrottlePercent = Mathf.Clamp01(_aircraftEngine.Throttle) * 100f;
             EngineRunning = _aircraftEngine.IsRunning;
+
+            CurrentSnapshot = new AircraftTelemetrySnapshot(
+                HorizontalGroundSpeedMps,
+                AirspeedMps,
+                AltitudeMeters,
+                VerticalSpeedMps,
+                HeadingDegrees,
+                HeadingValid,
+                PitchDegrees,
+                RollDegrees,
+                YawDegrees,
+                ThrottlePercent,
+                EngineRunning);
+            return true;
+        }
+
+        private bool HasValidReferences()
+        {
+            return _rigidbody != null &&
+                _aircraftPhysics != null &&
+                _aircraftEngine != null &&
+                _rigidbody.gameObject == gameObject &&
+                _aircraftPhysics.gameObject == gameObject &&
+                _aircraftEngine.gameObject == gameObject;
         }
 
         private void UpdateHeading()

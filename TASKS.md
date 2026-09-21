@@ -270,7 +270,7 @@ Kullanıcı uçuş ve görev sırasında farklı kamera modlarını sorunsuz kul
 - [x] Throttle yüzdesini hesapla
 - [x] Motor durumunu hesapla
 - [ ] Waypoint mesafesini hesapla
-- [ ] Telemetri verilerini event veya arayüz üzerinden yayınla
+- [x] Telemetri verilerini event veya arayüz üzerinden yayınla
 - [x] Telemetri değerlerinin doğruluğunu test et
 
 ### Çıkış kriteri

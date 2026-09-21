@@ -184,6 +184,82 @@ namespace MertKaan.UAVSimulator.Tests
             Assert.That(_telemetry.EngineRunning, Is.True);
         }
 
+        [Test]
+        public void CurrentSnapshot_MatchesAllTelemetryPropertiesFromTheSameStep()
+        {
+            _rigidbody.position = new Vector3(2f, 123.4f, -8f);
+            _rigidbody.linearVelocity = new Vector3(3f, -4f, 12f);
+            _rigidbody.rotation = Quaternion.Euler(15f, 30f, -20f);
+            SetAutoProperty(_engine, "Throttle", 0.375f);
+            SetAutoProperty(_engine, "IsRunning", true);
+
+            AircraftTelemetrySnapshot receivedSnapshot = default;
+            _telemetry.SnapshotUpdated += snapshot => receivedSnapshot = snapshot;
+            InvokeFixedUpdate(_aircraftPhysics);
+            InvokeFixedUpdate(_telemetry);
+
+            Assert.That(receivedSnapshot.HorizontalGroundSpeedMps, Is.EqualTo(_telemetry.HorizontalGroundSpeedMps).Within(Tolerance));
+            Assert.That(receivedSnapshot.AirspeedMps, Is.EqualTo(_telemetry.AirspeedMps).Within(Tolerance));
+            Assert.That(receivedSnapshot.AltitudeMeters, Is.EqualTo(_telemetry.AltitudeMeters).Within(Tolerance));
+            Assert.That(receivedSnapshot.VerticalSpeedMps, Is.EqualTo(_telemetry.VerticalSpeedMps).Within(Tolerance));
+            Assert.That(receivedSnapshot.HeadingDegrees, Is.EqualTo(_telemetry.HeadingDegrees).Within(Tolerance));
+            Assert.That(receivedSnapshot.HeadingValid, Is.EqualTo(_telemetry.HeadingValid));
+            Assert.That(receivedSnapshot.PitchDegrees, Is.EqualTo(_telemetry.PitchDegrees).Within(Tolerance));
+            Assert.That(receivedSnapshot.RollDegrees, Is.EqualTo(_telemetry.RollDegrees).Within(Tolerance));
+            Assert.That(receivedSnapshot.YawDegrees, Is.EqualTo(_telemetry.YawDegrees).Within(Tolerance));
+            Assert.That(receivedSnapshot.ThrottlePercent, Is.EqualTo(_telemetry.ThrottlePercent).Within(Tolerance));
+            Assert.That(receivedSnapshot.EngineRunning, Is.EqualTo(_telemetry.EngineRunning));
+            Assert.That(_telemetry.CurrentSnapshot.HeadingValid, Is.EqualTo(_telemetry.HeadingValid));
+            Assert.That(_telemetry.CurrentSnapshot.EngineRunning, Is.EqualTo(_telemetry.EngineRunning));
+        }
+
+        [Test]
+        public void SnapshotUpdated_IsRaisedOncePerSuccessfulFixedUpdate()
+        {
+            int eventCount = 0;
+            _telemetry.SnapshotUpdated += snapshot => eventCount++;
+
+            InvokeFixedUpdate(_aircraftPhysics);
+            InvokeFixedUpdate(_telemetry);
+            InvokeFixedUpdate(_aircraftPhysics);
+            InvokeFixedUpdate(_telemetry);
+
+            Assert.That(eventCount, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void SnapshotUpdated_CarriesHeadingValidityAndEngineState()
+        {
+            _rigidbody.rotation = Quaternion.FromToRotation(Vector3.back, Vector3.up);
+            SetAutoProperty(_engine, "IsRunning", false);
+            AircraftTelemetrySnapshot receivedSnapshot = default;
+            _telemetry.SnapshotUpdated += snapshot => receivedSnapshot = snapshot;
+
+            InvokeFixedUpdate(_telemetry);
+
+            Assert.That(receivedSnapshot.HeadingValid, Is.False);
+            Assert.That(receivedSnapshot.HeadingDegrees, Is.EqualTo(0f).Within(Tolerance));
+            Assert.That(receivedSnapshot.EngineRunning, Is.False);
+        }
+
+        [Test]
+        public void MissingSourceReference_DoesNotPublishSnapshotUpdate()
+        {
+            int eventCount = 0;
+            _telemetry.SnapshotUpdated += snapshot => eventCount++;
+            SetPrivateField<AircraftPhysics>(_telemetry, "_aircraftPhysics", null);
+
+            InvokeFixedUpdate(_telemetry);
+
+            Assert.That(eventCount, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void Snapshot_IsAValueType()
+        {
+            Assert.That(typeof(AircraftTelemetrySnapshot).IsValueType, Is.True);
+        }
+
         private void AssertHeading(float physicalHeadingDegrees, float expectedHeading)
         {
             Vector3 expectedPhysicalForward = HeadingVector(physicalHeadingDegrees);
