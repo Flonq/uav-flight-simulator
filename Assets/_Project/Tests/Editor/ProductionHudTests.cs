@@ -1,4 +1,5 @@
 using MertKaan.UAVSimulator.Aircraft;
+using MertKaan.UAVSimulator.Missions;
 using MertKaan.UAVSimulator.Telemetry;
 using MertKaan.UAVSimulator.UI.Production;
 using NUnit.Framework;
@@ -34,6 +35,15 @@ namespace MertKaan.UAVSimulator.Tests
             Assert.That(
                 ProductionHudFormatting.GetEngineStateLabel(false),
                 Is.EqualTo("Stopped"));
+            Assert.That(
+                ProductionHudFormatting.GetMissionStateLabel(MissionState.NotStarted),
+                Is.EqualTo("Not Started"));
+            Assert.That(
+                ProductionHudFormatting.GetMissionStateLabel(MissionState.Active),
+                Is.EqualTo("Active"));
+            Assert.That(
+                ProductionHudFormatting.GetMissionStateLabel(MissionState.RouteCompleted),
+                Is.EqualTo("Route Completed"));
         }
 
         [Test]
@@ -128,6 +138,42 @@ namespace MertKaan.UAVSimulator.Tests
             Assert.That(clamped, Is.EqualTo(Vector2.zero));
             Assert.That(distance, Is.EqualTo(0f).Within(Tolerance));
             Assert.That(float.IsNaN(distance) || float.IsInfinity(distance), Is.False);
+        }
+
+        [Test]
+        public void WaypointIndicator_UsesNorthUpDirectionAndClampsOutOfRange()
+        {
+            GameObject waypointObject = new GameObject("WaypointMathTest");
+            Waypoint waypoint = waypointObject.AddComponent<Waypoint>();
+            MissionSnapshot snapshot = new MissionSnapshot(
+                MissionState.Active,
+                0,
+                0,
+                1,
+                50f,
+                waypoint);
+
+            Vector2 offset = ProductionMinimapMath.WorldToNorthUpOffset(
+                Vector3.zero,
+                Vector3.forward * 500f + Vector3.right * 100f,
+                100f,
+                new Vector2(200f, 200f));
+            Vector2 clamped = ProductionMinimapMath.ClampToPanelEdge(offset, new Vector2(100f, 100f));
+
+            Assert.That(ProductionFlightHud.ShouldShowWaypointIndicator(snapshot), Is.True);
+            Assert.That(clamped.x, Is.EqualTo(20f).Within(Tolerance));
+            Assert.That(clamped.y, Is.EqualTo(100f).Within(Tolerance));
+
+            MissionSnapshot completed = new MissionSnapshot(
+                MissionState.RouteCompleted,
+                -1,
+                1,
+                1,
+                0f,
+                null);
+            Assert.That(ProductionFlightHud.ShouldShowWaypointIndicator(completed), Is.False);
+
+            Object.DestroyImmediate(waypointObject);
         }
 
         private static AircraftTelemetrySnapshot CreateSnapshot(

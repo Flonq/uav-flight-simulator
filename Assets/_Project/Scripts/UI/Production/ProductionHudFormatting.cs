@@ -1,4 +1,5 @@
 using MertKaan.UAVSimulator.Aircraft;
+using MertKaan.UAVSimulator.Missions;
 using MertKaan.UAVSimulator.Telemetry;
 
 namespace MertKaan.UAVSimulator.UI.Production
@@ -49,6 +50,19 @@ namespace MertKaan.UAVSimulator.UI.Production
         public static string GetEngineStateLabel(bool engineRunning)
         {
             return engineRunning ? "Running" : "Stopped";
+        }
+
+        public static string GetMissionStateLabel(MissionState state)
+        {
+            switch (state)
+            {
+                case MissionState.Active:
+                    return "Active";
+                case MissionState.RouteCompleted:
+                    return "Route Completed";
+                default:
+                    return "Not Started";
+            }
         }
 
         public static ProductionHudAlertLevel GetAlertLevel(AircraftTelemetrySnapshot snapshot)

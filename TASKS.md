@@ -269,7 +269,7 @@ Kullanıcı uçuş ve görev sırasında farklı kamera modlarını sorunsuz kul
 - [x] Yaw açısını hesapla
 - [x] Throttle yüzdesini hesapla
 - [x] Motor durumunu hesapla
-- [ ] Waypoint mesafesini hesapla
+- [x] Waypoint mesafesini hesapla — MissionSnapshot ve production HUD tarafından tüketiliyor
 - [x] Telemetri verilerini event veya arayüz üzerinden yayınla
 - [x] Telemetri değerlerinin doğruluğunu test et
 
@@ -305,19 +305,19 @@ Kullanıcı temel uçuş ve görev bilgilerini tek ekrandan takip edebilmelidir.
 
 # FAZ 11 — Waypoint ve Görev Sistemi
 
-- [ ] `MissionManager` oluştur
-- [ ] `Waypoint` bileşeni oluştur
-- [ ] Waypoint sıralaması ekle
-- [ ] Waypoint algılama yarıçapı ekle
-- [ ] Aktif waypoint görseli ekle
-- [ ] Görev başlangıç sistemi ekle
-- [ ] Görev açıklama paneli ekle
+- [x] `MissionManager` oluştur
+- [x] `Waypoint` bileşeni oluştur
+- [x] Waypoint sıralaması ekle
+- [x] Waypoint algılama yarıçapı ekle
+- [x] Aktif waypoint görseli ekle
+- [x] Görev başlangıç sistemi ekle
+- [x] Görev açıklama paneli ekle
 - [ ] Hedef bölgesi oluştur
 - [ ] EO kamera ile hedef gözlemi koşulu ekle
 - [ ] Görev başarı koşulu ekle
 - [ ] Görev başarısızlık koşulu ekle
 - [ ] Görev süresi ekle
-- [ ] Üsse dönüş waypointleri ekle
+- [x] Üsse dönüş waypointleri ekle
 - [ ] İniş sonrası görevi tamamlama koşulu ekle
 - [ ] Görev sonuç ekranı ekle
 

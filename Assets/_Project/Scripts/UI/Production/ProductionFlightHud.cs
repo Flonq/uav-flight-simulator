@@ -1,4 +1,5 @@
 using MertKaan.UAVSimulator.Aircraft;
+using MertKaan.UAVSimulator.Missions;
 using MertKaan.UAVSimulator.Telemetry;
 using TMPro;
 using UnityEngine;
@@ -19,6 +20,9 @@ namespace MertKaan.UAVSimulator.UI.Production
 
         [SerializeField]
         private BoxCollider _runwayCollider;
+
+        [SerializeField]
+        private MissionManager _missionManager;
 
         [Header("Telemetry Values")]
         [SerializeField]
@@ -65,6 +69,26 @@ namespace MertKaan.UAVSimulator.UI.Production
         [SerializeField]
         private TMP_Text _runwayDistanceValue;
 
+        [Header("Mission")]
+        [SerializeField]
+        private TMP_Text _missionStateValue;
+
+        [SerializeField]
+        private TMP_Text _waypointNameValue;
+
+        [SerializeField]
+        private TMP_Text _waypointOrderValue;
+
+        [SerializeField]
+        private TMP_Text _waypointDistanceValue;
+
+        [SerializeField]
+        private TMP_Text _waypointDescriptionValue;
+
+        [Header("Minimap Mission Marker")]
+        [SerializeField]
+        private RectTransform _waypointIndicator;
+
         [SerializeField, Min(1f)]
         private float _minimapVisibleRadiusMeters = 250f;
 
@@ -75,16 +99,18 @@ namespace MertKaan.UAVSimulator.UI.Production
             if (!HasValidReferences())
             {
                 Debug.LogError(
-                    $"{nameof(ProductionFlightHud)} requires AircraftTelemetry, the serialized runway BoxCollider, " +
-                    "and all serialized TMP/Image UI references.",
+                    $"{nameof(ProductionFlightHud)} requires AircraftTelemetry, MissionManager, the serialized " +
+                    "runway BoxCollider, and all serialized TMP/Image UI references.",
                     this);
                 enabled = false;
                 return;
             }
 
             _telemetry.SnapshotUpdated += HandleSnapshotUpdated;
+            _missionManager.SnapshotUpdated += HandleMissionSnapshot;
             _subscribed = true;
             HandleSnapshotUpdated(_telemetry.CurrentSnapshot);
+            HandleMissionSnapshot(_missionManager.CurrentSnapshot);
         }
 
         private void OnDisable()
@@ -94,6 +120,11 @@ namespace MertKaan.UAVSimulator.UI.Production
                 _telemetry.SnapshotUpdated -= HandleSnapshotUpdated;
             }
 
+            if (_subscribed && _missionManager != null)
+            {
+                _missionManager.SnapshotUpdated -= HandleMissionSnapshot;
+            }
+
             _subscribed = false;
         }
 
@@ -101,6 +132,7 @@ namespace MertKaan.UAVSimulator.UI.Production
         {
             return _telemetry != null &&
                 _runwayCollider != null &&
+                _missionManager != null &&
                 _airspeedValue != null &&
                 _altitudeValue != null &&
                 _verticalSpeedValue != null &&
@@ -115,6 +147,12 @@ namespace MertKaan.UAVSimulator.UI.Production
                 _aircraftArrow != null &&
                 _runwayIndicator != null &&
                 _runwayDistanceValue != null &&
+                _missionStateValue != null &&
+                _waypointNameValue != null &&
+                _waypointOrderValue != null &&
+                _waypointDistanceValue != null &&
+                _waypointDescriptionValue != null &&
+                _waypointIndicator != null &&
                 _minimapVisibleRadiusMeters > 0f;
         }
 
@@ -143,6 +181,34 @@ namespace MertKaan.UAVSimulator.UI.Production
             _alertBackground.color = GetAlertColor(alertLevel);
 
             UpdateMinimap(snapshot);
+        }
+
+        private void HandleMissionSnapshot(MissionSnapshot snapshot)
+        {
+            _missionStateValue.SetText(ProductionHudFormatting.GetMissionStateLabel(snapshot.State));
+
+            if (snapshot.ActiveWaypoint == null)
+            {
+                _waypointNameValue.SetText("---");
+                _waypointOrderValue.SetText("{0}/{1}", snapshot.CompletedWaypointCount, snapshot.TotalWaypointCount);
+                _waypointDistanceValue.SetText("---");
+                _waypointDescriptionValue.SetText(
+                    snapshot.RouteCompleted ? "Route complete" : "Start mission");
+            }
+            else
+            {
+                _waypointNameValue.SetText(snapshot.ActiveWaypointName);
+                _waypointOrderValue.SetText(
+                    "{0}/{1}",
+                    snapshot.ActiveWaypointIndex + 1,
+                    snapshot.TotalWaypointCount);
+                _waypointDistanceValue.SetText(
+                    "{0:0} m",
+                    snapshot.ActiveWaypointDistanceMeters);
+                _waypointDescriptionValue.SetText(snapshot.ActiveWaypointDescription);
+            }
+
+            UpdateWaypointIndicator(snapshot);
         }
 
         private void UpdateMinimap(AircraftTelemetrySnapshot snapshot)
@@ -177,6 +243,31 @@ namespace MertKaan.UAVSimulator.UI.Production
 
             float runwayDistance = ProductionMinimapMath.HorizontalDistance(aircraftPosition, runwayPosition);
             _runwayDistanceValue.SetText("{0:0} m", runwayDistance);
+        }
+
+        private void UpdateWaypointIndicator(MissionSnapshot snapshot)
+        {
+            bool isVisible = ShouldShowWaypointIndicator(snapshot);
+            _waypointIndicator.gameObject.SetActive(isVisible);
+            if (!isVisible)
+            {
+                return;
+            }
+
+            Vector3 aircraftPosition = _telemetry.transform.position;
+            Vector2 mapSize = _minimapFrame.rect.size;
+            Vector2 halfSize = mapSize * 0.5f;
+            Vector2 offset = ProductionMinimapMath.WorldToNorthUpOffset(
+                aircraftPosition,
+                snapshot.ActiveWaypoint.WorldPosition,
+                _minimapVisibleRadiusMeters,
+                mapSize);
+            _waypointIndicator.anchoredPosition = ProductionMinimapMath.ClampToPanelEdge(offset, halfSize);
+        }
+
+        public static bool ShouldShowWaypointIndicator(MissionSnapshot snapshot)
+        {
+            return snapshot.State == MissionState.Active && snapshot.ActiveWaypoint != null;
         }
 
         private static Color GetAlertColor(ProductionHudAlertLevel alertLevel)
