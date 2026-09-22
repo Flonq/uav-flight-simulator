@@ -437,6 +437,24 @@ namespace MertKaan.UAVSimulator.InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""EOLook"",
+                    ""type"": ""Value"",
+                    ""id"": ""b2a0e8b6-4f47-4d92-99b4-4a6e7e7f5e61"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""TargetLock"",
+                    ""type"": ""Button"",
+                    ""id"": ""b2b1f9c7-5f58-4ea3-aac5-5b7f8f806f72"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -505,6 +523,50 @@ namespace MertKaan.UAVSimulator.InputSystem
                     ""action"": ""EOZoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b2c20ad8-6f69-4fb4-bbd6-6c80a0917083"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EOLook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b2d31be9-7f7a-40c5-cce7-7d91b1a28194"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EOLook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b2e42cfa-8f8b-41d6-ddf8-8ea2c2b392a5"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TargetLock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b2f53d0b-9f9c-42e7-ee09-9fb3d3c4a3b6"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TargetLock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -562,6 +624,8 @@ namespace MertKaan.UAVSimulator.InputSystem
             m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
             m_Camera_SwitchCamera = m_Camera.FindAction("SwitchCamera", throwIfNotFound: true);
             m_Camera_EOZoom = m_Camera.FindAction("EOZoom", throwIfNotFound: true);
+            m_Camera_EOLook = m_Camera.FindAction("EOLook", throwIfNotFound: true);
+            m_Camera_TargetLock = m_Camera.FindAction("TargetLock", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
@@ -800,6 +864,8 @@ namespace MertKaan.UAVSimulator.InputSystem
         private List<ICameraActions> m_CameraActionsCallbackInterfaces = new List<ICameraActions>();
         private readonly InputAction m_Camera_SwitchCamera;
         private readonly InputAction m_Camera_EOZoom;
+        private readonly InputAction m_Camera_EOLook;
+        private readonly InputAction m_Camera_TargetLock;
         /// <summary>
         /// Provides access to input actions defined in input action map "Camera".
         /// </summary>
@@ -819,6 +885,14 @@ namespace MertKaan.UAVSimulator.InputSystem
             /// Provides access to the underlying input action "Camera/EOZoom".
             /// </summary>
             public InputAction @EOZoom => m_Wrapper.m_Camera_EOZoom;
+            /// <summary>
+            /// Provides access to the underlying input action "Camera/EOLook".
+            /// </summary>
+            public InputAction @EOLook => m_Wrapper.m_Camera_EOLook;
+            /// <summary>
+            /// Provides access to the underlying input action "Camera/TargetLock".
+            /// </summary>
+            public InputAction @TargetLock => m_Wrapper.m_Camera_TargetLock;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -851,6 +925,12 @@ namespace MertKaan.UAVSimulator.InputSystem
                 @EOZoom.started += instance.OnEOZoom;
                 @EOZoom.performed += instance.OnEOZoom;
                 @EOZoom.canceled += instance.OnEOZoom;
+                @EOLook.started += instance.OnEOLook;
+                @EOLook.performed += instance.OnEOLook;
+                @EOLook.canceled += instance.OnEOLook;
+                @TargetLock.started += instance.OnTargetLock;
+                @TargetLock.performed += instance.OnTargetLock;
+                @TargetLock.canceled += instance.OnTargetLock;
             }
 
             /// <summary>
@@ -868,6 +948,12 @@ namespace MertKaan.UAVSimulator.InputSystem
                 @EOZoom.started -= instance.OnEOZoom;
                 @EOZoom.performed -= instance.OnEOZoom;
                 @EOZoom.canceled -= instance.OnEOZoom;
+                @EOLook.started -= instance.OnEOLook;
+                @EOLook.performed -= instance.OnEOLook;
+                @EOLook.canceled -= instance.OnEOLook;
+                @TargetLock.started -= instance.OnTargetLock;
+                @TargetLock.performed -= instance.OnTargetLock;
+                @TargetLock.canceled -= instance.OnTargetLock;
             }
 
             /// <summary>
@@ -1068,6 +1154,20 @@ namespace MertKaan.UAVSimulator.InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnEOZoom(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "EOLook" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnEOLook(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "TargetLock" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnTargetLock(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

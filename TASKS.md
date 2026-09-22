@@ -237,18 +237,18 @@ Bütün kullanıcı komutları fizik sisteminden bağımsız şekilde okunabilme
 
 # FAZ 8 — Kamera Sistemi
 
-- [ ] `CameraModeController` oluştur
+- [x] `CameraModeController` oluştur
 - [x] Takip kamerası ekle
 - [x] Takip kamerasında yumuşak hareket ekle
 - [ ] Gövde kamerası ekle
 - [ ] Serbest kamera ekle
-- [ ] EO kamera ekle
-- [ ] Kamera modları arasında geçiş ekle
-- [ ] EO kamera zoom sistemi ekle
-- [ ] EO kamera dönüş limitleri ekle
+- [x] EO kamera ekle
+- [x] Kamera modları arasında geçiş ekle
+- [x] EO kamera zoom sistemi ekle
+- [x] EO kamera dönüş limitleri ekle
 - [ ] Kamera titreşimini değerlendir
-- [ ] Kamera geçişlerinde görüntü sıçramasını önle
-- [ ] Kamera modunu UI üzerinde göster
+- [x] Kamera geçişlerinde görüntü sıçramasını önle
+- [x] Kamera modunu UI üzerinde göster
 
 ### Çıkış kriteri
 
@@ -288,10 +288,10 @@ Uçuş sisteminden gerekli bütün temel veriler UI tarafından okunabilir durum
 - [x] Heading göstergesini ekle
 - [x] Throttle göstergesini ekle
 - [x] Uçuş modu göstergesini ekle
-- [ ] Kamera modu göstergesini ekle
+- [x] Kamera modu göstergesini ekle
 - [x] Uyarı mesaj alanı ekle
-- [ ] Görev hedefi alanı ekle
-- [ ] EO kamera görüntü paneli ekle
+- [x] Görev hedefi alanı ekle
+- [x] EO kamera görüntü paneli ekle
 - [x] Mini harita alanını değerlendir
 - [x] Arayüzü 16:9 çözünürlüklerde test et
 - [x] 1920×1080 çözünürlük testi yap
@@ -312,8 +312,8 @@ Kullanıcı temel uçuş ve görev bilgilerini tek ekrandan takip edebilmelidir.
 - [x] Aktif waypoint görseli ekle
 - [x] Görev başlangıç sistemi ekle
 - [x] Görev açıklama paneli ekle
-- [ ] Hedef bölgesi oluştur
-- [ ] EO kamera ile hedef gözlemi koşulu ekle
+- [x] Hedef bölgesi oluştur
+- [x] EO kamera ile hedef gözlemi koşulu ekle
 - [ ] Görev başarı koşulu ekle
 - [ ] Görev başarısızlık koşulu ekle
 - [ ] Görev süresi ekle
@@ -329,18 +329,18 @@ Kullanıcı kalkıştan inişe kadar tamamlanabilir tek bir görev oynayabilmeli
 
 # FAZ 12 — Hedefleme ve EO Kamera
 
-- [ ] Hedef nesnesi oluştur
-- [ ] Hedef tespit alanı ekle
-- [ ] EO kamera merkez noktasını hesapla
-- [ ] Raycast ile hedef tespiti ekle
-- [ ] Hedef kilidi sistemi ekle
-- [ ] Hedef işaretleyici ekle
-- [ ] Zoom seviyelerini ayarla
-- [ ] Kamera dönüş hızını ayarla
-- [ ] Görüş alanı sınırlarını ayarla
-- [ ] Hedef kaybolma durumunu yönet
-- [ ] Görev sistemiyle bağlantı kur
-- [ ] Yanlış hedef davranışını test et
+- [x] Hedef nesnesi oluştur
+- [x] Hedef tespit alanı ekle
+- [x] EO kamera merkez noktasını hesapla
+- [x] Raycast ile hedef tespiti ekle
+- [x] Hedef kilidi sistemi ekle
+- [x] Hedef işaretleyici ekle
+- [x] Zoom seviyelerini ayarla
+- [x] Kamera dönüş hızını ayarla
+- [x] Görüş alanı sınırlarını ayarla
+- [x] Hedef kaybolma durumunu yönet
+- [x] Görev sistemiyle bağlantı kur
+- [x] Yanlış hedef davranışını test et
 
 ### Çıkış kriteri
 

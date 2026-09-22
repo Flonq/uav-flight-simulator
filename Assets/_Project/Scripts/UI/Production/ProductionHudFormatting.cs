@@ -1,5 +1,7 @@
 using MertKaan.UAVSimulator.Aircraft;
+using MertKaan.UAVSimulator.CameraSystem;
 using MertKaan.UAVSimulator.Missions;
+using MertKaan.UAVSimulator.Targeting;
 using MertKaan.UAVSimulator.Telemetry;
 
 namespace MertKaan.UAVSimulator.UI.Production
@@ -50,6 +52,26 @@ namespace MertKaan.UAVSimulator.UI.Production
         public static string GetEngineStateLabel(bool engineRunning)
         {
             return engineRunning ? "Running" : "Stopped";
+        }
+
+        public static string GetCameraModeLabel(CameraMode mode)
+        {
+            return mode == CameraMode.EO ? "EO" : "Chase";
+        }
+
+        public static string GetTargetingStateLabel(TargetingState state)
+        {
+            switch (state)
+            {
+                case TargetingState.Candidate:
+                    return "Candidate";
+                case TargetingState.Locked:
+                    return "Locked";
+                case TargetingState.Observed:
+                    return "Observed";
+                default:
+                    return "No Target";
+            }
         }
 
         public static string GetMissionStateLabel(MissionState state)

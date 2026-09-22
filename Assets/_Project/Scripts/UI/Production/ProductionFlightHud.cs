@@ -1,4 +1,5 @@
 using MertKaan.UAVSimulator.Aircraft;
+using MertKaan.UAVSimulator.CameraSystem;
 using MertKaan.UAVSimulator.Missions;
 using MertKaan.UAVSimulator.Telemetry;
 using TMPro;
@@ -24,6 +25,9 @@ namespace MertKaan.UAVSimulator.UI.Production
         [SerializeField]
         private MissionManager _missionManager;
 
+        [SerializeField]
+        private CameraModeController _cameraModeController;
+
         [Header("Telemetry Values")]
         [SerializeField]
         private TMP_Text _airspeedValue;
@@ -42,6 +46,10 @@ namespace MertKaan.UAVSimulator.UI.Production
 
         [SerializeField]
         private TMP_Text _engineValue;
+
+        [Header("Camera")]
+        [SerializeField]
+        private TMP_Text _cameraModeValue;
 
         [Header("State and Warning")]
         [SerializeField]
@@ -108,9 +116,11 @@ namespace MertKaan.UAVSimulator.UI.Production
 
             _telemetry.SnapshotUpdated += HandleSnapshotUpdated;
             _missionManager.SnapshotUpdated += HandleMissionSnapshot;
+            _cameraModeController.SnapshotUpdated += HandleCameraModeSnapshot;
             _subscribed = true;
             HandleSnapshotUpdated(_telemetry.CurrentSnapshot);
             HandleMissionSnapshot(_missionManager.CurrentSnapshot);
+            HandleCameraModeSnapshot(_cameraModeController.CurrentSnapshot);
         }
 
         private void OnDisable()
@@ -125,6 +135,11 @@ namespace MertKaan.UAVSimulator.UI.Production
                 _missionManager.SnapshotUpdated -= HandleMissionSnapshot;
             }
 
+            if (_subscribed && _cameraModeController != null)
+            {
+                _cameraModeController.SnapshotUpdated -= HandleCameraModeSnapshot;
+            }
+
             _subscribed = false;
         }
 
@@ -133,12 +148,14 @@ namespace MertKaan.UAVSimulator.UI.Production
             return _telemetry != null &&
                 _runwayCollider != null &&
                 _missionManager != null &&
+                _cameraModeController != null &&
                 _airspeedValue != null &&
                 _altitudeValue != null &&
                 _verticalSpeedValue != null &&
                 _headingValue != null &&
                 _throttleValue != null &&
                 _engineValue != null &&
+                _cameraModeValue != null &&
                 _flightStateValue != null &&
                 _speedStateValue != null &&
                 _alertValue != null &&
@@ -181,6 +198,11 @@ namespace MertKaan.UAVSimulator.UI.Production
             _alertBackground.color = GetAlertColor(alertLevel);
 
             UpdateMinimap(snapshot);
+        }
+
+        private void HandleCameraModeSnapshot(CameraModeSnapshot snapshot)
+        {
+            _cameraModeValue.SetText(ProductionHudFormatting.GetCameraModeLabel(snapshot.Mode));
         }
 
         private void HandleMissionSnapshot(MissionSnapshot snapshot)
