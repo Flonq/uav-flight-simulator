@@ -180,7 +180,9 @@ namespace MertKaan.UAVSimulator.Telemetry
                 RollDegrees,
                 YawDegrees,
                 ThrottlePercent,
-                EngineRunning);
+                EngineRunning,
+                _aircraftPhysics.FlightState,
+                _aircraftPhysics.SpeedState);
             return true;
         }
 

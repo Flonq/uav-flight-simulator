@@ -281,21 +281,21 @@ Uçuş sisteminden gerekli bütün temel veriler UI tarafından okunabilir durum
 
 # FAZ 10 — Yer Kontrol İstasyonu Arayüzü
 
-- [ ] Ana HUD taslağını hazırla
-- [ ] Hız göstergesini ekle
-- [ ] İrtifa göstergesini ekle
-- [ ] Dikey hız göstergesini ekle
-- [ ] Heading göstergesini ekle
-- [ ] Throttle göstergesini ekle
-- [ ] Uçuş modu göstergesini ekle
+- [x] Ana HUD taslağını hazırla
+- [x] Hız göstergesini ekle
+- [x] İrtifa göstergesini ekle
+- [x] Dikey hız göstergesini ekle
+- [x] Heading göstergesini ekle
+- [x] Throttle göstergesini ekle
+- [x] Uçuş modu göstergesini ekle
 - [ ] Kamera modu göstergesini ekle
-- [ ] Uyarı mesaj alanı ekle
+- [x] Uyarı mesaj alanı ekle
 - [ ] Görev hedefi alanı ekle
 - [ ] EO kamera görüntü paneli ekle
-- [ ] Mini harita alanını değerlendir
-- [ ] Arayüzü 16:9 çözünürlüklerde test et
-- [ ] 1920×1080 çözünürlük testi yap
-- [ ] 1366×768 çözünürlük testi yap
+- [x] Mini harita alanını değerlendir
+- [x] Arayüzü 16:9 çözünürlüklerde test et
+- [x] 1920×1080 çözünürlük testi yap
+- [x] 1366×768 çözünürlük testi yap
 
 ### Çıkış kriteri
 

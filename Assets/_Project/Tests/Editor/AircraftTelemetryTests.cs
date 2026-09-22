@@ -209,8 +209,12 @@ namespace MertKaan.UAVSimulator.Tests
             Assert.That(receivedSnapshot.YawDegrees, Is.EqualTo(_telemetry.YawDegrees).Within(Tolerance));
             Assert.That(receivedSnapshot.ThrottlePercent, Is.EqualTo(_telemetry.ThrottlePercent).Within(Tolerance));
             Assert.That(receivedSnapshot.EngineRunning, Is.EqualTo(_telemetry.EngineRunning));
+            Assert.That(receivedSnapshot.FlightState, Is.EqualTo(_aircraftPhysics.FlightState));
+            Assert.That(receivedSnapshot.SpeedState, Is.EqualTo(_aircraftPhysics.SpeedState));
             Assert.That(_telemetry.CurrentSnapshot.HeadingValid, Is.EqualTo(_telemetry.HeadingValid));
             Assert.That(_telemetry.CurrentSnapshot.EngineRunning, Is.EqualTo(_telemetry.EngineRunning));
+            Assert.That(_telemetry.CurrentSnapshot.FlightState, Is.EqualTo(_aircraftPhysics.FlightState));
+            Assert.That(_telemetry.CurrentSnapshot.SpeedState, Is.EqualTo(_aircraftPhysics.SpeedState));
         }
 
         [Test]

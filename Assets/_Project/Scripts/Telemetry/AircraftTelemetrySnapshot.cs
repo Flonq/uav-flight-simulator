@@ -1,3 +1,5 @@
+using MertKaan.UAVSimulator.Aircraft;
+
 namespace MertKaan.UAVSimulator.Telemetry
 {
     /// <summary>
@@ -39,6 +41,12 @@ namespace MertKaan.UAVSimulator.Telemetry
         /// <summary>Whether the engine reports itself as running.</summary>
         public readonly bool EngineRunning;
 
+        /// <summary>Current flight state reported by AircraftPhysics.</summary>
+        public readonly AircraftFlightState FlightState;
+
+        /// <summary>Current speed-envelope state reported by AircraftPhysics.</summary>
+        public readonly AircraftSpeedState SpeedState;
+
         public AircraftTelemetrySnapshot(
             float horizontalGroundSpeedMps,
             float airspeedMps,
@@ -50,7 +58,9 @@ namespace MertKaan.UAVSimulator.Telemetry
             float rollDegrees,
             float yawDegrees,
             float throttlePercent,
-            bool engineRunning)
+            bool engineRunning,
+            AircraftFlightState flightState,
+            AircraftSpeedState speedState)
         {
             HorizontalGroundSpeedMps = horizontalGroundSpeedMps;
             AirspeedMps = airspeedMps;
@@ -63,6 +73,8 @@ namespace MertKaan.UAVSimulator.Telemetry
             YawDegrees = yawDegrees;
             ThrottlePercent = throttlePercent;
             EngineRunning = engineRunning;
+            FlightState = flightState;
+            SpeedState = speedState;
         }
     }
 }
