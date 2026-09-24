@@ -1,5 +1,6 @@
 using MertKaan.UAVSimulator.Aircraft;
 using MertKaan.UAVSimulator.CameraSystem;
+using MertKaan.UAVSimulator.Landing;
 using MertKaan.UAVSimulator.Missions;
 using MertKaan.UAVSimulator.Targeting;
 using MertKaan.UAVSimulator.Telemetry;
@@ -85,6 +86,43 @@ namespace MertKaan.UAVSimulator.UI.Production
                 default:
                     return "Not Started";
             }
+        }
+
+        public static string GetLandingStateLabel(LandingState state)
+        {
+            switch (state)
+            {
+                case LandingState.GroundReady:
+                    return "ON GROUND";
+                case LandingState.Approach:
+                    return "APPROACH";
+                case LandingState.Airborne:
+                    return "AIRBORNE";
+                case LandingState.InitialContact:
+                    return "CONTACT";
+                case LandingState.GroundRoll:
+                    return "GROUND ROLL";
+                case LandingState.Stopped:
+                    return "STOPPED";
+                case LandingState.Successful:
+                    return "SUCCESSFUL";
+                case LandingState.FailedHardLanding:
+                    return "HARD LANDING";
+                case LandingState.FailedOffRunway:
+                    return "OFF RUNWAY";
+                default:
+                    return "INACTIVE";
+            }
+        }
+
+        public static string GetLandingGearStateLabel(LandingGearState state)
+        {
+            return state == LandingGearState.FixedDown ? "FIXED DOWN" : "UNKNOWN";
+        }
+
+        public static string GetSinkRateLabel(bool warning)
+        {
+            return warning ? "SINK WARNING" : "SINK OK";
         }
 
         public static ProductionHudAlertLevel GetAlertLevel(AircraftTelemetrySnapshot snapshot)

@@ -433,7 +433,7 @@ MonoBehaviour:
   _minimumGroundNormalDot: 0.5
   _lateralGrip: 8
   _rollingResistance: 0.8
-  _brakeDeceleration: 12
+  _brakeDeceleration: 5
   _maximumSteeringAcceleration: 1.5
   _minimumSteeringSpeed: 1
   _fullSteeringSpeed: 6

@@ -350,20 +350,22 @@ Kullanıcı EO kamera ile görev hedefini bulabilmeli ve doğrulayabilmelidir.
 
 # FAZ 13 — İniş Sistemi
 
-- [ ] Yaklaşma waypointleri oluştur
-- [ ] Pist yönlendirme göstergesi ekle
-- [ ] Yüksek dikey hız uyarısı ekle
-- [ ] İniş takımı durumunu değerlendir
-- [ ] Yere temas algılama sistemi oluştur
-- [ ] Sert iniş algılama sistemi ekle
-- [ ] Pist üzerinde frenleme davranışını ayarla
-- [ ] Pist dışı iniş başarısızlık koşulu ekle
-- [ ] Başarılı iniş koşulu ekle
-- [ ] Farklı yaklaşma hızlarında test yap
+- [x] Yaklaşma waypointleri oluştur
+- [x] Pist yönlendirme göstergesi ekle
+- [x] Yüksek dikey hız uyarısı ekle
+- [x] İniş takımı durumunu değerlendir
+- [x] Yere temas algılama sistemi oluştur
+- [x] Sert iniş algılama sistemi ekle
+- [x] Pist üzerinde frenleme davranışını ayarla — 5 m/s² prototip değeri kontrollü pist ölçümünde doğrulandı; kullanıcı fren hissini ve yön kararlılığını kabul etti
+- [x] Pist dışı iniş başarısızlık koşulu ekle
+- [x] Başarılı iniş koşulu ekle
+- [x] Farklı yaklaşma hızlarında test yap
 
 ### Çıkış kriteri
 
 İHA kontrollü şekilde piste indirilebilmeli ve durdurulabilmelidir.
+
+Kullanıcı 24 Eylül 2026'da rota `7/7`, EO hedef gözlemi `Observed` ve pistte fren sonrası `LANDING SUCCESSFUL` durumunu manuel uçuşta kabul etti.
 
 ---
 
@@ -517,6 +519,6 @@ Mevcut doğrulanması gereken teknik borçlar:
 
 Bu bölüm her çalışma oturumunun sonunda güncellenmelidir.
 
-1. Prototip hız zarfını kullanıcı uçuş testiyle kabul et; gerçek araç verisi sağlanırsa Vne ve aerodinamik katsayıları yeniden kalibre et.
-2. Pist dışı davranışı ve gelişmiş tekerlek/süspansiyon ihtiyacını değerlendir.
-3. İniş yaklaşımı, teker temas geçişi ve fren kabul senaryosunu tasarla.
+1. Faz 14 için mevcut ve kullanılabilir ses varlıklarını denetle; motor sesini throttle/RPM davranışına bağlama kapsamını belirle.
+2. Faz 14 kapsamında rüzgâr, pist teması ve uyarı seslerini ekle.
+3. Faz 14 görsel geri bildirim, atmosfer ve post-processing kalemlerini değerlendir.

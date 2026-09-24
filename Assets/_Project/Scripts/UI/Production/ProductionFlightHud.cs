@@ -1,5 +1,6 @@
 using MertKaan.UAVSimulator.Aircraft;
 using MertKaan.UAVSimulator.CameraSystem;
+using MertKaan.UAVSimulator.Landing;
 using MertKaan.UAVSimulator.Missions;
 using MertKaan.UAVSimulator.Telemetry;
 using TMPro;
@@ -93,6 +94,19 @@ namespace MertKaan.UAVSimulator.UI.Production
         [SerializeField]
         private TMP_Text _waypointDescriptionValue;
 
+        [Header("Landing Guidance")]
+        [SerializeField]
+        private RunwayApproachGuidance _runwayApproachGuidance;
+
+        [SerializeField]
+        private AircraftLandingMonitor _landingMonitor;
+
+        [SerializeField]
+        private TMP_Text _landingGuidanceValue;
+
+        [SerializeField]
+        private TMP_Text _landingStatusValue;
+
         [Header("Minimap Mission Marker")]
         [SerializeField]
         private RectTransform _waypointIndicator;
@@ -101,6 +115,8 @@ namespace MertKaan.UAVSimulator.UI.Production
         private float _minimapVisibleRadiusMeters = 250f;
 
         private bool _subscribed;
+        private RunwayApproachSnapshot _approachSnapshot;
+        private LandingSnapshot _landingSnapshot;
 
         private void OnEnable()
         {
@@ -117,10 +133,14 @@ namespace MertKaan.UAVSimulator.UI.Production
             _telemetry.SnapshotUpdated += HandleSnapshotUpdated;
             _missionManager.SnapshotUpdated += HandleMissionSnapshot;
             _cameraModeController.SnapshotUpdated += HandleCameraModeSnapshot;
+            _runwayApproachGuidance.SnapshotUpdated += HandleApproachSnapshot;
+            _landingMonitor.SnapshotUpdated += HandleLandingSnapshot;
             _subscribed = true;
             HandleSnapshotUpdated(_telemetry.CurrentSnapshot);
             HandleMissionSnapshot(_missionManager.CurrentSnapshot);
             HandleCameraModeSnapshot(_cameraModeController.CurrentSnapshot);
+            HandleApproachSnapshot(_runwayApproachGuidance.CurrentSnapshot);
+            HandleLandingSnapshot(_landingMonitor.CurrentSnapshot);
         }
 
         private void OnDisable()
@@ -140,6 +160,16 @@ namespace MertKaan.UAVSimulator.UI.Production
                 _cameraModeController.SnapshotUpdated -= HandleCameraModeSnapshot;
             }
 
+            if (_subscribed && _runwayApproachGuidance != null)
+            {
+                _runwayApproachGuidance.SnapshotUpdated -= HandleApproachSnapshot;
+            }
+
+            if (_subscribed && _landingMonitor != null)
+            {
+                _landingMonitor.SnapshotUpdated -= HandleLandingSnapshot;
+            }
+
             _subscribed = false;
         }
 
@@ -149,6 +179,8 @@ namespace MertKaan.UAVSimulator.UI.Production
                 _runwayCollider != null &&
                 _missionManager != null &&
                 _cameraModeController != null &&
+                _runwayApproachGuidance != null &&
+                _landingMonitor != null &&
                 _airspeedValue != null &&
                 _altitudeValue != null &&
                 _verticalSpeedValue != null &&
@@ -169,6 +201,8 @@ namespace MertKaan.UAVSimulator.UI.Production
                 _waypointOrderValue != null &&
                 _waypointDistanceValue != null &&
                 _waypointDescriptionValue != null &&
+                _landingGuidanceValue != null &&
+                _landingStatusValue != null &&
                 _waypointIndicator != null &&
                 _minimapVisibleRadiusMeters > 0f;
         }
@@ -203,6 +237,45 @@ namespace MertKaan.UAVSimulator.UI.Production
         private void HandleCameraModeSnapshot(CameraModeSnapshot snapshot)
         {
             _cameraModeValue.SetText(ProductionHudFormatting.GetCameraModeLabel(snapshot.Mode));
+        }
+
+        private void HandleApproachSnapshot(RunwayApproachSnapshot snapshot)
+        {
+            _approachSnapshot = snapshot;
+            RefreshLandingDisplay();
+        }
+
+        private void HandleLandingSnapshot(LandingSnapshot snapshot)
+        {
+            _landingSnapshot = snapshot;
+            RefreshLandingDisplay();
+        }
+
+        private void RefreshLandingDisplay()
+        {
+            if (!_approachSnapshot.GuidanceValid)
+            {
+                _landingGuidanceValue.SetText("RWY --- | CL ---\nHDG --- | AGL ---");
+            }
+            else
+            {
+                float heightAboveRunway = Mathf.Abs(_approachSnapshot.HeightAboveRunwayMeters) < 0.5f
+                    ? 0f
+                    : _approachSnapshot.HeightAboveRunwayMeters;
+                _landingGuidanceValue.SetText(
+                    "RWY {0:0}m | CL {1:0.0}m\nHDG {2:0.0}° | AGL {3:0}m",
+                    _approachSnapshot.ThresholdDistanceMeters,
+                    _approachSnapshot.CenterlineErrorMeters,
+                    _approachSnapshot.HeadingErrorDegrees,
+                    heightAboveRunway);
+            }
+
+            _landingStatusValue.SetText(
+                string.Format(
+                    "LANDING {0}\nGEAR {1} | {2}",
+                    ProductionHudFormatting.GetLandingStateLabel(_landingSnapshot.State),
+                    ProductionHudFormatting.GetLandingGearStateLabel(_landingSnapshot.GearState),
+                    ProductionHudFormatting.GetSinkRateLabel(_landingSnapshot.SinkRateWarning)));
         }
 
         private void HandleMissionSnapshot(MissionSnapshot snapshot)

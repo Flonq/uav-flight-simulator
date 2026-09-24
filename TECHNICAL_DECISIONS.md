@@ -984,6 +984,38 @@ Eşikler gerçek araca ait Vne/işletme limitleri değildir. Yapısal hasar, aer
 
 ---
 
+## TD-037 — İniş durumu, sink uyarısı ve fren prototipi güncellemesi
+
+**Durum:** Prototip uygulandı ve kullanıcı pilotajında kabul edildi
+
+**Tarih:** 2026-09-23
+
+### Karar
+
+Pistte üç tekerle düşük yatay ve düşey hızla durmak, rota veya hedef gözlemi eksik olsa da `Stopped` durumudur. `Successful` durumu rota tamamlanması, kalıcı hedef gözlemi ve 1,5 saniye kesintisiz stabil pist teması şartlarını korur. Sink-rate uyarısı, pist merkez hattına en fazla 50 m uzakta ve eşikten en fazla 600 m mesafede, 0–50 m AGL aralığında tehlikeli alçalmayı her iki yaklaşma yönünde de bildirir. Tanımlı iniş yönü ve rota değişmez.
+
+`AircraftGroundController` fren yavaşlama prototipi 12 m/s² değerinden 5 m/s² değerine indirildi. Teker, Rigidbody, motor ve aerodinamik ayarlar korunur. Bu değer gerçek İHA fren verisi değildir.
+
+Gövde collider'ının Terrain temas noktası, açık referanslı pist BoxCollider'ının yatay alanı içindeyse bu temas `FailedOffRunway` üretmez. Pist alanı dışındaki gövde–Terrain teması yalnızca iniş koridorunda (eşikten en fazla 600 m, merkez hattından en fazla 50 m) kalıcı hata oluşturur. Böylece pist altındaki Terrain teması ve uçuş rotasında pistten uzaktaki arazi teması iniş hatası olarak sınıflandırılmaz. İlk pist dışı hata, kaynak collider, temas noktası, rota aşaması ve teker yüzeyleriyle bir kez Console'a kaydedilir.
+
+### Gerekçe ve doğrulama
+
+Kullanıcı iniş görüntüsünde yaklaşık 24,6 m/s hızdan iki saniye içinde sıfıra iniş ve görev rotası 2/7 iken durmasına rağmen `GROUND ROLL` durumu görüldü. Yaklaşık 28 m AGL ve −10,8 m/s düşey hızda, ters yönden pist hattına yaklaşırken `SINK OK` görünüyordu. Kontrollü Unity pist koşusunda yeni fren değeriyle 25 m/s başlangıç hızı yaklaşık 48 m içinde sıfırlandı; üç teker pistte kaldı. Touchdown sonrası rota/hedef eksikken `Stopped`, ikisi sağlandıktan 1,52 saniye sonra `Successful` gözlendi. Kullanıcı daha uzun frenleme süresini, pistte yön sapması olmadan duruşu ve fren hissini kabul etti.
+
+Kullanıcı duruş ekranında üç teker `R/Tile_4` olmasına rağmen `LANDING OFF RUNWAY` bildirdi. 12° yatışlı kontrollü tekrarda `LeftWingCollider` ile Terrain teması `(−258,44; 0,09; 92,33)` noktasında hata üretti; nokta pist alanı içindeydi. Alan filtresi sonrası aynı senaryo üç pist tekeriyle `Stopped` durumuna geçti. İlk düzeltmenin ardından kullanıcının rota 7/7 olan uçuşunda aynı uyarı sürdü; canlı snapshot'ta hata ilk teker touchdown'ından önce oluşmuştu, fakat o uçuşun ilk temas noktası kaydedilmemişti.
+
+Ek kontrollü fizik denemesinde pist merkez hattından 102 m uzaktaki `North Perimeter` gövde–Terrain teması önce yanlış biçimde `FailedOffRunway` üretti. İniş koridoru filtresi sonrasında aynı temas `Airborne` kaldı. Merkez hattından 42 m uzaktaki gerçek pist dışı gövde–Terrain teması ise tekerler henüz yerde değilken aynı fizik adımında `FailedOffRunway` üretti. EditMode testleri 118/118 geçti. Kullanıcının önceki uçuşundaki uyarının kaynağı bu kontrollü senaryoyla kesin olarak özdeşleştirilemedi.
+
+24 Eylül kullanıcı kaydında tanımlı +X iniş yönünün tersinde, yaklaşık 270,4° heading ile uçak 28,0 m/s hızdan piste indi. Üç teker `R/Tile_4` temasını korurken `GroundRoll` görüldü; fren altında hız sıfıra düşünce yaklaşık beşinci saniyede `Stopped` göründü ve kaydın sonuna kadar kaldı. `FailedOffRunway` görünmedi. Bu, ters yönden pistte durma davranışını kullanıcı görüntüsünde doğrular; önceki 7/7 uçuşundaki ilk hata temasını geriye dönük olarak tanımlamaz.
+
+Kullanıcı daha sonra tek manuel uçuşta waypoint sırasının ilerlediğini, EO hedefinde `Candidate` ve kilit sonrası `Observed` gördüğünü, rotanın `Route Completed / 7/7` olduğunu ve pistte frenle durduktan yaklaşık iki saniye sonra `LANDING SUCCESSFUL` göründüğünü bildirdi. Bu Faz 13'ün manuel kabulüdür; bu son uçuşun canlı Editor snapshot'ı veya video kaydı bağımsız olarak alınmadı.
+
+### Sınırlar
+
+İlk ve 24 Eylül görüntülerinde uçak tanımlı +X iniş yönünün tersine ve rota tamamlanmadan indi; bu kayıtlar tek başına görev başarısı kanıtı değildir. Aradaki 7/7 uçuşunun canlı snapshot'ında hedef gözlemi `NotObserved` idi. Son tam görev uçuşunda `Successful` kullanıcı tarafından gözlendi; ilk temasın ayrıntılı fizik kaydı veya bu uçuşun bağımsız canlı ölçümü bulunmuyor. Eşikler gerçek İHA verisi değil, prototip değerleridir.
+
+---
+
 ## Karar Bekleyen Konular
 
 - [ ] Yakıt sistemi veya batarya sistemi
@@ -1020,3 +1052,4 @@ Joystick/HOTAS desteği MVP sonrasına ertelenmiştir; yeniden değerlendirilene
 | 2026-09-17 | TD-034 | Yüksek hızlı takip kamerası için tam pitch izleyen roll bağımsız chase frame, dikey geçiş sürekliliği, heading/right cache ve konum feed-forward uygulandı |
 | 2026-09-17 | TD-035 | Gövde eksenli yanal hava hızı ve sideslip telemetrisi, side-force, directional stability, yanal akıştan ayrılmış lift/drag ve geri-akış kontrol sınırı uygulandı |
 | 2026-09-17 | TD-036 | Doğal thrust/drag dengesi korundu; total airspeed tabanlı caution/overspeed/recovery zarfı ve hysteresis telemetrisi uygulandı |
+| 2026-09-23 | TD-037 | Fiziksel durma ile görev başarısı ayrıldı, pist yakınındaki ters yön sink uyarısı açıldı ve fren prototipi yeniden ayarlandı |

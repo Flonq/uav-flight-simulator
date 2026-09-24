@@ -57,7 +57,7 @@ namespace MertKaan.UAVSimulator.Aircraft
         private float _rollingResistance = 0.8f;
 
         [SerializeField, Min(0f)]
-        private float _brakeDeceleration = 12f;
+        private float _brakeDeceleration = 5f;
 
         [Header("Steering")]
         [SerializeField, Min(0f)]
@@ -106,6 +106,12 @@ namespace MertKaan.UAVSimulator.Aircraft
         public int OffRunwayContactCount { get; private set; }
         public bool AnyWheelOnRunway { get; private set; }
         public bool AllContactingWheelsOnRunway { get; private set; }
+        public bool HasValidWheelReferences =>
+            IsValidWheel(_noseWheel) &&
+            IsValidWheel(_rightMainWheel) &&
+            IsValidWheel(_leftMainWheel);
+        public bool IsWheelCollider(Collider candidate) =>
+            IsWheelCollider(candidate, _noseWheel, _rightMainWheel, _leftMainWheel);
         public bool IsBraking { get; private set; }
         public float ForwardGroundSpeed { get; private set; }
         public float LateralGroundSpeed { get; private set; }
@@ -320,6 +326,18 @@ namespace MertKaan.UAVSimulator.Aircraft
             return contactCollider is TerrainCollider
                 ? GroundSurfaceType.Terrain
                 : GroundSurfaceType.Other;
+        }
+
+        public static bool IsWheelCollider(
+            Collider candidate,
+            Collider noseWheel,
+            Collider rightMainWheel,
+            Collider leftMainWheel)
+        {
+            return candidate != null &&
+                (candidate == noseWheel ||
+                 candidate == rightMainWheel ||
+                 candidate == leftMainWheel);
         }
 
         public readonly struct GroundSurfaceSummary

@@ -41,8 +41,11 @@ namespace MertKaan.UAVSimulator.Missions
 
         private MissionObservationSnapshot _currentSnapshot;
         private bool _subscribed;
+        private bool _observationRecorded;
+        private bool _ignoreObservedUntilFreshLock;
 
         public MissionObservationSnapshot CurrentSnapshot => _currentSnapshot;
+        public bool IsObservationRecorded => _observationRecorded;
         public event Action<MissionObservationSnapshot> SnapshotUpdated;
 
         private void OnEnable()
@@ -71,9 +74,21 @@ namespace MertKaan.UAVSimulator.Missions
 
         private void HandleTargetingSnapshot(TargetingSnapshot snapshot)
         {
-            MissionObservationState state = MissionObservationState.NotObserved;
-            if (snapshot.IsMissionTarget && snapshot.State == TargetingState.Observed)
+            if (_ignoreObservedUntilFreshLock && snapshot.State != TargetingState.Observed)
             {
+                _ignoreObservedUntilFreshLock = false;
+            }
+
+            MissionObservationState state = MissionObservationState.NotObserved;
+            if (_observationRecorded)
+            {
+                state = MissionObservationState.Observed;
+            }
+            else if (snapshot.IsMissionTarget &&
+                snapshot.State == TargetingState.Observed &&
+                !_ignoreObservedUntilFreshLock)
+            {
+                _observationRecorded = true;
                 state = MissionObservationState.Observed;
             }
             else if (snapshot.IsMissionTarget && snapshot.HasLock)
@@ -86,6 +101,24 @@ namespace MertKaan.UAVSimulator.Missions
                 snapshot.LockedTarget ?? snapshot.Candidate,
                 snapshot.ObservationProgressSeconds,
                 snapshot.RequiredObservationSeconds);
+            SnapshotUpdated?.Invoke(_currentSnapshot);
+        }
+
+        /// <summary>
+        /// Clears the persistent mission record. If the targeting controller is
+        /// still in Observed, a fresh lock must first leave that state before a
+        /// later observation can be recorded again.
+        /// </summary>
+        public void ResetObservation()
+        {
+            _observationRecorded = false;
+            _ignoreObservedUntilFreshLock = _targetingController != null &&
+                _targetingController.CurrentSnapshot.State == TargetingState.Observed;
+            _currentSnapshot = new MissionObservationSnapshot(
+                MissionObservationState.NotObserved,
+                null,
+                0f,
+                _targetingController == null ? 0f : _targetingController.RequiredObservationSeconds);
             SnapshotUpdated?.Invoke(_currentSnapshot);
         }
     }
