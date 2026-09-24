@@ -520,6 +520,6 @@ Mevcut doğrulanması gereken teknik borçlar:
 
 Bu bölüm her çalışma oturumunun sonunda güncellenmelidir.
 
-1. Faz 14 için mevcut ve kullanılabilir ses varlıklarını denetle; motor sesini throttle/RPM davranışına bağlama kapsamını belirle.
-2. Faz 14 kapsamında rüzgâr, pist teması ve uyarı seslerini ekle.
-3. Faz 14 görsel geri bildirim, atmosfer ve post-processing kalemlerini değerlendir.
+1. Faz 14 için kaynakları doğrulanmış dört sesi Unity içinde dinle; motor döngüsünü RPM/throttle davranışına bağlayıp motor kapalı/rölanti/tam gaz geçişlerini ölç.
+2. Rüzgâr döngüsünü hava hızına ve uyarı bipini uygun durumlara bağla; 12,4 saniyelik iniş kaydının temas mı, pistte koşu mu için uygun olduğunu dinleyerek kararlaştır.
+3. Ses karışımını iki kamera modunda doğrula; ardından Faz 14 görsel geri bildirim, atmosfer ve post-processing kalemlerini değerlendir.

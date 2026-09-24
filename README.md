@@ -278,6 +278,7 @@ Windows build yayımlandığında:
 | [`PROJECT_OVERVIEW.md`](PROJECT_OVERVIEW.md) | Projenin amacı, kapsamı ve başarı kriterleri |
 | [`TECHNICAL_DECISIONS.md`](TECHNICAL_DECISIONS.md) | Alınan teknik kararlar ve gerekçeleri |
 | [`TASKS.md`](TASKS.md) | Geliştirme aşamaları ve görev takibi |
+| [`AUDIO_CREDITS.md`](AUDIO_CREDITS.md) | Ses dosyalarının kaynakları ve lisansları |
 | [`README.md`](README.md) | GitHub ve portföy tanıtımı |
 
 ---
