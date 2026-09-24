@@ -26,9 +26,9 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 
 ## Proje Durumu
 
-**Son güncelleme:** 17 Eylül 2026
+**Son güncelleme:** 24 Eylül 2026
 
-**Mevcut aşama:** Açı-of-attack, stall, sideslip ve prototip hız zarfı doğrulandı; sıradaki adım kullanıcı kabulü ve iniş/yer davranışı geliştirmesidir
+**Mevcut aşama:** Yedi waypointli rota, EO hedef gözlemi ve pistte başarılı iniş kullanıcı uçuşunda kabul edildi. Sıradaki planlı aşama Faz 14 ses ve görsel geri bildirim çalışmasıdır.
 
 | Sistem | Durum |
 |---|---|
@@ -40,11 +40,11 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 | Görsel kontrol yüzeyi animasyonları | Tamamlandı ve Play Mode'da doğrulandı |
 | Motor, RPM ve itki | Sabit fizik adımında çalışan prototip; görsel burun yönü ve pervane animasyonuyla eşleştirildi |
 | Aerodinamik uçuş fiziği | Toplam hava hızı, signed AoA, stall drag, sideslip toparlanması ve 75/85/80 m/s prototip hız zarfı sabit fizik adımında çalışıyor; gerçek araç verisiyle kalibrasyon açık |
-| Yer hareketi ve fren | Üç teker temas kontrolü, yanal tutuş, yuvarlanma direnci, düşük hızlı yönlendirme ve fren tamamlandı |
+| Yer hareketi ve fren | Üç teker temas kontrolü, yanal tutuş, yuvarlanma direnci, düşük hızlı yönlendirme ve 5 m/s² prototip fren kullanıcı tarafından kabul edildi |
 | Kontrollü kalkış | 13 m/s rotasyon komutu ve yaklaşık 17,2 m/s yerden kesilme referansı FlightTest pistinde doğrulandı |
-| Kamera ve EO sistemi | Temel takip kamerası tamamlandı; diğer modlar planlandı |
-| Telemetri ve görev sistemi | Planlandı |
-| Yer kontrol istasyonu UI | Planlandı |
+| Kamera ve EO sistemi | Takip ve EO kamera geçişi, fare ile yönlendirme, zoom ve hedef kilidi çalışıyor; diğer kamera modları açık kapsam |
+| Telemetri ve görev sistemi | Uçuş telemetrisi, yedi waypointli rota, kalıcı EO hedef gözlemi ve iniş durumu çalışıyor |
+| Yer kontrol istasyonu UI | Uçuş verisi, mini harita, görev ve iniş panelleri çalışıyor; görev sonuç ekranı açık kapsam |
 | Windows build | Planlandı |
 
 ---
@@ -126,9 +126,9 @@ Proje, Baykar iş başvurusunda teknik portföy çalışması olarak sunulmak ü
 
 ### Ertelenen veya değerlendirilecek teknolojiler
 
-- Cinemachine kullanımı kamera fazında yeniden değerlendirilecek.
+- Mevcut takip ve EO kameraları özel bileşenlerle çalışıyor; Cinemachine gereksinimi ileride yeniden değerlendirilecek.
 - Joystick/HOTAS desteği MVP sonrasına ertelendi.
-- Harita çözümü henüz kesinleşmedi.
+- Mini harita çalışıyor; daha kapsamlı görev haritası çözümü henüz kesinleşmedi.
 
 ---
 
@@ -211,8 +211,11 @@ Mevcut doğrulanmış klavye/fare kontrolleri:
 | Motor aç/kapat | I |
 | Fren | Space |
 | Kamera değiştir | C |
+| EO hedef kilidi | F |
+| EO kamera yönü | Fare hareketi |
 | EO kamera zoom | Mouse Wheel |
-| Pause | Escape |
+
+`Escape` için Input System'de pause komutu tanımlıdır; uygulamada henüz duraklatma davranışı yoktur. Editor testlerinde Unity'nin Pause düğmesini kullanın.
 
 DualSense, genel `<Gamepad>` bindingleri üzerinden test edilmiştir. Joystick/HOTAS MVP sonrasına ertelenmiştir.
 
@@ -318,10 +321,10 @@ docs/images/
 - [x] Motor ve throttle sisteminin geliştirilmesi
 - [~] Temel uçuş fiziğinin geliştirilmesi — AoA/stall, rate feedback, sideslip ve prototip hız zarfı tamamlandı; gerçek veri kalibrasyonu açık
 - [x] Temel yer hareketi, pist stabilizasyonu ve fren prototipi
-- [~] Kalkış ve iniş sisteminin geliştirilmesi — kontrollü kalkış referansı doğrulandı; iniş ve nihai kalibrasyon planlandı
-- [~] Kamera sisteminin geliştirilmesi — temel yumuşak takip kamerası tamamlandı
-- [ ] Telemetri arayüzünün geliştirilmesi
-- [ ] Waypoint ve görev sisteminin geliştirilmesi
+- [~] Kalkış ve iniş sisteminin geliştirilmesi — görev sonrası başarılı iniş kullanıcı uçuşunda kabul edildi; gerçek araç kalibrasyonu açık
+- [~] Kamera sisteminin geliştirilmesi — takip ve EO kamera çalışıyor; diğer modlar açık kapsam
+- [x] Telemetri arayüzünün geliştirilmesi — uçuş verisi ve mini harita
+- [x] Waypoint ve görev sisteminin geliştirilmesi — yedi waypoint, EO gözlemi ve iniş kabul akışı
 - [ ] Ses ve görsel iyileştirmeler
 - [ ] Optimizasyon
 - [ ] Windows build
@@ -351,11 +354,8 @@ Mevcut doğrulanmış eksikler:
 - Prototip 75/85/80 m/s hız zarfının gerçek araç Vne ve işletme limitleriyle yeniden kalibre edilmesi
 - Prototip drag katsayısıyla nihai yer/uçuş hızının ve kontrol torklarının kullanıcı uçuş testinde kalibre edilmesi
 - Nihai kalkış hızlarının açı-of-attack/stall modeli ve gerçek araç verileriyle yeniden kalibre edilmesi
-- Pist dışı davranış, iniş ve gelişmiş tekerlek/süspansiyon sistemi
-- Yer kontrol istasyonu arayüzü
-- Waypoint görevi
-- EO kamera hedefleme sistemi
-- Telemetri sistemi
+- Tekerlek/süspansiyon sistemi ve gerçek araç iniş eşiklerinin kalibrasyonu
+- Görev sonuç ekranı ve ek kamera modları
 - Ses sistemi
 - Windows build
 

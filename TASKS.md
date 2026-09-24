@@ -400,7 +400,7 @@ Simülasyon temel seviyede tutarlı ses ve görsel geri bildirim sunmalıdır.
 - [ ] Fare hassasiyeti ayarı ekle
 - [ ] Kamera hassasiyeti ayarı ekle
 - [ ] Pause menüsü ekle
-- [ ] Görevi yeniden başlat seçeneği ekle
+- [ ] Görevi yeniden başlat seçeneği ekle — rota, kalıcı EO gözlemi, iniş monitörü ve uçak başlangıç durumu birlikte sıfırlanmalı
 - [ ] Ana menüye dön seçeneği ekle
 - [ ] Uygulamadan çık seçeneği ekle
 
@@ -512,6 +512,7 @@ Mevcut doğrulanması gereken teknik borçlar:
 - [ ] Takip kamerasına arazi/geometri çarpışması ve görüş engeli yönetimi ekle
 - [ ] Takip kamerası mesafe, yükseklik ve yumuşatma değerlerini uçuş fiziği tamamlandıktan sonra final kullanıcı testiyle kalibre et
 - [ ] Yüksek RPM için pervane blur/disc görselleştirmesini değerlendir; mevcut çözüm dönüş hızını görsel örnekleme için ölçekler
+- [ ] Açık Git klonunda çalıştırılabilir portföy sürümü için lisanslı Military Base Pack'e bağımlı `FlightTest` ortamına yeniden dağıtılabilir bir alternatif planla; mevcut sahne bu paketten 45 varlığa bağlıdır (2026-09-24 yerel ölçümü)
 
 ---
 

@@ -90,9 +90,9 @@ Simülasyonun planlanan temel akışı:
 
 ### Ertelenen veya daha sonra doğrulanacak kararlar
 
-- Cinemachine gereksinimi kamera fazında yeniden değerlendirilecek.
+- Mevcut takip ve EO kameraları özel bileşenlerle çalışıyor; Cinemachine gereksinimi ileride yeniden değerlendirilecek.
 - Joystick/HOTAS desteği MVP sonrasına ertelendi.
-- Harita çözümü ve yakıt/enerji sistemi henüz kesinleştirilmedi.
+- Mini harita mevcut; daha kapsamlı harita çözümü ve yakıt/enerji sistemi henüz kesinleştirilmedi.
 
 Kesinleşen kararların gerekçeleri `TECHNICAL_DECISIONS.md` içinde tutulur.
 
@@ -273,9 +273,11 @@ Proje aşağıdaki koşullar sağlandığında başarılı kabul edilecektir:
 
 ## 13. Mevcut Durum
 
-**Son güncelleme:** 2026-09-17
+**Son güncelleme:** 2026-09-24
 
-**Durum:** Özel İHA modeli, input, motor/RPM/propulsion, takip kamerası, yer hareketi/fren, açı-of-attack tabanlı uçuş fiziği, yanal aerodinamik ve prototip hız zarfı doğrulandı; sıradaki aşama kullanıcı hız zarfı kabulü ve iniş/yer davranışı planlamasıdır.
+**Durum:** Faz 13'te yedi waypointli rota, EO hedef gözlemi ve pistte başarılı iniş kullanıcı uçuşunda kabul edildi. Faz 14 ses ve görsel geri bildirim çalışması henüz başlamadı. İniş başarısı ekranda gösteriliyor; görev sonuç ekranı ve yeniden başlatma akışı hâlâ planlıdır.
+
+Aşağıdaki teknik ölçümler 17 Eylül uçuş fiziği temelinin tarihsel doğrulama kayıtlarıdır. Güncel görev ve iniş kabulü için `TASKS.md` ve `TECHNICAL_DECISIONS.md` içindeki TD-037 esas alınır.
 
 Doğrulanmış mevcut durum:
 
@@ -303,7 +305,7 @@ Doğrulanmış mevcut durum:
 - Stall ve post-stall durumları, ileri hız izdüşümü azaldığında artık kontrol otoritesi ve açısal hız sönümlemesi FlightTest'te doğrulandı.
 - Prototip hız zarfı tamamlandı; eşiklerin gerçek Vne/işletme limitleriyle kalibrasyonu, gerçek kütle/ağırlık merkezi/inertia, propeller verimi, rüzgâr/irtifa yoğunluğu ve gerçek araç kalkış kalibrasyonu henüz sonlandırılmadı.
 
-Sıradaki kontrollü akış:
+17 Eylül'e kadar tamamlanan kontrollü akış:
 
 1. Tamamlandı (2026-09-15): `AircraftInputReader` ve `AircraftControlSurfaceAnimator` uçak prefabına taşındı; debug panel sahnede aktif instance'a bağlı kaldı (TD-022).
 2. Tamamlandı (2026-09-15): Throttle state/ramp sahipliği `AircraftEngine` bileşenine taşındı; Input Reader yalnızca komut sağlar.
@@ -318,7 +320,7 @@ Sıradaki kontrollü akış:
 11. Tamamlandı (2026-09-17): Toplam hava hızı ve signed angle of attack tabanlı lift, stall sonrası drag, artık kontrol otoritesi ve rate feedback uygulandı; nötr pitch, kontrollü kalkış ve sönümlenen pitch senaryoları doğrulandı.
 12. Tamamlandı (2026-09-17): Gövde eksenli yanal hava hızı/sideslip telemetrisi, side-force, directional stability, yanal akıştan ayrılmış lift/longitudinal drag ve geri-akış kontrol sınırı uygulandı; 20/20 EditMode testi ve kontrollü FlightTest ölçümleri doğrulandı.
 13. Tamamlandı (2026-09-17): Doğal thrust/drag dengesi yaklaşık 65,71 m/s olarak doğrulandı; total airspeed tabanlı 75/85/80 m/s caution/overspeed/recovery zarfı ve hysteresis debug telemetrisi uygulandı.
-14. Prototip hız zarfı kullanıcı uçuş testiyle kabul edilecek; gerçek araç verisi sağlandığında Vne ve aerodinamik katsayılar yeniden kalibre edilecek.
+14. Sonraki fazlarda prototip hız zarfı ve aerodinamik katsayılar gerçek araç verisi sağlandığında yeniden kalibre edilecek.
 
 ---
 
